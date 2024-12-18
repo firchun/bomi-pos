@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DiscountController extends Controller
 {
@@ -11,7 +12,7 @@ class DiscountController extends Controller
     public function index()
     {
         //get data discount
-        $discounts = \App\Models\Discount::all();
+        $discounts = \App\Models\Discount::where('user_id', Auth::id())->get();
 
         return response()->json([
             'status' => 'success',

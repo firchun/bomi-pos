@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
@@ -14,7 +15,7 @@ class ProductController extends Controller
     public function index()
     {
 
-        $products = \App\Models\Product::orderBy('id', 'desc')->get();
+        $products = \App\Models\Product::where('user_id', Auth::id())->orderBy('id', 'desc')->get();
 
         $products->load('category');
         return response()->json([
@@ -42,6 +43,7 @@ class ProductController extends Controller
 
         $product = \App\Models\Product::create([
             'name' => $request->name,
+            'user_id' => Auth::id(),
             'price' => (int) $request->price,
             'stock' => (int) $request->stock,
             'category_id' => $request->category_id,

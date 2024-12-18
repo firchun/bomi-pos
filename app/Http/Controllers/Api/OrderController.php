@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -32,6 +33,7 @@ class OrderController extends Controller
         //create order
         $order = Order::create([
             'payment_amount' => $request->payment_amount,
+            'user_id' => Auth::id(),
             'sub_total' => $request->sub_total,
             'tax' => $request->tax,
             'discount' => $request->discount,
@@ -66,9 +68,9 @@ class OrderController extends Controller
         $start_date = $request->input('start_date');
         $end_date = $request->input('end_date');
         if ($start_date && $end_date) {
-            $orders = Order::whereBetween('created_at', [$start_date, $end_date])->get();
+            $orders = Order::where('user_id', Auth::id())->whereBetween('created_at', [$start_date, $end_date])->get();
         } else {
-            $orders = Order::all();
+            $orders = Order::where('user_id', Auth::id())->get();
         }
         return response()->json([
             'status' => 'success',
@@ -80,7 +82,7 @@ class OrderController extends Controller
     {
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
-        $query = Order::query();
+        $query = Order::where('user_id', Auth::id());
         if ($startDate && $endDate) {
             $query->whereBetween('created_at', [$startDate, $endDate]);
         }

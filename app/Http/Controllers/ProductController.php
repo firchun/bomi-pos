@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
@@ -11,14 +12,14 @@ class ProductController extends Controller
     // index
     public function index()
     {
-        $products = Product::paginate(10);
+        $products = Product::where('user_id', Auth::id())->paginate(10);
         return view('pages.products.index', compact('products'));
     }
 
     // create
     public function create()
     {
-        $categories = DB::table('categories')->get();
+        $categories = DB::table('categories')->where('user_id', Auth::id())->get();
         return view('pages.products.create', compact('categories'));
     }
 
@@ -40,6 +41,7 @@ class ProductController extends Controller
         // store the request...
         $product = new Product;
         $product->name = $request->name;
+        $product->user_id = Auth::id();
         $product->description = $request->description;
         $product->price = $request->price;
         $product->category_id = $request->category_id;

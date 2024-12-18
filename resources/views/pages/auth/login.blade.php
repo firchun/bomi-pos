@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Login Admin Resto')
+@section('title', 'Login')
 
 @push('style')
     <!-- CSS Libraries -->
@@ -14,6 +14,10 @@
         </div>
 
         <div class="card-body">
+            <p class="text-center text-mutted">
+                Selamat datang di <span class="text-primary">Bomi POS</span>, Silahkan login terlebih dahulu..
+            </p>
+
             <form method="POST" action="{{ route('login') }}" class="needs-validation" novalidate="">
                 @csrf
                 <div class="form-group">

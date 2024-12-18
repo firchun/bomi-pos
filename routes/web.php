@@ -4,6 +4,7 @@ use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,12 +22,15 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('home', function () {
-        return view('pages.dashboard');
-    })->name('home');
-    Route::resource('users', UserController::class);
-    Route::resource('products', ProductController::class);
-    Route::resource('categories', CategoryController::class);
-    //post update products
-    Route::post('products/update/{id}', [ProductController::class, 'update'])->name('products.newupdate');
+    Route::get('home', [HomeController::class, 'index'])->name('home');
+    Route::get('profile', [HomeController::class, 'profile'])->name('profile');
+    Route::middleware(['role:user,staff'])->group(function () {
+        Route::resource('products', ProductController::class);
+        Route::resource('categories', CategoryController::class);
+        //post update products
+        Route::post('products/update/{id}', [ProductController::class, 'update'])->name('products.newupdate');
+    });
+    Route::middleware(['role:admin'])->group(function () {
+        Route::resource('users', UserController::class);
+    });
 });
