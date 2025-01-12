@@ -12,11 +12,11 @@
     <meta name="author" content="BomiDev">
     <link rel="canonical" href="{{ url()->current() }}">
 
-    <meta property="og:title" content="Bomi POS - Solusi Aplikasi Pengelola Restaurant & Retail">
-    <meta property="og:description" content="Bomi POS menyediakan fitur lengkap bagi pemilik restaurant dan retail untuk mengelola usaha mereka dengan mudah. Daftar restaurant, produk, dan retail tersedia di platform ini. Coba sekarang!">
-    <meta property="og:image" content="{{ asset('home/images/logo_kasir.png') }}">
-    <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:type" content="website">
+    <meta property="og:title" content="@yield('meta-og-title', 'Bomi POS - Solusi Aplikasi Pengelola Restaurant & Retail')">
+    <meta property="og:description" content="@yield('meta-og-description', 'Bomi POS menyediakan fitur lengkap bagi pemilik restaurant dan retail untuk mengelola usaha mereka dengan mudah. Daftar restaurant, produk, dan retail tersedia di platform ini. Coba sekarang!')">
+    <meta property="og:image" content="@yield('meta-og-image', asset('home/images/logo_kasir.png'))">
+    <meta property="og:url" content="@yield('meta-og-url', url()->current())">
+    <meta property="og:type" content="@yield('meta-og-type', 'website')">    
 
     <title>@yield('title') &mdash; Bomi POS</title>
     <!-- # Google Fonts -->

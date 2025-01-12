@@ -5,6 +5,11 @@
 @section('meta-description', $shop->description)
 @section('meta-keywords', $shop->name)
 
+@section('meta-og-title', $shop->name)
+@section('meta-og-description', $shop->description)
+@section('meta-og-image', $shop->photo)
+@section('meta-og-url', url()->current())
+
 @section('content')
     <section class="section">
         <div class="container">
@@ -19,10 +24,10 @@
                         <p class="text-purple text-uppercase fw-bold mb-3">{{ $shop->shop_type }}</p>
                         <div class="content pe-0 pe-lg-5">
                             <p>{{ $shop->description }}</p>
-                            <p><strong>Open Hours:</strong> 
-                                {{ (new DateTime($shop->open_time))->format('h:i A') }} - 
+                            <p><strong>Open Hours:</strong>
+                                {{ (new DateTime($shop->open_time))->format('h:i A') }} -
                                 {{ (new DateTime($shop->close_time))->format('h:i A') }}
-                            </p>                            
+                            </p>
                             <p><strong>Address:</strong> {{ $shop->address }}</p>
                             <div class="d-flex align-items-center">
                                 <!-- Bintang Rating -->
@@ -41,6 +46,69 @@
                                     ({{ $shop->ratings->count() }}
                                     {{ $shop->ratings->count() === 1 ? 'Comment' : 'Comments' }})
                                 </span>
+                            </div>
+
+                            <!-- Tombol Bagikan -->
+                            <div class="mt-3 d-flex">
+                                <a href="https://wa.me/?text={{ urlencode(url('shop/' . $shop->slug)) }}" target="_blank"
+                                    class="btn btn-success btn-lg d-flex align-items-center me-2">
+                                    <i class="fab fa-whatsapp me-1"></i> Bagikan ke WhatsApp
+                                </a>
+
+                                <!-- Tombol Share Lainnya -->
+                                <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#shareModal">
+                                    <i class="fas fa-share-alt"></i> Share
+                                </button>
+                            </div>
+
+                            <!-- Modal Opsi Share -->
+                            <div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel"
+                                style="z-index: 2000 !important;" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="shareModalLabel">Bagikan ke Media Sosial</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <!-- Kontainer Tombol Share -->
+                                            <div class="d-flex flex-column align-items-center">
+                                                <!-- Share ke Facebook -->
+                                                <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url('shop/' . $shop->slug)) }}"
+                                                    target="_blank"
+                                                    style="color: white !important; background-color: #007bff !important; border-radius: 10px !important; padding: 10px 20px; text-decoration: none !important; 
+                                                    margin-bottom: 10px; display: inline-block; text-align: center; font-size: 14px; width: 100%;">
+                                                    <i class="fab fa-facebook-f"></i> Facebook
+                                                </a>
+
+                                                <!-- Share ke Instagram -->
+                                                <a href="https://www.instagram.com/?url={{ urlencode(url('shop/' . $shop->slug)) }}"
+                                                    target="_blank"
+                                                    style="color: white !important; background-color: #dc3545 !important; border-radius: 10px !important; padding: 10px 20px; text-decoration: none !important; 
+                                                    margin-bottom: 10px; display: inline-block; text-align: center; font-size: 14px; width: 100%;">
+                                                    <i class="fab fa-instagram"></i> Instagram
+                                                </a>
+
+                                                <!-- Share ke Twitter -->
+                                                <a href="https://twitter.com/intent/tweet?text={{ urlencode(url('shop/' . $shop->slug)) }}"
+                                                    target="_blank"
+                                                    style="color: white !important; background-color: #17a2b8 !important; border-radius: 10px !important; padding: 10px 20px; text-decoration: none !important; 
+                                                    margin-bottom: 10px; display: inline-block; text-align: center; font-size: 14px; width: 100%;">
+                                                    <i class="fab fa-twitter"></i> Twitter
+                                                </a>
+
+                                                <!-- Share ke WhatsApp -->
+                                                <a href="https://wa.me/?text={{ urlencode(url('shop/' . $shop->slug)) }}"
+                                                    target="_blank"
+                                                    style="color: white !important; background-color: #28a745 !important; border-radius: 10px !important; padding: 10px 20px; text-decoration: none !important; 
+                                                    margin-bottom: 10px; display: inline-block; text-align: center; font-size: 14px; width: 100%;">
+                                                    <i class="fab fa-whatsapp"></i> WhatsApp
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

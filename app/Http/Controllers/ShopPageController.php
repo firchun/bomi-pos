@@ -31,8 +31,8 @@ class ShopPageController extends Controller
             ->where('user_id', $user->id)
             ->paginate(6);
 
-        // Ambil data komentar dengan pagination
-        $ratings = $shop->ratings()->paginate(5);
+        // Ambil data komentar dengan pagination, urutkan berdasarkan waktu input terbaru
+        $ratings = $shop->ratings()->orderBy('created_at', 'desc')->paginate(5);
 
         // Ambil kategori produk berdasarkan user_id
         $categories = Category::whereHas('products', function ($query) use ($user) {
@@ -59,7 +59,7 @@ class ShopPageController extends Controller
             $query->where('user_id', $user->id)
                 ->where('status', true); // Pastikan hanya produk aktif
         })->get();
-        
+
         return response()->json([
             'products' => $products,
             'categories' => $categories,

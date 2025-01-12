@@ -10,7 +10,8 @@
                     <div class="section-title text-center">
                         <p class="text-purple text-uppercase fw-bold mb-3">Our Store</p>
                         <h1>Restaurant</h1>
-                        <p>Your One-Stop Shop for Quality and Style. Discover Unique Finds That Inspire and Unleash Your Style with Our Exclusive Collections.</p>
+                        <p>Your One-Stop Shop for Quality and Style. Discover Unique Finds That Inspire and Unleash Your
+                            Style with Our Exclusive Collections.</p>
                     </div>
                 </div>
             </div>
@@ -21,9 +22,9 @@
                             <div class="block">
                                 <div class="d-flex justify-content-center align-items-center" style="height: 140px;">
                                     <div class="mb-5"
-                                        style="width: 200px; height: 200px; display: flex; justify-content: center; align-items: center;">
+                                        style="width: 100%; max-width: 200px; height: 200px; display: flex; justify-content: center; align-items: center; overflow: hidden;">
                                         <img src="{{ asset('storage/' . $shop->photo) }}" alt="{{ $shop->name }}"
-                                            class="img-fluid rounded" style="max-height: 120px; object-fit: cover;">
+                                            class="img-fluid rounded" style="width: 100%; height: 100%; object-fit: cover;">
                                     </div>
                                 </div>
 
@@ -38,13 +39,13 @@
                                     </p>
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <p class="mb-0"><strong>Open:</strong> 
-                                        {{ (new DateTime($shop->open_time))->format('h:i A') }} - 
+                                    <p class="mb-0"><strong>Open:</strong>
+                                        {{ (new DateTime($shop->open_time))->format('h:i A') }} -
                                         {{ (new DateTime($shop->close_time))->format('h:i A') }}
-                                    </p>                                    
+                                    </p>
                                     <a href="{{ route('shop.details', $shop->slug) }}" class="btn btn-primary">View Shop</a>
                                 </div>
-                                
+
                             </div>
                         </a>
                     </div>

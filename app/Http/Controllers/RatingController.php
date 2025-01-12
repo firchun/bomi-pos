@@ -32,15 +32,16 @@ class RatingController extends Controller
         }
 
         // Redirect dengan pesan sukses
-        return redirect()->route('shop-pages.shop_details', $slug)->with('success', 'Thank you for your feedback!');
+        return redirect()->route('shop.details', $slug)->with('success', 'Thank you for your feedback!');
     }
 
     public function fetchComments(Request $request, $shopId)
     {
         $shop = ShopProfile::findOrFail($shopId);
+        // Ambil komentar dengan pagination, urutkan berdasarkan waktu input terbaru
         $comments = Rating::where('shop_profile_id', $shop->id)
+            ->orderBy('created_at', 'desc') // Urutkan berdasarkan created_at terbaru
             ->paginate(5); // Batasi jumlah komentar per halaman
-
         return response()->json($comments);
     }
 
@@ -65,9 +66,9 @@ class RatingController extends Controller
         $comments = Rating::where('shop_profile_id', $shopId)
             ->orderBy('created_at', 'desc')
             ->paginate(5); // Batasi 5 komentar per halaman
-    
+
         return response()->json($comments);
-    }    
+    }
 
     public function deleteComment($id)
     {
