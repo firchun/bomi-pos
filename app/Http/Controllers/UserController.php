@@ -36,7 +36,7 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8',
-            'role' => 'required|in:admin,staff,user',
+            'role' => 'required|in:admin,user',
         ]);
 
         // store the request...
@@ -70,7 +70,7 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required',
-            'role' => 'required|in:admin,staff,user',
+            'role' => 'required|in:admin,user',
         ]);
 
         // update the request...

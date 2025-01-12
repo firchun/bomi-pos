@@ -32,10 +32,9 @@ class ProductController extends Controller
             'description' => 'required',
             'price' => 'required|numeric',
             'category_id' => 'required',
-            'stock' => 'required|numeric',
+            'stock' => 'nullable|numeric', // stock diizinkan kosong
             'status' => 'required|boolean',
             'is_favorite' => 'required|boolean',
-
         ]);
 
         // store the request...
@@ -45,7 +44,7 @@ class ProductController extends Controller
         $product->description = $request->description;
         $product->price = $request->price;
         $product->category_id = $request->category_id;
-        $product->stock = $request->stock;
+        $product->stock = $request->stock ?? 0; // Jika kosong, gunakan default 0
         $product->status = $request->status;
         $product->is_favorite = $request->is_favorite;
 
@@ -85,7 +84,7 @@ class ProductController extends Controller
             'description' => 'required',
             'price' => 'required|numeric',
             'category_id' => 'required',
-            'stock' => 'required|numeric',
+            'stock' => 'nullable|numeric', // stock diizinkan kosong
             'status' => 'required|boolean',
             'is_favorite' => 'required|boolean',
         ]);
@@ -96,7 +95,7 @@ class ProductController extends Controller
         $product->description = $request->description;
         $product->price = $request->price;
         $product->category_id = $request->category_id;
-        $product->stock = $request->stock;
+        $product->stock = $request->stock ?? $product->stock; // Jika kosong, tetap gunakan nilai lama
         $product->status = $request->status;
         $product->is_favorite = $request->is_favorite;
         $product->save();

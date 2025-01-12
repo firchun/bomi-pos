@@ -55,6 +55,7 @@
                                             <th>Name</th>
                                             <th>Category</th>
                                             <th>Price</th>
+                                            <th>Photo</th>
                                             <th>Status</th>
                                             <th>Create At</th>
                                             <th>Action</th>
@@ -68,7 +69,16 @@
                                                     {{ $product->category->name }}
                                                 </td>
                                                 <td>
-                                                    {{ $product->price }}
+                                                    Rp{{ number_format($product->price, 0, ',', '.') }}
+                                                </td>
+                                                <td>
+                                                    @if ($product->image)
+                                                        <img src="{{ asset($product->image) }}" alt=""
+                                                            width="100px" class="img-thumbnail">
+                                                            @else
+                                                            <span class="badge badge-danger">No Image</span>
+
+                                                    @endif
                                                 </td>
                                                 <td>
                                                     {{ $product->status == 1 ? 'Active' : 'Inactive' }}

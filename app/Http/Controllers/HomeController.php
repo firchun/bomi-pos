@@ -13,6 +13,9 @@ class HomeController extends Controller
 {
     public function index()
     {
+        if(!Auth::check()){
+            return redirect('login');
+        }
         $product = Product::query();
         if (Auth::user()->role == 'user') {
             $product->where('user_id', Auth::id());
@@ -49,5 +52,11 @@ class HomeController extends Controller
             'product' => $product->count(),
         ];
         return view('pages.profile', $data);
+    }
+    public function login(){
+        return view('pages.auth.login');
+    }
+    public function register(){
+        return view('pages.auth.register');
     }
 }
