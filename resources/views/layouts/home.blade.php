@@ -1,11 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+
+    <meta name="title" content="@yield('meta-title','Bomi POS - Solusi Aplikasi Pengelola Restaurant & Retail')">
+    <meta name="description" content="@yield('meta-description','Bomi POS menyediakan fitur lengkap bagi pemilik restaurant dan retail untuk mengelola usaha mereka dengan mudah. Daftar restaurant, produk, dan retail tersedia di platform ini. Coba sekarang!')">
+    <meta name="keywords" content="@yield('meta-keywords','Bomi, Bomi POS, Aplikasi Restaurant, Aplikasi Retail, Restaurant Merauke, Retail Merauke, Daftar Restaurant, Solusi POS, Software POS, Manajemen Usaha')">
+    <meta name="author" content="BomiDev">
+    <link rel="canonical" href="{{ url()->current() }}">
+
+    <meta property="og:title" content="Bomi POS - Solusi Aplikasi Pengelola Restaurant & Retail">
+    <meta property="og:description" content="Bomi POS menyediakan fitur lengkap bagi pemilik restaurant dan retail untuk mengelola usaha mereka dengan mudah. Daftar restaurant, produk, dan retail tersedia di platform ini. Coba sekarang!">
+    <meta property="og:image" content="{{ asset('home/images/logo_kasir.png') }}">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:type" content="website">
+
+    <title>@yield('title') &mdash; Bomi POS</title>
     <!-- # Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

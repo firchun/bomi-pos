@@ -1,5 +1,7 @@
 @extends('layouts.home')
 
+@section('title', 'Restaurant')
+
 @section('content')
     <section class="section" style="padding-top:50px !important;">
         <div class="container">
@@ -36,7 +38,10 @@
                                     </p>
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <p class="mb-0"><strong>Open:</strong> {{ $shop->open_time }} - {{ $shop->close_time }}</p>
+                                    <p class="mb-0"><strong>Open:</strong> 
+                                        {{ (new DateTime($shop->open_time))->format('h:i A') }} - 
+                                        {{ (new DateTime($shop->close_time))->format('h:i A') }}
+                                    </p>                                    
                                     <a href="{{ route('shop.details', $shop->slug) }}" class="btn btn-primary">View Shop</a>
                                 </div>
                                 

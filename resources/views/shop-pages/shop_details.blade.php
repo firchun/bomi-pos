@@ -1,5 +1,10 @@
 @extends('layouts.home')
 
+@section('title', $shop->name)
+@section('meta-title', $shop->name)
+@section('meta-description', $shop->description)
+@section('meta-keywords', $shop->name)
+
 @section('content')
     <section class="section">
         <div class="container">
@@ -14,7 +19,10 @@
                         <p class="text-purple text-uppercase fw-bold mb-3">{{ $shop->shop_type }}</p>
                         <div class="content pe-0 pe-lg-5">
                             <p>{{ $shop->description }}</p>
-                            <p><strong>Open Hours:</strong> {{ $shop->open_time }} - {{ $shop->close_time }}</p>
+                            <p><strong>Open Hours:</strong> 
+                                {{ (new DateTime($shop->open_time))->format('h:i A') }} - 
+                                {{ (new DateTime($shop->close_time))->format('h:i A') }}
+                            </p>                            
                             <p><strong>Address:</strong> {{ $shop->address }}</p>
                             <div class="d-flex align-items-center">
                                 <!-- Bintang Rating -->
@@ -43,7 +51,7 @@
 
     @include('shop-pages.partials-shop.products', ['categories' => $categories, 'products' => $products])
     @include('shop-pages.partials-shop.ratings', ['shop' => $shop, 'ratings' => $ratings])
-    
+
 @endsection
 
 @push('js')
@@ -60,23 +68,31 @@
                     // Memastikan data produk adalah array
                     const products = response.products.data || [];
 
-                    products.forEach(product => {
-                        productsContainer.append(`
-                        <div class="col-md-4 mb-4">
-                            <div class="card h-100">
-                                <img src="${product.image ? `/${product.image}` : '/images/default-product.png'}" 
-                                     class="card-img-top" 
-                                     alt="${product.name}" 
-                                     style="height: 300px; object-fit: cover;">
-                                <div class="card-body">
-                                    <h5 class="card-title">${product.name}</h5>
-                                    <p class="card-text">${product.description}</p>
-                                    <p class="text-purple"><strong>Price:</strong> Rp${parseFloat(product.price).toLocaleString()}</p>
+                    if (products.length > 0) {
+                        products.forEach(product => {
+                            productsContainer.append(`
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100">
+                                        <img src="${product.image ? `/${product.image}` : '/images/default-product.png'}" 
+                                            class="card-img-top" 
+                                            alt="${product.name}" 
+                                            style="height: 300px; object-fit: cover;">
+                                        <div class="card-body">
+                                            <h5 class="card-title">${product.name}</h5>
+                                            <p class="card-text">${product.description}</p>
+                                            <p class="text-purple"><strong>Price:</strong> Rp${parseFloat(product.price).toLocaleString()}</p>
+                                        </div>
+                                    </div>
                                 </div>
+                            `);
+                        });
+                    } else {
+                        productsContainer.append(`
+                            <div class="col-12">
+                                <p class="text-center text-muted">No products available.</p>
                             </div>
-                        </div>
-                `);
-                    });
+                        `);
+                    }
 
                     $('#product-pagination').html(renderPagination(response.products, 'products', shopId));
                 },
@@ -146,19 +162,27 @@
                     const commentsContainer = $('#ratings-container');
                     commentsContainer.empty();
 
-                    response.data.forEach(comment => {
+                    if (response.data.length > 0) {
+                        response.data.forEach(comment => {
+                            commentsContainer.append(`
+                                <div class="rating-item">
+                                    <strong>Anonymous</strong>
+                                    <span class="text-warning">
+                                        ${'★'.repeat(comment.rating)}${'☆'.repeat(5 - comment.rating)}
+                                    </span>
+                                    <p>${comment.comment || ''}</p>
+                                    <small class="text-muted">${new Date(comment.created_at).toLocaleDateString()}</small>
+                                </div>
+                                <hr>
+                            `);
+                        });
+                    } else {
                         commentsContainer.append(`
-                            <div class="rating-item">
-                                <strong>Anonymous</strong>
-                                <span class="text-warning">
-                                    ${'★'.repeat(comment.rating)}${'☆'.repeat(5 - comment.rating)}
-                                </span>
-                                <p>${comment.comment || ''}</p>
-                                <small class="text-muted">${new Date(comment.created_at).toLocaleDateString()}</small>
+                            <div class="no-comments">
+                                <p class="text-center text-muted">No comments available.</p>
                             </div>
-                            <hr>
                         `);
-                    });
+                    }
 
                     $('#comment-pagination').html(renderPagination(response, 'comments', shopId));
                 },

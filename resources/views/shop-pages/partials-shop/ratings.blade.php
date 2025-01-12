@@ -9,7 +9,6 @@
 
                 <!-- Formulir Rating dan Komentar -->
                 <div class="mt-5">
-                    <h4>Give a Rating and Comment</h4>
                     <form action="{{ route('shop.rate', $shop->slug) }}" method="POST">
                         @csrf
                         <div class="mb-3">
