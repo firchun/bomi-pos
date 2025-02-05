@@ -18,8 +18,8 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="ps-lg-5 text-center">
-                        <img loading="lazy" decoding="async" src="{{ asset('home/images/header-banner.png') }}"
-                            alt="banner image" class="w-75">
+                        <img loading="lazy" decoding="async" src="{{ asset('home/images/home-header.png') }}"
+                            alt="banner image" class="w-100">
                     </div>
                 </div>
             </div>

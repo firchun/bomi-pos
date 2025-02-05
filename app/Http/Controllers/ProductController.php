@@ -19,7 +19,7 @@ class ProductController extends Controller
     // create
     public function create()
     {
-        $categories = DB::table('categories')->where('user_id', Auth::id())->get();
+        $categories = DB::table('categories')->get();
         return view('pages.products.create', compact('categories'));
     }
 

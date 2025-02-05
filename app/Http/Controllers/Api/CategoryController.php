@@ -12,7 +12,7 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = \App\Models\Category::where('user_id', Auth::id())->get();
+        $categories = \App\Models\Category::all();
         return response()->json([
             'status' => 'success',
             'data' => $categories

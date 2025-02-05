@@ -24,7 +24,7 @@
                                     <div class="mb-5"
                                         style="width: 100%; max-width: 200px; height: 200px; display: flex; justify-content: center; align-items: center; overflow: hidden;">
                                         <img src="{{ asset('storage/' . $shop->photo) }}" alt="{{ $shop->name }}"
-                                            class="img-fluid rounded" style="width: 100%; height: 100%; object-fit: cover;">
+                                            class="img-fluid rounded" style="max-height: 100%; width: 100%; object-fit: cover; aspect-ratio: 1 / 1;">
                                     </div>
                                 </div>
 

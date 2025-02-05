@@ -18,7 +18,10 @@
     <meta property="og:url" content="@yield('meta-og-url', url()->current())">
     <meta property="og:type" content="@yield('meta-og-type', 'website')">    
 
-    <title>@yield('title') &mdash; Bomi POS</title>
+    <title>@yield('title', 'Home') — Bomi POS</title>
+
+    <link rel="icon" href="{{ asset('favicon.png') }}" type="image/png">
+    
     <!-- # Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,6 +31,8 @@
     <!-- # Main Style Sheet -->
     <link rel="stylesheet" href="{{ asset('home/css/style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+
+    @stack('css')
 </head>
 
 <body>
@@ -41,7 +46,9 @@
     <script src="{{ asset('home/plugins/bootstrap/bootstrap.min.js') }}"></script>
     <script src="{{ asset('home/plugins/slick/slick.min.js') }}"></script>
     <script src="{{ asset('home/plugins/scrollmenu/scrollmenu.min.js') }}"></script>
-@stack('js')
+
+    @stack('js')
+
     <!-- Main Script -->
     <script src="js/script.js"></script>
 </body>

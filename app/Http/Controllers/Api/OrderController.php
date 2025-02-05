@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\Models\Order;
 use App\Models\OrderItem;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
@@ -26,9 +27,12 @@ class OrderController extends Controller
             'total_item' => 'required',
             'id_kasir' => 'required',
             'nama_kasir' => 'required',
-            'transaction_time' => 'required',
+            'transaction_time' => 'required|unique:orders,transaction_time',
             // 'order_items' => 'required'
         ]);
+
+        //generate unique invoice number
+        $no_invoice = 'BOMI-' . Carbon::now()->format('YmdHis');
 
         //create order
         $order = Order::create([
@@ -44,7 +48,8 @@ class OrderController extends Controller
             'total_item' => $request->total_item,
             'id_kasir' => $request->id_kasir,
             'nama_kasir' => $request->nama_kasir,
-            'transaction_time' => $request->transaction_time
+            'transaction_time' => $request->transaction_time,
+            'no_invoice' => $no_invoice
         ]);
 
         //create order items

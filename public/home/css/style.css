@@ -8843,7 +8843,7 @@ a {
   color: #888888;
 }
 a:hover {
-  color: #660078;
+  color: #9900CC;
   text-decoration: underline;
 }
 
@@ -8912,7 +8912,7 @@ a:hover {
 
 .text-black a:hover,
 a.text-black:hover {
-  color: #51B56D !important;
+  color: #9900CC !important;
 }
 
 .text-default {
@@ -8969,7 +8969,7 @@ a.text-black:hover {
   border-bottom: 1px dotted #51B56D;
 }
 .content a:hover {
-  color: #51B56D;
+  color: #9900CC;
   border-bottom: 1px solid #51B56D;
 }
 .content ol,
@@ -9209,7 +9209,7 @@ a.text-black:hover {
   font-size: 15px;
 }
 .card-social a:hover {
-  color: #51B56D;
+  color: #9900CC;
 }
 
 .card:hover .card-social {
@@ -9457,7 +9457,7 @@ blockquote::before {
   color: #888888;
 }
 .service-item a:hover .service-title {
-  color: #51B56D;
+  color: #9900CC;
 }
 .service-item a:hover .service-description {
   color: #888888;
@@ -9631,7 +9631,7 @@ blockquote::before {
   color: #111;
 }
 .page-header .breadcrumbs a:hover {
-  color: #51B56D;
+  color: #9900CC;
 }
 .page-header .breadcrumbs li:last-child a {
   pointer-events: none;
@@ -9912,7 +9912,7 @@ textarea.form-control {
   color: #000;
 }
 .footer-widget ul li a:hover {
-  color: #51B56D;
+  color: #9900CC;
   text-decoration: underline !important;
 }
 
@@ -10094,7 +10094,7 @@ textarea.form-control {
   text-decoration: none;
 }
 .widget.widget-categories li a:hover, .widget.widget-tags li a:hover {
-  background-color: #51B56D;
+  background-color: #9900CC;
   color: #fff;
 }
 .widget.widget-tags li a {

@@ -55,6 +55,12 @@
                     @enderror
                 </div>
 
+                <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" name="remember" class="custom-control-input" id="remember" tabindex="3" {{ old('remember') ? 'checked' : '' }}>
+                        <label class="custom-control-label" for="remember">Remember Me</label>
+                    </div>
+                </div>
 
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">
@@ -66,7 +72,6 @@
 
         </div>
     </div>
-
 @endsection
 
 @push('scripts')

@@ -1,3 +1,6 @@
- <div class="login-brand">
-     {{-- <img src="{{ asset('img/logo-jf.png') }}" alt="logo" width="100" class="shadow-light rounded-circle"> --}}
- </div>
+<div class="login-brand">
+    <img src="{{ asset('home/images/logo_kasir.png') }}"
+        alt="logo"
+        width="130"
+        class="shadow-light">
+</div>

@@ -10,6 +10,10 @@
 @section('meta-og-image', $shop->photo)
 @section('meta-og-url', url()->current())
 
+@push('css')
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+@endpush
+
 @section('content')
     <section class="section">
         <div class="container">
@@ -51,7 +55,7 @@
                             <!-- Tombol Bagikan -->
                             <div class="mt-3 d-flex">
                                 <a href="https://wa.me/?text={{ urlencode(url('shop/' . $shop->slug)) }}" target="_blank"
-                                    class="btn btn-success btn-lg d-flex align-items-center me-2">
+                                    class="btn btn-success d-flex align-items-center me-2">
                                     <i class="fab fa-whatsapp me-1"></i> Bagikan ke WhatsApp
                                 </a>
 
@@ -120,10 +124,27 @@
     @include('shop-pages.partials-shop.products', ['categories' => $categories, 'products' => $products])
     @include('shop-pages.partials-shop.ratings', ['shop' => $shop, 'ratings' => $ratings])
 
+    <section class="section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 mb-4">
+                    <div class="section-title text-center">
+                        <p class="text-purple text-uppercase fw-bold mb-3">Find Us Here</p>
+                        <h1>Discover the Location of {{ $shop->name }}</h1>
+                    </div>
+    
+                    <div class="mt-5">
+                        <div id="map" style="height: 400px; width: 100%; margin-top: 20px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 @endsection
 
 @push('js')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         function loadProducts(shopId, page = 1) {
             $.ajax({
@@ -302,6 +323,25 @@
                     }
                 });
             });
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const latitude = {{ $shop->location->latitude ?? 0 }};
+            const longitude = {{ $shop->location->longitude ?? 0 }};
+            const shopName = "{{ $shop->name }}";
+
+            // Inisialisasi peta
+            const map = L.map('map').setView([latitude, longitude], 15);
+
+            // Tambahkan tile layer dari OpenStreetMap
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Tambahkan marker ke lokasi toko
+            L.marker([latitude, longitude]).addTo(map)
+                .bindPopup(`<strong>${name}</strong><br>Latitude: ${latitude}, Longitude: ${longitude}`)
+                .openPopup();
         });
     </script>
 @endpush

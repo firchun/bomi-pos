@@ -4,6 +4,8 @@
 
 @push('style')
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha384-xodZBntMorA17cE6Bqy8BMKGzHkxjVRyDzt2EZ7bhD4MLUyZMivDDr2IC6Q8tiyP" crossorigin="" />
 
     <style>
         #create-map,
@@ -96,10 +98,9 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <form 
-                            action="{{ isset($shopProfile) ? route('shop-profiles.update', $shopProfile->id) : route('shop-profiles.store') }}" 
-                            method="POST" 
-                            enctype="multipart/form-data">
+                        <form
+                            action="{{ isset($shopProfile) ? route('shop-profiles.update', $shopProfile->id) : route('shop-profiles.store') }}"
+                            method="POST" enctype="multipart/form-data">
                             @csrf
                             @if (isset($shopProfile))
                                 @method('PUT')
@@ -108,14 +109,14 @@
                             {{-- Shop Name --}}
                             <div class="form-group">
                                 <label for="name">Shop Name</label>
-                                <input type="text" name="name" id="name" class="form-control" 
+                                <input type="text" name="name" id="name" class="form-control"
                                     value="{{ old('name', $shopProfile->name ?? '') }}" required>
                             </div>
 
                             {{-- Shop Type --}}
                             <div class="form-group">
                                 <label for="shop_type">Shop Type</label>
-                                <input type="text" name="shop_type" id="shop_type" class="form-control" 
+                                <input type="text" name="shop_type" id="shop_type" class="form-control"
                                     value="{{ old('shop_type', $shopProfile->shop_type ?? '') }}" required>
                             </div>
 
@@ -134,14 +135,14 @@
                             {{-- Open Time --}}
                             <div class="form-group">
                                 <label for="open_time">Open Time</label>
-                                <input type="time" name="open_time" id="open_time" class="form-control" 
+                                <input type="time" name="open_time" id="open_time" class="form-control"
                                     value="{{ old('open_time', $shopProfile->open_time ?? '') }}" required>
                             </div>
 
                             {{-- Close Time --}}
                             <div class="form-group">
                                 <label for="close_time">Close Time</label>
-                                <input type="time" name="close_time" id="close_time" class="form-control" 
+                                <input type="time" name="close_time" id="close_time" class="form-control"
                                     value="{{ old('close_time', $shopProfile->close_time ?? '') }}" required>
                             </div>
 
@@ -151,23 +152,25 @@
                                 <input type="file" name="photo" id="photo" class="form-control">
                                 @if (isset($shopProfile->photo))
                                     <p class="mt-2">Current Photo:</p>
-                                    <img src="{{ Storage::url($shopProfile->photo) }}" alt="Current Photo" 
-                                         style="max-width: 150px; max-height: 150px;">
+                                    <img src="{{ Storage::url($shopProfile->photo) }}" alt="Current Photo"
+                                        style="max-width: 150px; max-height: 150px;">
                                 @endif
                             </div>
 
                             {{-- Latitude --}}
                             <div class="form-group">
                                 <label for="latitude">Latitude</label>
-                                <input type="text" name="latitude" id="latitude" class="form-control" 
-                                    value="{{ old('latitude', $shopProfile->location->latitude ?? '-8.5003989') }}" required>
+                                <input type="text" name="latitude" id="latitude" class="form-control"
+                                    value="{{ old('latitude', $shopProfile->location->latitude ?? '-8.5003989') }}"
+                                    required>
                             </div>
 
                             {{-- Longitude --}}
                             <div class="form-group">
                                 <label for="longitude">Longitude</label>
-                                <input type="text" name="longitude" id="longitude" class="form-control" 
-                                    value="{{ old('longitude', $shopProfile->location->longitude ?? '140.3659557') }}" required>
+                                <input type="text" name="longitude" id="longitude" class="form-control"
+                                    value="{{ old('longitude', $shopProfile->location->longitude ?? '140.3659557') }}"
+                                    required>
                             </div>
 
                             {{-- Map --}}
@@ -187,6 +190,7 @@
 
 @push('scripts')
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         // Static Map (View-Only Mode)
         @if (isset($shopProfile))

@@ -18,7 +18,7 @@ class ShopPageController extends Controller
     public function shop_details(Request $request, $slug)
     {
         // Ambil data shop berdasarkan slug
-        $shop = ShopProfile::where('slug', $slug)->firstOrFail();
+        $shop = ShopProfile::with('location')->where('slug', $slug)->firstOrFail();
 
         // Ambil user yang memiliki shop ini
         $user = $shop->user;

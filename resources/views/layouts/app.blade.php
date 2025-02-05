@@ -12,28 +12,27 @@
         integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+    <link rel="icon" href="{{ asset('favicon.png') }}" type="image/png">
+
     @stack('style')
 
     <!-- Template CSS -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/components.css') }}">
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-xodZBntMorA17cE6Bqy8BMKGzHkxjVRyDzt2EZ7bhD4MLUyZMivDDr2IC6Q8tiyP" crossorigin=""/>
-</head>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
 </head>
 
 <body>
     <div id="app">
         <div class="main-wrapper">
-            <!-- Header -->
-            @include('components.header')
-
             <!-- Sidebar -->
             @include('components.sidebar')
-
+            <!-- Header -->
+            @include('components.header')
             <!-- Content -->
             @yield('main')
-
             <!-- Footer -->
             @include('components.footer')
         </div>
@@ -53,8 +52,7 @@
     <!-- Template JS File -->
     <script src="{{ asset('js/scripts.js') }}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
-
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    @livewireScripts
 </body>
 
 </html>

@@ -45,7 +45,7 @@ class AdminProfileController extends Controller
         ]);
 
         return redirect()
-            ->route('pages.admin_profiles.index')
+            ->route('admin_profiles.index')
             ->with('success', 'Profile created successfully!');
     }
 
