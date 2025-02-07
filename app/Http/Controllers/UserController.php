@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -36,6 +37,7 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8',
+            'business_name' => 'nullable',
             'role' => 'required|in:admin,user',
         ]);
 
@@ -44,6 +46,7 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
+        $user->business_name = $request->business_name;
         $user->role = $request->role;
         $user->save();
 
@@ -64,29 +67,32 @@ class UserController extends Controller
     }
 
     // update
-    public function update(Request $request, $id)
+    public function update(Request $request,$id)
     {
         // validate the request...
         $request->validate([
             'name' => 'required',
             'email' => 'required',
+            'business_name' => 'nullable',
             'role' => 'required|in:admin,user',
         ]);
-
+        
+        dd($request);
         // update the request...
         $user = User::find($id);
         $user->name = $request->name;
         $user->email = $request->email;
+        $user->business_name = $request->business_name;
         $user->role = $request->role;
-        $user->save();
+        $user->update();
 
         //if password is not empty
         if ($request->password) {
             $user->password = Hash::make($request->password);
-            $user->save();
+            $user->update();
         }
-
-        return redirect()->route('users.index')->with('success', 'User updated successfully');
+        return back();
+        // return redirect()->route('users.index')->with('success', 'User updated successfully');
     }
 
     // destroy

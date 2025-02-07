@@ -56,7 +56,9 @@
                 </div>
                 <div class="col-12 col-md-12 col-lg-7">
                     <div class="card">
-                        <form method="post" class="needs-validation" novalidate="">
+                        <form method="POST" class="needs-validation" novalidate="" action="{{ route('profile.update',Auth::id())}}">
+                            @method('PUT')
+                            @csrf
                             <div class="card-header">
                                 <h4>Edit Profile</h4>
                             </div>
@@ -65,9 +67,17 @@
                                     <div class="form-group  col-12">
                                         <label>Name</label>
                                         <input type="text" class="form-control" value="{{ Auth::user()->name }}"
-                                            required="">
+                                            required="" name="name">
                                         <div class="invalid-feedback">
                                             Please fill in the first name
+                                        </div>
+                                    </div>
+                                    <div class="form-group  col-12">
+                                        <label>Business Name</label>
+                                        <input type="text" class="form-control" value="{{ Auth::user()->business_name }}"
+                                            required="" name="business_name">
+                                        <div class="invalid-feedback">
+                                            Please fill in the business name
                                         </div>
                                     </div>
 
@@ -76,7 +86,7 @@
                                     <div class="form-group col-md-7 col-12">
                                         <label>Email</label>
                                         <input type="email" class="form-control" value="{{ Auth::user()->email }}"
-                                            required="" readonly>
+                                            required="" readonly name="email">
                                         <div class="invalid-feedback">
                                             Please fill in the email
                                         </div>

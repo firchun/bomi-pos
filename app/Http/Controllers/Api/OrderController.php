@@ -32,7 +32,7 @@ class OrderController extends Controller
         ]);
 
         //generate unique invoice number
-        $no_invoice = 'BOMI-' . Carbon::now()->format('YmdHis');
+        $no_invoice = 'BR-' . Carbon::now()->format('YmdHis');
 
         //create order
         $order = Order::create([
@@ -72,22 +72,23 @@ class OrderController extends Controller
     {
         $start_date = $request->input('start_date');
         $end_date = $request->input('end_date');
+        $query = Order::where('id_kasir', Auth::id()); // Filter berdasarkan kasir yang sedang login
         if ($start_date && $end_date) {
-            $orders = Order::where('user_id', Auth::id())->whereBetween('created_at', [$start_date, $end_date])->get();
-        } else {
-            $orders = Order::where('user_id', Auth::id())->get();
+            $query->whereBetween('created_at', [$start_date, $end_date]);
         }
+        $orders = $query->get();
         return response()->json([
             'status' => 'success',
             'data' => $orders
         ], 200);
     }
 
+
     public function summary(Request $request)
     {
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
-        $query = Order::where('user_id', Auth::id());
+        $query = Order::where('id_kasir', Auth::id());
         if ($startDate && $endDate) {
             $query->whereBetween('created_at', [$startDate, $endDate]);
         }

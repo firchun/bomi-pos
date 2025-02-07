@@ -8,16 +8,17 @@
         </div>
         <div class="sidebar">
             <ul class="sidebar-menu">
+                <li class="menu-header">Dashboard</li>
                 <li class='nav-item {{ request()->routeIs('home') ? 'active' : '' }}'>
                     <a class="nav-link" href="{{ route('home') }}">
                         <i class="fas fa-gauge"></i><span class="nav-text">Dashboard</span>
                     </a>
                 </li>                
                 @if (Auth::user()->role != 'admin')
-                    <li class='nav-item'>
+                    {{-- <li class='nav-item'>
                         <a class="nav-link" href="{{ route('user.pos') }}"><i
                                 class="fas fa-folder-open"></i><span class="nav-text badge bg-danger rounded-pill ms-2 px-3 py-1 text-white">POS SOON</span></a>
-                    </li>
+                    </li> --}}
 
                     <li class="menu-header">Inventory</li>
                     <li class='nav-item {{ request()->is('products*') ? 'active' : '' }}'>
@@ -37,17 +38,17 @@
                     </li>
                     <li class='nav-item {{ request()->is('ratings*') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ route('ratings.index') }}">
-                            <i class="fas fa-comments"></i><span class="nav-text">Comment & Rating</span></a>
+                            <i class="fas fa-star"></i><span class="nav-text">Comment & Rating</span></a>
                     </li>
 
                     <li class="menu-header">User</li>
                     <li class='nav-item'>
                         <a class="nav-link" href="{{ route('daily.report') }}"><i
-                                class="fas fa-folder-open"></i><span class="nav-text">Report</span></a>
+                                class="fas fa-chart-line"></i><span class="nav-text">Report</span></a>
                     </li>
                     <li class='nav-item {{ request()->is('shop-profiles*') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ route('shop-profiles.index') }}"><i
-                                class="fas fa-folder-open"></i><span class="nav-text">Shop Profile</span></a>
+                                class="fas fa-store"></i><span class="nav-text">Shop Profile</span></a>
                     </li>
                 @endif
 

@@ -68,8 +68,9 @@
                     </button>
                 </div>
             </form>
-
-
+            <div class="text-center mt-3">
+                <p>Belum punya akun? <a href="{{ route('register') }}" class="text-primary">Daftar Sekarang</a></p>
+            </div>
         </div>
     </div>
 @endsection

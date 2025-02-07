@@ -132,7 +132,7 @@
                         <p class="text-purple text-uppercase fw-bold mb-3">Find Us Here</p>
                         <h1>Discover the Location of {{ $shop->name }}</h1>
                     </div>
-    
+
                     <div class="mt-5">
                         <div id="map" style="height: 400px; width: 100%; margin-top: 20px;"></div>
                     </div>
@@ -325,7 +325,7 @@
             });
         });
 
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const latitude = {{ $shop->location->latitude ?? 0 }};
             const longitude = {{ $shop->location->longitude ?? 0 }};
             const shopName = "{{ $shop->name }}";
@@ -333,15 +333,30 @@
             // Inisialisasi peta
             const map = L.map('map').setView([latitude, longitude], 15);
 
-            // Tambahkan tile layer dari OpenStreetMap
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(map);
+            // Tambahkan tile layer dari Esri Satellite (peta satelit)
+            L.tileLayer(
+                'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                    attribution: '© Esri & OpenStreetMap contributors'
+                }).addTo(map);
 
             // Tambahkan marker ke lokasi toko
-            L.marker([latitude, longitude]).addTo(map)
-                .bindPopup(`<strong>${name}</strong><br>Latitude: ${latitude}, Longitude: ${longitude}`)
+            const marker = L.marker([latitude, longitude]).addTo(map)
+                .bindPopup(`
+                <div style="text-align: center;">
+                    <strong>${shopName}</strong><br>
+                    Latitude: ${latitude}, Longitude: ${longitude}<br>
+                    <a href="https://www.google.com/maps?q=${latitude},${longitude}" target="_blank" 
+                    style="color: #9900CC; text-decoration: underline; display: inline-block; margin-top: 5px;">
+                        🗺️ Buka di Google Maps
+                    </a>
+                </div>
+            `)
                 .openPopup();
+
+            // Tambahkan event agar marker bisa diklik untuk membuka Google Maps
+            marker.on('click', function() {
+                window.open(`https://www.google.com/maps?q=${latitude},${longitude}`, '_blank');
+            });
         });
     </script>
 @endpush

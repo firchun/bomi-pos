@@ -11,8 +11,7 @@
                         <p class="mb-4">Kami telah mengumpulkan fitur terbaik untuk mendukung operasional kasir
                             <br> Anda. Pilih solusi paling terbaik untuk bisnis Anda dengan cepat dan mudah!.
                         </p>
-                        <a type="button" class="btn btn-primary" href="{{ route('register') }}" data-bs-toggle="modal"
-                            data-bs-target="#applyLoan">Daftar Sekarang <span style="font-size: 14px;"
+                        <a type="button" class="btn btn-primary" href="{{ route('register') }}">Daftar Sekarang <span style="font-size: 14px;"
                                 class="ms-2 fas fa-arrow-right"></span></a>
                     </div>
                 </div>

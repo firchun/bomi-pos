@@ -7,14 +7,16 @@ use App\Models\User;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
     public function index()
     {
-        if(!Auth::check()){
+        if (!Auth::check()) {
             return redirect('login');
         }
         $product = Product::query();
@@ -25,11 +27,25 @@ class HomeController extends Controller
         if (Auth::user()->role == 'user') {
             $categories->where('user_id', Auth::id());
         }
+        // Subquery untuk total pesanan per produk
+        $orderCounts = OrderItem::select('product_id', DB::raw('COALESCE(SUM(quantity), 0) as total_ordered'))
+            ->groupBy('product_id');
+
+        // Ambil kategori dengan 3 produk terpopuler
+        $popularCategories = Category::with(['products' => function ($query) use ($orderCounts) {
+            $query->leftJoinSub($orderCounts, 'order_counts', function ($join) {
+                $join->on('products.id', '=', 'order_counts.product_id');
+            })
+                ->select('products.*', DB::raw('COALESCE(order_counts.total_ordered, 0) as total_ordered'))
+                ->orderByDesc('total_ordered')
+                ->take(3);
+        }])->get();
         $data = [
             'admin' => User::where('role', 'admin')->count(),
             'user' => User::where('role', 'user')->count(),
             'categories' => $categories->count(),
             'product' => $product->count(),
+            'popularCategories' => $popularCategories,
         ];
         return view('pages.dashboard', $data);
     }
@@ -38,7 +54,7 @@ class HomeController extends Controller
     {
         $filter = $request->input('filter', 'week');
         $now = Carbon::now();
-    
+
         // Data untuk chart
         if ($filter == 'week') {
             $startDate = $now->copy()->startOfWeek();
@@ -56,10 +72,10 @@ class HomeController extends Controller
             $interval = 'month';
             $periods = 12;
         }
-    
+
         $labels = [];
         $data = [];
-    
+
         for ($i = 0; $i < $periods; $i++) {
             if ($interval == 'day') {
                 $currentDate = $startDate->copy()->addDays($i);
@@ -75,7 +91,7 @@ class HomeController extends Controller
             }
             $data[] = $total;
         }
-    
+
         return response()->json([
             'labels' => $labels,
             'data' => $data,
@@ -85,7 +101,7 @@ class HomeController extends Controller
     public function getSalesStatistics()
     {
         $now = Carbon::now();
-    
+
         return response()->json([
             'today' => Order::whereDate('transaction_time', $now->toDateString())->sum('total'),
             'week' => Order::whereBetween('transaction_time', [$now->startOfWeek()->toDateTimeString(), $now->endOfWeek()->toDateTimeString()])->sum('total'),
@@ -93,7 +109,7 @@ class HomeController extends Controller
             'year' => Order::whereBetween('transaction_time', [$now->startOfYear()->toDateTimeString(), $now->endOfYear()->toDateTimeString()])->sum('total')
         ]);
     }
-    
+
     public function profile()
     {
         $product = Product::query();
@@ -115,10 +131,12 @@ class HomeController extends Controller
         ];
         return view('pages.profile', $data);
     }
-    public function login(){
+    public function login()
+    {
         return view('pages.auth.login');
     }
-    public function register(){
+    public function register()
+    {
         return view('pages.auth.register');
     }
 }

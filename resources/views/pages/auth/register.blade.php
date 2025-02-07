@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Register CBT')
+@section('title', 'Register')
 
 @push('style')
     <!-- CSS Libraries -->
@@ -30,7 +30,19 @@
                     @enderror
                 </div>
 
-
+                <div class="form-group">
+                    <label for="frist_name">Business Name</label>
+                    <input id="frist_name" type="text"
+                        class="form-control @error('business_name')
+                        is-invalid
+                    @enderror"
+                        name="name" autofocus>
+                    @error('business_name')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
 
                 <div class="form-group">
                     <label for="email">Email</label>
@@ -49,12 +61,16 @@
 
                 <div class="form-group">
                     <label for="password" class="d-block">Password</label>
-                    <input id="password" type="password"
-                        class="form-control pwstrength @error('password')
-                        is-invalid
-
-                    @enderror"
-                        data-indicator="pwindicator" name="password">
+                    <div class="input-group">
+                        <input id="password" type="password"
+                            class="form-control pwstrength @error('password') is-invalid @enderror"
+                            data-indicator="pwindicator" name="password">
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
                     @error('password')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -65,6 +81,7 @@
                         <div class="label"></div>
                     </div>
                 </div>
+
                 <div class="form-group ">
                     <label for="password2" class="d-block">Password Confirmation</label>
                     <input id="password2" type="password"
@@ -85,6 +102,9 @@
                     </button>
                 </div>
             </form>
+            <div class="text-center mt-3">
+                <p>Sudah punya akun? <a href="{{ route('login') }}" class="text-primary">Masuk Sekarang</a></p>
+            </div>
         </div>
     </div>
 @endsection
@@ -96,4 +116,21 @@
 
     <!-- Page Specific JS File -->
     <script src="{{ asset('js/page/auth-register.js') }}"></script>
+
+    <script>
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            var passwordField = document.getElementById('password');
+            var icon = this.querySelector('i');
+    
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordField.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+    </script>
 @endpush

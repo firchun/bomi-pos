@@ -45,10 +45,8 @@ Route::get('/register', [HomeController::class, 'register'])->name('register');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', [HomeController::class, 'index'])->name('home');
-    Route::get('/dashboard/transaction-data', [HomeController::class, 'getTransactionData']);
-    Route::get('/dashboard/sales-statistics', [HomeController::class, 'getSalesStatistics']);
-
     Route::get('profile', [HomeController::class, 'profile'])->name('profile');
+    Route::put('profile/update/{id}', [UserController::class, 'update'])->name('profile.update');
     Route::middleware(['role:user'])->group(function () {
         Route::resource('products', ProductController::class);
         Route::resource('categories', CategoryController::class);
@@ -70,6 +68,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/home-pos', Pos::class)->name('user.pos');
 
         Route::get('/daily-report', [ReportController::class, 'dailyReport'])->name('daily.report');
+        Route::get('/reports/{order}', [ReportController::class, 'show'])->name('report.show');
+        Route::get('/report/{id}/printTransaction', [ReportController::class, 'printTransaction'])->name('report.printTransaction');
+
+        Route::get('/dashboard/transaction-data', [HomeController::class, 'getTransactionData']);
+        Route::get('/dashboard/sales-statistics', [HomeController::class, 'getSalesStatistics']);    
     });
     Route::middleware(['role:admin'])->group(function () {
         Route::resource('users', UserController::class);

@@ -2,83 +2,121 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\Models\Order;
 use App\Models\OrderItem;
-use Carbon\Carbon;
+use App\Models\ShopProfile;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
     public function dailyReport(Request $request)
     {
+        // Ambil toko dari user yang sedang login
+        $user = Auth::user();
         $date = $request->input('date');
         $search = $request->input('search')['value'] ?? '';
-    
-        // Query untuk mengambil data OrderItem dengan relasi Order dan Product
-        $orderItemsQuery = OrderItem::with(['order', 'product'])
+        $orderColumn = $request->input('order')[0]['column'] ?? 2; // Urut berdasarkan tanggal transaksi
+        $orderDir = $request->input('order')[0]['dir'] ?? 'desc';
+        $columns = ['id', 'no_invoice', 'transaction_time', 'total_item', 'total'];
+
+        $ordersQuery = Order::query()
             ->when($date, function ($query, $date) {
-                $query->whereHas('order', function ($q) use ($date) {
-                    $q->whereDate('transaction_time', $date);
-                });
+                $query->whereDate('transaction_time', $date);
             })
             ->when($search, function ($query, $search) {
-                // Pencarian berdasarkan nama produk atau atribut lain
-                $query->whereHas('product', function ($q) use ($search) {
-                    $q->where('name', 'like', '%' . $search . '%');
+                $query->where(function ($q) use ($search) {
+                    $q->where('no_invoice', 'like', '%' . $search . '%')
+                        ->orWhere('transaction_time', 'like', '%' . $search . '%');
                 });
             });
-    
-        // Hitung total revenue (tanpa pagination)
-        $totalRevenue = $orderItemsQuery->get()->reduce(function ($carry, $item) {
-            $totalPrice = $item->quantity * $item->price;
-            $discountAmount = $item->order->discount > 0 ? ($totalPrice * ($item->order->discount / 100)) : 0;
-            $totalPriceAfterDiscount = $totalPrice - $discountAmount;
-            return $carry + $totalPriceAfterDiscount;
-        }, 0);
-    
-        $recordsTotal = $orderItemsQuery->count();
-    
-        // Pagination DataTables
+
+        // Sorting berdasarkan tanggal terbaru
+        $ordersQuery->orderBy($columns[$orderColumn], $orderDir);
+
+        // Total records
+        $recordsTotal = Order::count();
+        $recordsFiltered = $ordersQuery->count();
+
+        // Pagination
         $start = $request->input('start', 0);
         $length = $request->input('length', 10);
-    
-        $orderItems = $orderItemsQuery->skip($start)->take($length)->get();
-    
-        $reportData = [];
-        $nomor = $start + 1;
-    
-        foreach ($orderItems as $item) {
-            $order = $item->order;
-            $totalPrice = $item->quantity * $item->price;
-            $discountAmount = $order->discount > 0 ? ($totalPrice * ($order->discount / 100)) : 0;
-            $totalPriceAfterDiscount = $totalPrice - $discountAmount;
+        $orders = $ordersQuery->skip($start)->take($length)->get();
 
-            $transactionDate = $order ? Carbon::parse($order->transaction_time)->format('Y-m-d') : 'Tanggal Tidak Ditemukan';
-    
+        // Total revenue
+        $totalRevenue = $ordersQuery->sum('total');
+
+        $reportData = [];
+        foreach ($orders as $order) {
             $reportData[] = [
-                'nomor' => $nomor++,
-                'nama_product' => $item->product ? $item->product->name : 'Produk Tidak Ditemukan',
-                'jumlah_beli' => $item->quantity,
-                'harga_satuan' => $item->price,
-                'total_harga' => $totalPrice,
-                'diskon' => $discountAmount,
-                'total_setelah_diskon' => $totalPriceAfterDiscount,
-                'tanggal_transaksi' => $transactionDate,
+                'id' => $order->id,
+                'no_invoice' => $order->no_invoice,
+                'tanggal_transaksi' => Carbon::parse($order->transaction_time)->format('d/m/Y H:i'),
+                'jumlah_beli' => $order->total_item,
+                'total_keseluruhan' => $order->total,
+                'detail_button' => '<a href="' . route('report.show', $order->id) . '" class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></a>'
             ];
         }
-    
+
         if ($request->ajax()) {
             return response()->json([
-                'recordsTotal' => $recordsTotal,
-                'recordsFiltered' => $recordsTotal,
-                'data' => $reportData,
                 'draw' => intval($request->input('draw')),
-                'totalRevenue' => $totalRevenue, // Kirim total revenue ke frontend
+                'recordsTotal' => $recordsTotal,
+                'recordsFiltered' => $recordsFiltered,
+                'data' => $reportData,
+                'totalRevenue' => $totalRevenue,
             ]);
         }
-    
-        return view('pages.report.index', [
-            'date' => $date,
-        ]);
+
+        return view('pages.report.index', compact('date'));
+    }
+
+    // ReportController.php
+    public function show($id)
+    {
+        $user = Auth::user();
+        // Ambil data OrderItem dengan relasi ke Order dan Product
+        $orderItems = OrderItem::with(['order', 'product'])
+            ->where('order_id', $id)
+            ->get();
+
+        // Ambil Order berdasarkan ID
+        $order = Order::findOrFail($id);
+
+        // Ambil data toko
+        $shop = ShopProfile::first();
+
+        // Hitung total sebelum diskon, tax, service charge
+        $totalProduk = $orderItems->sum(fn($item) => $item->quantity * $item->price);
+
+        // Hitung total setelah diskon, tax, dan service charge
+        $totalFinal = ($totalProduk - $order->discount_amount) + $order->tax + $order->service_charge;
+
+        return view('pages.report.show', compact('order', 'orderItems', 'shop', 'totalProduk', 'totalFinal'));
+    }
+
+    public function printTransaction($id)
+    {
+        $user = Auth::user();
+        // Ambil data OrderItem dengan relasi ke Product
+        $orderItems = OrderItem::with('product')
+            ->where('order_id', $id)
+            ->get();
+
+        // Ambil Order berdasarkan ID
+        $order = Order::findOrFail($id);
+
+        // Ambil data toko
+        $shop = ShopProfile::first();
+
+        // Hitung total sebelum diskon, tax, service charge
+        $totalProduk = $orderItems->sum(fn($item) => $item->quantity * $item->price);
+
+        // Hitung total setelah diskon, tax, dan service charge
+        $totalFinal = ($totalProduk - $order->discount_amount) + $order->tax + $order->service_charge;
+
+        return view('pages.report.print-transaction', compact('order', 'orderItems', 'shop', 'totalProduk', 'totalFinal'));
     }
 }

@@ -8897,6 +8897,10 @@ a:hover {
   background: #233242 !important;
 }
 
+.bg-purple {
+  background: #9900CC !important;
+}
+
 
 .text-primary {
   color: #51B56D !important;
@@ -8904,6 +8908,10 @@ a:hover {
 
 .text-purple {
   color: #660078 !important;
+}
+
+.text-violet {
+  color: #9900CC !important;
 }
 
 .text-black {

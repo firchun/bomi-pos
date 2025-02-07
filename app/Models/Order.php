@@ -24,4 +24,9 @@ class Order extends Model
         'transaction_time',
         'no_invoice'
     ];
+    
+    public function items()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
 }

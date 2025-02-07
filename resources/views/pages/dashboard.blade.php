@@ -96,7 +96,7 @@
                             </div>
                             <div class="card-body">
                                 <canvas id="Chart" style="min-height: 400px; width: 100%"></canvas>
-    
+
                                 <div class="statistic-details mt-sm-4">
                                     <div class="statistic-details-item">
                                         <div class="detail-value" id="todaySales">Rp 0</div>
@@ -132,6 +132,35 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- Card produk terpopuler -->
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Produk Terpopuler per Kategori</h4>
+                            </div>
+                            <div class="card-body">
+                                @forelse($popularCategories as $category)
+                                    @if ($category->products->count() > 0)
+                                        <div class="mb-4">
+                                            <h5 class="badge bg-primary rounded-pill text-white">{{ $category->name }}</h5>
+                                            <ul class="list-group">
+                                                @foreach ($category->products as $product)
+                                                    <li class="list-group-item d-flex justify-content-between align-items-center border-0">
+                                                        {{ $product->name }}
+                                                        {{-- <span class="badge bg-primary rounded-pill">
+                                                            {{ $product->total_ordered ?? 0 }} Terjual
+                                                        </span> --}}
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    @endif
+                                @empty
+                                    <div class="alert alert-info">Tidak ada data produk terpopuler.</div>
+                                @endforelse
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -153,7 +182,7 @@
     <!-- Page Specific JS File -->
     <script src="{{ asset('js/page/index-0.js') }}"></script>
     <script src="{{ asset('js/page/features-posts.js') }}"></script>
-    
+
     {{-- chart js --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>

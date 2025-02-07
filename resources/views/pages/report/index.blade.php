@@ -5,6 +5,22 @@
 @push('style')
     <link rel="stylesheet" href="{{ asset('library/selectric/public/selectric.css') }}">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.css" />
+
+    <style>
+        #report-table thead th {
+            background-color: #9900CC;
+            color: white;
+            text-align: center;
+        }
+
+        #report-table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        #report-table tbody tr:hover {
+            background-color: rgba(153, 0, 204, 0.2);
+        }
+    </style>
 @endpush
 
 @section('main')
@@ -28,7 +44,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="row mt-4">
                     <div class="col-12">
                         <div class="card">
@@ -46,25 +61,19 @@
                                     </form>
                                 </div>
 
-                                <div class="clearfix mb-3"></div>
-
                                 <div class="table-responsive">
                                     <table class="table-striped table" id="report-table">
                                         <thead>
                                             <tr>
-                                                <th>No</th>
-                                                <th>Nama Produk</th>
+                                                <th>ID</th>
+                                                <th>No Invoice</th>
                                                 <th>Tanggal Transaksi</th>
                                                 <th>Jumlah Beli</th>
-                                                <th>Harga Satuan</th>
-                                                <th>Total Harga</th>
-                                                <th>Diskon</th>
-                                                <th>Total Setelah Diskon</th>
+                                                <th>Total Keseluruhan</th>
+                                                <th>Aksi</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-
-                                        </tbody>
+                                        <tbody></tbody>
                                     </table>
                                 </div>
                             </div>
@@ -82,7 +91,7 @@
 
     <!-- Page Specific JS File -->
     <script src="{{ asset('js/page/features-posts.js') }}"></script>
-    
+
     <script src="https://cdn.datatables.net/2.2.1/js/dataTables.js"></script>
 
     <script>
@@ -94,72 +103,56 @@
                     url: "{{ route('daily.report') }}",
                     type: 'GET',
                     data: function(d) {
-                        d.date = $('#date-filter').val(); // Filter tanggal (jika ada)
+                        d.date = $('#date-filter').val();
                     },
                     dataSrc: function(json) {
-                        // Update Total Revenue untuk keseluruhan data
                         $('#total-revenue').text('Rp' + new Intl.NumberFormat('id-ID').format(json
                             .totalRevenue));
                         return json.data;
                     }
                 },
+                order: [
+                    [2, 'desc']
+                ],
                 columns: [{
-                        data: 'nomor',
-                        name: 'nomor',
+                        data: 'id',
+                        name: 'id',
                         className: 'text-left'
                     },
                     {
-                        data: 'nama_product',
-                        name: 'nama_product',
+                        data: 'no_invoice',
+                        name: 'no_invoice',
                         className: 'text-left'
                     },
                     {
                         data: 'tanggal_transaksi',
-                        name: 'tanggal_transaksi',
+                        name: 'transaction_time',
                         className: 'text-left'
                     },
                     {
                         data: 'jumlah_beli',
-                        name: 'jumlah_beli',
+                        name: 'total_item',
                         className: 'text-left'
                     },
                     {
-                        data: 'harga_satuan',
-                        name: 'harga_satuan',
-                        className: 'text-left'
+                        data: 'total_keseluruhan',
+                        name: 'total',
+                        className: 'text-left',
+                        render: function(data) {
+                            return 'Rp' + new Intl.NumberFormat('id-ID').format(data);
+                        }
                     },
                     {
-                        data: 'total_harga',
-                        name: 'total_harga',
-                        className: 'text-left'
-                    },
-                    {
-                        data: 'diskon',
-                        name: 'diskon',
-                        className: 'text-left'
-                    },
-                    {
-                        data: 'total_setelah_diskon',
-                        name: 'total_setelah_diskon',
-                        className: 'text-left'
-                    },
-                ],
-                columnDefs: [{
-                    targets: [3, 4, 5, 6], // Format untuk kolom harga
-                    render: function(data, type, row) {
-                        return type === 'display' ? 'Rp' + new Intl.NumberFormat('id-ID')
-                            .format(data) : data;
+                        data: 'detail_button',
+                        className: 'text-center',
+                        orderable: false,
+                        searchable: false
                     }
-                }],
-                // language: {
-                //     url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Indonesian.json"
-                // }
+                ]
             });
-
-            // Event saat filter tanggal dikirim
             $('#date-filter-form').on('submit', function(e) {
                 e.preventDefault();
-                table.ajax.reload(); // Reload data sesuai filter
+                table.ajax.reload();
             });
         });
     </script>

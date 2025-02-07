@@ -18,8 +18,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">
-                            Retail
-                            <span class="badge bg-danger rounded-pill ms-2 px-3 py-1 text-white">Soon</span>
+                            Product
                         </a>
                     </li>
                     {{-- <li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="#"
