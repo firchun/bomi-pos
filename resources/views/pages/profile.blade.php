@@ -31,10 +31,6 @@
                                 class="rounded-circle profile-widget-picture">
                             <div class="profile-widget-items">
                                 <div class="profile-widget-item">
-                                    <div class="profile-widget-item-label">Categories</div>
-                                    <div class="profile-widget-item-value">{{ $categories }}</div>
-                                </div>
-                                <div class="profile-widget-item">
                                     <div class="profile-widget-item-label">Products</div>
                                     <div class="profile-widget-item-value">{{ $product }}</div>
                                 </div>
@@ -55,10 +51,13 @@
                     </div>
                 </div>
                 <div class="col-12 col-md-12 col-lg-7">
+                    @include('layouts.alert')
                     <div class="card">
-                        <form method="POST" class="needs-validation" novalidate="" action="{{ route('profile.update',Auth::id())}}">
+                        <form method="POST" class="needs-validation" novalidate=""
+                            action="{{ url('/user/profile-information') }}">
                             @method('PUT')
                             @csrf
+
                             <div class="card-header">
                                 <h4>Edit Profile</h4>
                             </div>
@@ -74,8 +73,8 @@
                                     </div>
                                     <div class="form-group  col-12">
                                         <label>Business Name</label>
-                                        <input type="text" class="form-control" value="{{ Auth::user()->business_name }}"
-                                            required="" name="business_name">
+                                        <input type="text" class="form-control"
+                                            value="{{ Auth::user()->business_name }}" required="" name="business_name">
                                         <div class="invalid-feedback">
                                             Please fill in the business name
                                         </div>

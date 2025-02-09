@@ -19,7 +19,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
     {
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
-            'business_name' => ['required', 'string', 'max:255'],
+            'business_name' => ['nullable', 'string', 'max:255'],
             'email' => [
                 'required',
                 'string',
@@ -29,9 +29,11 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             ],
         ])->validateWithBag('updateProfileInformation');
 
-        
-        if ($input['email'] !== $user->email &&
-            $user instanceof MustVerifyEmail) {
+
+        if (
+            $input['email'] !== $user->email &&
+            $user instanceof MustVerifyEmail
+        ) {
             $this->updateVerifiedUser($user, $input);
         } else {
             $user->forceFill([

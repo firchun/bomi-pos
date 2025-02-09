@@ -36,7 +36,7 @@
                         class="form-control @error('business_name')
                         is-invalid
                     @enderror"
-                        name="name" autofocus>
+                        autofocus name="business_name">
                     @error('business_name')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -121,7 +121,7 @@
         document.getElementById('togglePassword').addEventListener('click', function() {
             var passwordField = document.getElementById('password');
             var icon = this.querySelector('i');
-    
+
             if (passwordField.type === 'password') {
                 passwordField.type = 'text';
                 icon.classList.remove('fa-eye');
