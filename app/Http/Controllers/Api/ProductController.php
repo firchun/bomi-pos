@@ -43,7 +43,7 @@ class ProductController extends Controller
 
         $product = \App\Models\Product::create([
             'name' => $request->name,
-            'user_id' => Auth::id(),
+            'user_id' => $request->user_id ?? Auth::id(),
             'price' => (int) $request->price,
             'stock' => (int) $request->stock,
             'category_id' => $request->category_id,

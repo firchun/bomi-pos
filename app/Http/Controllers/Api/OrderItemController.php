@@ -20,12 +20,13 @@ class OrderItemController extends Controller
         $query->select('order_items.*', DB::raw('(SELECT name FROM products WHERE products.id = order_items.product_id) AS product_name'));
 
         if ($start_date && $end_date) {
-            $query->whereBetween('order_items.created_at', [$start_date, $end_date])->whereExists(function ($subQuery) {
-                $subQuery->select(DB::raw(1))
-                    ->from('orders')
-                    ->whereColumn('orders.id', 'order_items.order_id')
-                    ->where('orders.id_kasir', Auth::id());
-            });
+            $query->whereBetween('order_items.created_at', [$start_date, $end_date])
+                ->whereExists(function ($subQuery) {
+                    $subQuery->select(DB::raw(1))
+                        ->from('orders')
+                        ->whereColumn('orders.id', 'order_items.order_id')
+                        ->where('orders.id_kasir', Auth::id());
+                });
         }
 
         $orderItems = $query->get();
