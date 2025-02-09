@@ -20,11 +20,12 @@ class Order extends Model
         'payment_method',
         'total_item',
         'id_kasir',
+        'user_id',
         'nama_kasir',
         'transaction_time',
         'no_invoice'
     ];
-    
+
     public function items()
     {
         return $this->hasMany(OrderItem::class);

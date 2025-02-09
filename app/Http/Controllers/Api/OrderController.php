@@ -46,7 +46,8 @@ class OrderController extends Controller
             'total' => $request->total,
             'payment_method' => $request->payment_method,
             'total_item' => $request->total_item,
-            'id_kasir' => $request->id_kasir,
+            'id_kasir' => Auth::id(),
+            // 'id_kasir' => $request->id_kasir,
             'nama_kasir' => $request->nama_kasir,
             'transaction_time' => $request->transaction_time,
             'no_invoice' => $no_invoice
