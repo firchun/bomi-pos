@@ -49,4 +49,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Message::class);
     }
+    
+    public function shopProfile()
+    {
+        return $this->hasOne(ShopProfile::class);
+    }
 }

@@ -37,6 +37,7 @@ class HomeController extends Controller
                 $join->on('products.id', '=', 'order_counts.product_id');
             })
                 ->select('products.*', DB::raw('COALESCE(order_counts.total_ordered, 0) as total_ordered'))
+                ->where('products.user_id', Auth::id())
                 ->orderByDesc('total_ordered')
                 ->take(3);
         }])->get();
@@ -57,21 +58,22 @@ class HomeController extends Controller
 
         // Data untuk chart
         if ($filter == 'week') {
-            $startDate = $now->copy()->startOfWeek();
-            $endDate = $now->copy()->endOfWeek();
+            $startDate = $now->copy()->subDays(6); // 7 hari terakhir termasuk hari ini
+            $endDate = $now;
             $interval = 'day';
             $periods = 7;
         } elseif ($filter == 'month') {
-            $startDate = $now->copy()->startOfMonth();
-            $endDate = $now->copy()->endOfMonth();
+            $startDate = $now->copy()->subDays(30); // 31 hari terakhir termasuk hari ini
+            $endDate = $now;
             $interval = 'day';
-            $periods = $startDate->daysInMonth;
+            $periods = 31;
         } elseif ($filter == 'year') {
-            $startDate = $now->copy()->startOfYear();
-            $endDate = $now->copy()->endOfYear();
+            $startDate = $now->copy()->subMonths(11)->startOfMonth(); // 12 bulan terakhir termasuk bulan ini
+            $endDate = $now;
             $interval = 'month';
             $periods = 12;
         }
+
 
         $labels = [];
         $data = [];
@@ -80,13 +82,14 @@ class HomeController extends Controller
             if ($interval == 'day') {
                 $currentDate = $startDate->copy()->addDays($i);
                 $dateString = $currentDate->format('Y-m-d');
-                $total = Order::whereDate('transaction_time', $dateString)->sum('total');
+                $total = Order::whereDate('transaction_time', $dateString)->where('id_kasir', Auth::id())
+                    ->sum('total');
                 $labels[] = $dateString;
             } else {
                 $currentMonth = $startDate->copy()->addMonths($i);
                 $monthStart = $currentMonth->startOfMonth()->toDateTimeString();
                 $monthEnd = $currentMonth->endOfMonth()->toDateTimeString();
-                $total = Order::whereBetween('transaction_time', [$monthStart, $monthEnd])->sum('total');
+                $total = Order::whereBetween('transaction_time', [$monthStart, $monthEnd])->where('id_kasir', Auth::id())->sum('total');
                 $labels[] = $currentMonth->format('F');
             }
             $data[] = $total;
@@ -104,10 +107,10 @@ class HomeController extends Controller
 
         return response()->json([
             'today' => Order::whereDate('transaction_time', $now->toDateString())->sum('total'),
-            'week' => Order::whereBetween('transaction_time', [$now->startOfWeek()->toDateTimeString(), $now->endOfWeek()->toDateTimeString()])->sum('total'),
-            'month' => Order::whereBetween('transaction_time', [$now->startOfMonth()->toDateTimeString(), $now->endOfMonth()->toDateTimeString()])->sum('total'),
-            'year' => Order::whereBetween('transaction_time', [$now->startOfYear()->toDateTimeString(), $now->endOfYear()->toDateTimeString()])->sum('total')
-        ]);
+            'week' => Order::whereBetween('transaction_time', [$now->copy()->subDays(6)->toDateTimeString(), $now->toDateTimeString()])->sum('total'),
+            'month' => Order::whereBetween('transaction_time', [$now->copy()->subDays(30)->toDateTimeString(), $now->toDateTimeString()])->sum('total'),
+            'year' => Order::whereBetween('transaction_time', [$now->copy()->subMonths(11)->startOfMonth()->toDateTimeString(), $now->toDateTimeString()])->sum('total')
+        ]);        
     }
 
     public function profile()

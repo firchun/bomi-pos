@@ -54,11 +54,12 @@
 
                             <!-- Tombol Bagikan -->
                             <div class="mt-3 d-flex">
-                                <a href="https://wa.me/?text={{ urlencode(url('shop/' . $shop->slug)) }}" target="_blank"
+                                <a href="https://wa.me/?text=Yuk%20Kunjungi%20Caffe/Resto%20Kami!%0A%0ADi%20Caffe/Resto%20kami,%20kamu%20bisa%20menemukan%20berbagai%20menu%20menarik%20dengan%20harga%20terbaik!%0A%0ACek%20langsung%20di%20link%20berikut:%0A{{url('shop/' . $shop->slug)}}%0A%0AJangan%20lupa%20share%20juga%20ya!" 
+                                    target="_blank"
                                     class="btn btn-success d-flex align-items-center me-2">
                                     <i class="fab fa-whatsapp me-1"></i> Bagikan ke WhatsApp
                                 </a>
-
+                                                           
                                 <!-- Tombol Share Lainnya -->
                                 <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#shareModal">
                                     <i class="fas fa-share-alt"></i> Share
@@ -78,37 +79,29 @@
                                         <div class="modal-body">
                                             <!-- Kontainer Tombol Share -->
                                             <div class="d-flex flex-column align-items-center">
-                                                <!-- Share ke Facebook -->
-                                                <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url('shop/' . $shop->slug)) }}"
+                                                <!-- Share ke Facebook Messenger -->
+                                                <a href="https://m.me/?link={{ urlencode(url('shop/' . $shop->slug)) }}"
                                                     target="_blank"
                                                     style="color: white !important; background-color: #007bff !important; border-radius: 10px !important; padding: 10px 20px; text-decoration: none !important; 
                                                     margin-bottom: 10px; display: inline-block; text-align: center; font-size: 14px; width: 100%;">
-                                                    <i class="fab fa-facebook-f"></i> Facebook
+                                                    <i class="fab fa-facebook-messenger"></i> Messenger
                                                 </a>
 
-                                                <!-- Share ke Instagram -->
-                                                <a href="https://www.instagram.com/?url={{ urlencode(url('shop/' . $shop->slug)) }}"
-                                                    target="_blank"
+                                                <!-- Share ke Instagram DM -->
+                                                <a href="https://www.instagram.com/direct/inbox/" target="_blank"
                                                     style="color: white !important; background-color: #dc3545 !important; border-radius: 10px !important; padding: 10px 20px; text-decoration: none !important; 
                                                     margin-bottom: 10px; display: inline-block; text-align: center; font-size: 14px; width: 100%;">
-                                                    <i class="fab fa-instagram"></i> Instagram
+                                                    <i class="fab fa-instagram"></i> Instagram DM
                                                 </a>
 
-                                                <!-- Share ke Twitter -->
-                                                <a href="https://twitter.com/intent/tweet?text={{ urlencode(url('shop/' . $shop->slug)) }}"
+                                                <!-- Share ke Twitter DM -->
+                                                <a href="https://twitter.com/messages/compose?text={{ urlencode('Cek toko ini: ' . url('shop/' . $shop->slug)) }}"
                                                     target="_blank"
                                                     style="color: white !important; background-color: #17a2b8 !important; border-radius: 10px !important; padding: 10px 20px; text-decoration: none !important; 
                                                     margin-bottom: 10px; display: inline-block; text-align: center; font-size: 14px; width: 100%;">
-                                                    <i class="fab fa-twitter"></i> Twitter
+                                                    <i class="fab fa-twitter"></i> Twitter DM
                                                 </a>
 
-                                                <!-- Share ke WhatsApp -->
-                                                <a href="https://wa.me/?text={{ urlencode(url('shop/' . $shop->slug)) }}"
-                                                    target="_blank"
-                                                    style="color: white !important; background-color: #28a745 !important; border-radius: 10px !important; padding: 10px 20px; text-decoration: none !important; 
-                                                    margin-bottom: 10px; display: inline-block; text-align: center; font-size: 14px; width: 100%;">
-                                                    <i class="fab fa-whatsapp"></i> WhatsApp
-                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -191,51 +184,45 @@
             });
         }
 
-        function loadProductsByCategory(shopId, page = 1) {
+        function loadProductsByCategory(shopId, categoryId, page = 1) {
             $.ajax({
-                url: `/product/${shopId}?page=${page}`,
+                url: `/product/${shopId}?category_page_${categoryId}=${page}`,
                 method: 'GET',
                 success: function(response) {
-                    const categories = response.categories || []; // Pastikan server mengirim data kategori
-                    const products = response.products.data || []; // Data produk dari server
+                    const categoryContainer = $(`#category-${categoryId}-products`);
+                    categoryContainer.empty();
 
-                    categories.forEach(category => {
-                        const categoryContainer = $(`#category-${category.id}-products`);
-                        categoryContainer.empty(); // Bersihkan kontainer kategori
+                    const categoryProducts = response.categoryProducts[categoryId]?.data || [];
 
-                        // Filter produk berdasarkan kategori
-                        const categoryProducts = products.filter(product => product.category_id ===
-                            category.id);
-
-                        if (categoryProducts.length > 0) {
-                            categoryProducts.forEach(product => {
-                                categoryContainer.append(`
-                            <div class="col-md-4 mb-4">
-                                <div class="card h-100">
-                                    <img src="${product.image ? `/${product.image}` : '/images/default-product.png'}" 
-                                         class="card-img-top" 
-                                         alt="${product.name}" 
-                                         style="height: 300px; object-fit: cover;">
-                                    <div class="card-body">
-                                        <h5 class="card-title">${product.name}</h5>
-                                        <p class="card-text">${product.description}</p>
-                                        <p class="text-purple"><strong>Price:</strong> Rp${parseFloat(product.price).toLocaleString()}</p>
+                    if (categoryProducts.length > 0) {
+                        categoryProducts.forEach(product => {
+                            categoryContainer.append(`
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100">
+                                        <img src="${product.image ? `/${product.image}` : '/images/default-product.png'}" 
+                                            class="card-img-top" 
+                                            alt="${product.name}" 
+                                            style="height: 300px; object-fit: cover;">
+                                        <div class="card-body">
+                                            <h5 class="card-title">${product.name}</h5>
+                                            <p class="card-text">${product.description}</p>
+                                            <p class="text-purple"><strong>Price:</strong> Rp${parseFloat(product.price).toLocaleString()}</p>
+                                        </div>
                                     </div>
                                 </div>
+                            `);
+                        });
+                    } else {
+                        categoryContainer.append(`
+                            <div class="col-12">
+                                <p class="text-center text-muted">No products available in this category.</p>
                             </div>
                         `);
-                            });
-                        } else {
-                            categoryContainer.append(`
-                        <div class="col-12">
-                            <p class="text-center text-muted">No products available in this category.</p>
-                        </div>
-                    `);
-                        }
-                    });
+                    }
 
-                    // Menampilkan pagination produk
-                    $('#product-pagination').html(renderPagination(response.products, 'products', shopId));
+                    // Render pagination khusus untuk kategori ini
+                    $(`#category-${categoryId}-pagination`).html(renderPagination(response.categoryProducts[
+                        categoryId], 'category', shopId, categoryId));
                 },
                 error: function() {
                     alert('Failed to load products by category.');
@@ -281,15 +268,15 @@
             });
         }
 
-        function renderPagination(pagination, type, shopId) {
+        function renderPagination(pagination, type, shopId, categoryId = null) {
             let html = '';
             for (let i = 1; i <= pagination.last_page; i++) {
                 html += `
-            <button class="btn ${pagination.current_page === i ? 'btn-primary' : 'btn-light'} mx-1"
-                onclick="load${type.charAt(0).toUpperCase() + type.slice(1)}(${shopId}, ${i})">
-                ${i}
-            </button>
-        `;
+                    <button class="btn ${pagination.current_page === i ? 'btn-primary' : 'btn-light'} mx-1"
+                        onclick="${type === 'products' ? `loadProducts(${shopId}, ${i})` : `loadProductsByCategory(${shopId}, ${categoryId}, ${i})`}">
+                        ${i}
+                    </button>
+                `;
             }
             return html;
         }
@@ -298,7 +285,9 @@
             const shopId = {{ $shop->id }};
             loadProducts(shopId);
             loadComments(shopId);
-            loadProductsByCategory(shopId);
+            @foreach ($categories as $category)
+                loadProductsByCategory(shopId, {{ $category->id }});
+            @endforeach
         });
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -344,7 +333,6 @@
                 .bindPopup(`
                 <div style="text-align: center;">
                     <strong>${shopName}</strong><br>
-                    Latitude: ${latitude}, Longitude: ${longitude}<br>
                     <a href="https://www.google.com/maps?q=${latitude},${longitude}" target="_blank" 
                     style="color: #9900CC; text-decoration: underline; display: inline-block; margin-top: 5px;">
                         🗺️ Buka di Google Maps

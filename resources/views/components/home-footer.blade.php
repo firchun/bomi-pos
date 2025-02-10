@@ -3,7 +3,7 @@
         <div class="row justify-content-between">
             <div class="col-lg-2 col-md-4 col-6 mb-4">
                 <div class="footer-widget">
-                    <a href="index.html">
+                    <a href="{{ route('homepage') }}">
                         <img loading="prelaod" decoding="async" class="img-fluid" width="140"
                             src="{{ asset('home/images/logo_kasir.png') }}" alt="Bomi-Pos">
                     </a>

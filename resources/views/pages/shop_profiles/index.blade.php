@@ -4,12 +4,8 @@
 
 @push('style')
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha384-xodZBntMorA17cE6Bqy8BMKGzHkxjVRyDzt2EZ7bhD4MLUyZMivDDr2IC6Q8tiyP" crossorigin="" />
-
     <style>
-        #create-map,
-        #static-map {
+        #create-map {
             height: 400px;
             width: 100%;
         }
@@ -26,7 +22,7 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>{{ isset($shopProfile) ? 'Detail Shop Profile' : 'Create Shop Profile' }}</h1>
+                <h1>{{ isset($shopProfile) ? 'Update' : 'Create' }} Shop Profile</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
                     <div class="breadcrumb-item">Shop Profile</div>
@@ -34,152 +30,118 @@
             </div>
 
             <div class="section-body">
-                {{-- Menampilkan Data Shop Profile --}}
-                @if (isset($shopProfile))
-                    <div class="row">
-                        <div class="col-md-6 mb-1">
-                            <div class="card">
-                                <div class="card-body">
-                                    <p class="mt-3"><strong>Shop Name:</strong> {{ $shopProfile->name }}</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 mb-1">
-                            <div class="card">
-                                <div class="card-body">
-                                    <p class="mt-3"><strong>Shop Type:</strong> {{ $shopProfile->shop_type }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="card-body">
-                            @if ($shopProfile->photo)
-                                <div class="form-group">
-                                    <p><strong>Shop Photo:</strong></p>
-                                    <img src="{{ Storage::url($shopProfile->photo) }}" alt="Shop Photo"
-                                        class="d-block-center" style="max-width: 200px; max-height: 200px;">
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-1">
-                            <div class="card">
-                                <div class="card-body">
-                                    <p class="mt-3"><strong>Open Time:</strong> {{ $shopProfile->open_time }}</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 mb-1">
-                            <div class="card">
-                                <div class="card-body">
-                                    <p class="mt-3"><strong>Close Time:</strong> {{ $shopProfile->close_time }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="card-body">
-                            <p><strong>Address:</strong> {{ $shopProfile->address }}</p>
-                            <p><strong>Location:</strong>
-                                {{ $shopProfile->location->latitude ?? '-' }},
-                                {{ $shopProfile->location->longitude ?? '-' }}
-                            </p>
-                            <div id="static-map"></div>
-                        </div>
-                    </div>
-                @endif
-
                 <div class="card">
                     <div class="card-body">
+                        @if (session('success'))
+                            <div id="success-message" class="alert alert-success">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+                        @if (session('error'))
+                            <div id="error-message" class="alert alert-danger">
+                                {{ session('error') }}
+                            </div>
+                        @endif
+
+                        <script>
+                            setTimeout(function() {
+                                $('#success-message').fadeOut('slow');
+                                $('#error-message').fadeOut('slow');
+                            }, 2000); // 1000ms = 1 detik
+                        </script>
                         <form
-                            action="{{ isset($shopProfile) ? route('shop-profiles.update', $shopProfile->id) : route('shop-profiles.store') }}"
+                            action="{{ isset($shopProfile) ? route('shop-profiles.update', $shopProfile) : route('shop-profiles.store') }}"
                             method="POST" enctype="multipart/form-data">
                             @csrf
                             @if (isset($shopProfile))
                                 @method('PUT')
                             @endif
 
-                            {{-- Shop Name --}}
-                            <div class="form-group">
-                                <label for="name">Shop Name</label>
-                                <input type="text" name="name" id="name" class="form-control"
-                                    value="{{ old('name', $shopProfile->name ?? '') }}" required>
+                            <div class="row">
+                                <!-- Shop Name, Shop Type, Address, and other details with col-8 -->
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label for="name">Shop Name</label>
+                                        <input type="text" name="name" id="name" class="form-control"
+                                            value="{{ old('name', $shopProfile->name ?? '') }}" required
+                                            {{ isset($shopProfile) ? '' : 'autofocus' }}>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="shop_type">Shop Type</label>
+                                        <input type="text" name="shop_type" id="shop_type" class="form-control"
+                                            value="{{ old('shop_type', $shopProfile->shop_type ?? '') }}" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="address">Address</label>
+                                        <textarea name="address" id="address" class="form-control" rows="3" required>{{ old('address', $shopProfile->address ?? '') }}</textarea>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="description">Description</label>
+                                        <textarea name="description" id="description" class="form-control" rows="6" required>{{ old('description', $shopProfile->description ?? '') }}</textarea>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="open_time">Open Time</label>
+                                        <input type="time" name="open_time" id="open_time" class="form-control"
+                                            value="{{ old('open_time', $shopProfile->open_time ?? '08:00') }}" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="close_time">Close Time</label>
+                                        <input type="time" name="close_time" id="close_time" class="form-control"
+                                            value="{{ old('close_time', $shopProfile->close_time ?? '17:00') }}" required>
+                                    </div>
+                                </div>
+
+                                <!-- Shop Photo section with col-4 -->
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="photo">Shop Photo</label>
+                                        @if (isset($shopProfile) && $shopProfile->photo)
+                                            <div class="mt-2">
+                                                <img src="{{ Storage::url($shopProfile->photo) }}" alt="Shop Photo"
+                                                    class="img-thumbnail d-block mx-auto" style="max-width: 370px;">
+                                            </div>
+                                        @endif
+                                        <input type="file" name="photo" id="photo" class="form-control mt-2">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="latitude">Latitude</label>
+                                        <input type="text" name="latitude" id="latitude" class="form-control"
+                                            value="{{ old('latitude', $shopProfile->location->latitude ?? '-8.5003989') }}"
+                                            required>
+                                    </div>
+        
+                                    <div class="form-group">
+                                        <label for="longitude">Longitude</label>
+                                        <input type="text" name="longitude" id="longitude" class="form-control"
+                                            value="{{ old('longitude', $shopProfile->location->longitude ?? '140.3659557') }}"
+                                            required>
+                                    </div>
+                                </div>
                             </div>
 
-                            {{-- Shop Type --}}
-                            <div class="form-group">
-                                <label for="shop_type">Shop Type</label>
-                                <input type="text" name="shop_type" id="shop_type" class="form-control"
-                                    value="{{ old('shop_type', $shopProfile->shop_type ?? '') }}" required>
+                            <!-- Map Section (separate card with col-12) -->
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <div id="map" style="height: 400px; border-radius: 8px;"></div>
+                                </div>
                             </div>
 
-                            {{-- Address --}}
-                            <div class="form-group">
-                                <label for="address">Address</label>
-                                <textarea name="address" id="address" class="form-control" rows="3" required>{{ old('address', $shopProfile->address ?? '') }}</textarea>
-                            </div>
-
-                            {{-- Description --}}
-                            <div class="form-group">
-                                <label for="description">Description</label>
-                                <textarea name="description" id="description" class="form-control" rows="4" required>{{ old('description', $shopProfile->description ?? '') }}</textarea>
-                            </div>
-
-                            {{-- Open Time --}}
-                            <div class="form-group">
-                                <label for="open_time">Open Time</label>
-                                <input type="time" name="open_time" id="open_time" class="form-control"
-                                    value="{{ old('open_time', $shopProfile->open_time ?? '') }}" required>
-                            </div>
-
-                            {{-- Close Time --}}
-                            <div class="form-group">
-                                <label for="close_time">Close Time</label>
-                                <input type="time" name="close_time" id="close_time" class="form-control"
-                                    value="{{ old('close_time', $shopProfile->close_time ?? '') }}" required>
-                            </div>
-
-                            {{-- Photo --}}
-                            <div class="form-group">
-                                <label for="photo">Shop Photo</label>
-                                <input type="file" name="photo" id="photo" class="form-control">
-                                @if (isset($shopProfile->photo))
-                                    <p class="mt-2">Current Photo:</p>
-                                    <img src="{{ Storage::url($shopProfile->photo) }}" alt="Current Photo"
-                                        style="max-width: 150px; max-height: 150px;">
-                                @endif
-                            </div>
-
-                            {{-- Latitude --}}
-                            <div class="form-group">
-                                <label for="latitude">Latitude</label>
-                                <input type="text" name="latitude" id="latitude" class="form-control"
-                                    value="{{ old('latitude', $shopProfile->location->latitude ?? '-8.5003989') }}"
-                                    required>
-                            </div>
-
-                            {{-- Longitude --}}
-                            <div class="form-group">
-                                <label for="longitude">Longitude</label>
-                                <input type="text" name="longitude" id="longitude" class="form-control"
-                                    value="{{ old('longitude', $shopProfile->location->longitude ?? '140.3659557') }}"
-                                    required>
-                            </div>
-
-                            {{-- Map --}}
-                            <div id="create-map"></div>
-
-                            {{-- Submit Button --}}
-                            <button type="submit" class="btn btn-primary mt-3">
-                                {{ isset($shopProfile) ? 'Update Shop Profile' : 'Create Shop Profile' }}
+                            <button type="submit" class="btn btn-primary">
+                                {{ isset($shopProfile) ? 'Update' : 'Create' }} Shop Profile
                             </button>
+
+                            <!-- Lihat Shop Profile Button -->
+                            @if (isset($shopProfile))
+                                <a href="{{ route('shop.details', $shopProfile->slug) }}" class="btn btn-secondary ms-2">
+                                    Lihat Shop Profile
+                                </a>
+                            @endif
                         </form>
                     </div>
                 </div>
@@ -190,129 +152,76 @@
 
 @push('scripts')
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // Static Map (View-Only Mode)
-        @if (isset($shopProfile))
-            const staticMap = L.map('static-map').setView(
-                [
-                    {{ $shopProfile->location->latitude ?? '-8.5003989' }},
-                    {{ $shopProfile->location->longitude ?? '140.3659557' }}
-                ],
-                13
-            );
+        document.addEventListener('DOMContentLoaded', function() {
+            // Ambil data lokasi dari backend atau atur sebagai null jika tidak ada
+            let initialLat = {{ $shopProfile->location->latitude ?? 'null' }};
+            let initialLng = {{ $shopProfile->location->longitude ?? 'null' }};
+            const shopName = "{{ $shopProfile->name ?? 'New Shop' }}";
 
-            // Esri Satellite Imagery Layer
-            const satelliteLayer = L.tileLayer(
-                'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-                    maxZoom: 19,
-                    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, Earthstar Geographics, and the GIS User Community'
+            // Fungsi untuk memperbarui koordinat di form
+            function updateCoordinates(lat, lng) {
+                if (document.getElementById('latitude') && document.getElementById('longitude')) {
+                    document.getElementById('latitude').value = lat.toFixed(7);
+                    document.getElementById('longitude').value = lng.toFixed(7);
                 }
-            );
-
-            // Esri Label Layer
-            const labelLayer = L.tileLayer(
-                'https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
-                    maxZoom: 19,
-                    attribution: 'Labels &copy; Esri'
-                }
-            );
-
-            // Add layers to static map
-            satelliteLayer.addTo(staticMap);
-            labelLayer.addTo(staticMap);
-
-            // Add marker to static map
-            L.marker([
-                {{ $shopProfile->location->latitude ?? '-8.5003989' }},
-                {{ $shopProfile->location->longitude ?? '140.3659557' }}
-            ]).addTo(staticMap);
-        @endif
-
-        // Interactive Map (Create or Update Mode)
-        const latitudeInput = document.getElementById('latitude');
-        const longitudeInput = document.getElementById('longitude');
-        const defaultLat = latitudeInput.value || -8.5003989;
-        const defaultLng = longitudeInput.value || 140.3659557;
-
-        const createMap = L.map('create-map').setView([defaultLat, defaultLng], 13);
-
-        // Esri Satellite Imagery Layer
-        const satelliteLayerInteractive = L.tileLayer(
-            'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-                maxZoom: 19,
-                attribution: 'Tiles &copy; Esri &mdash; Source: Esri, Earthstar Geographics, and the GIS User Community'
             }
-        );
 
-        // Esri Label Layer
-        const labelLayerInteractive = L.tileLayer(
-            'https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
-                maxZoom: 19,
-                attribution: 'Labels &copy; Esri'
+            // Fungsi untuk memuat peta dengan koordinat yang diberikan
+            function loadMap(lat, lng) {
+                const map = L.map('map').setView([lat, lng], 13);
+
+                // Esri Satellite Layer
+                L.tileLayer(
+                    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                        attribution: 'Tiles © Esri'
+                    }).addTo(map);
+
+                // Tambahkan marker
+                let marker = L.marker([lat, lng], {
+                        draggable: true
+                    }).addTo(map)
+                    .bindPopup(`<b>${shopName}</b><br>Drag marker to adjust location`);
+
+                // Update koordinat saat marker dipindah
+                marker.on('dragend', function(e) {
+                    const newLatLng = e.target.getLatLng();
+                    updateCoordinates(newLatLng.lat, newLatLng.lng);
+                });
+
+                // Update marker saat peta diklik
+                map.on('click', function(e) {
+                    marker.setLatLng(e.latlng);
+                    updateCoordinates(e.latlng.lat, e.latlng.lng);
+                });
+
+                // Perbarui koordinat di input form
+                updateCoordinates(lat, lng);
             }
-        );
 
-        // Add layers to interactive map
-        satelliteLayerInteractive.addTo(createMap);
-        labelLayerInteractive.addTo(createMap);
-
-        // Add draggable marker to interactive map
-        const marker = L.marker([defaultLat, defaultLng], {
-            draggable: true
-        }).addTo(createMap);
-
-        // Update latitude and longitude inputs on marker drag
-        marker.on('dragend', function(e) {
-            const latLng = e.target.getLatLng();
-            latitudeInput.value = latLng.lat;
-            longitudeInput.value = latLng.lng;
-        });
-
-        // Update marker position on map click
-        createMap.on('click', function(e) {
-            const {
-                lat,
-                lng
-            } = e.latlng;
-            marker.setLatLng([lat, lng]);
-            latitudeInput.value = lat;
-            longitudeInput.value = lng;
-        });
-
-        // Geolocation: Get the user's current location and adjust map view
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                const userLat = position.coords.latitude;
-                const userLng = position.coords.longitude;
-
-                // Update map view to the user's location
-                createMap.setView([userLat, userLng], 13);
-                marker.setLatLng([userLat, userLng]);
-                latitudeInput.value = userLat;
-                longitudeInput.value = userLng;
-
-                // Optionally, add a marker to indicate the user's current location
-                L.marker([userLat, userLng])
-                    .addTo(createMap)
-                    .openPopup();
-            });
-        }
-
-        // Function to add labels to buildings using OpenStreetMap data (for nearby places/landmarks)
-        function addBuildingLabels() {
-            // Esri Satellite Imagery Layer
-            const satelliteLayer = L.tileLayer(
-                'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-                    maxZoom: 19,
-                    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, Earthstar Geographics, and the GIS User Community'
+            // Jika data lokasi dari backend kosong, gunakan geolocation
+            if (initialLat === null || initialLng === null) {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        function(position) {
+                            const userLat = position.coords.latitude;
+                            const userLng = position.coords.longitude;
+                            loadMap(userLat, userLng);
+                        },
+                        function(error) {
+                            console.log('Geolocation error:', error);
+                            // Jika pengguna menolak akses lokasi, gunakan koordinat default
+                            loadMap(-8.5003989, 140.3659557);
+                        }
+                    );
+                } else {
+                    // Jika browser tidak mendukung geolocation, gunakan koordinat default
+                    loadMap(-8.5003989, 140.3659557);
                 }
-            );
-            satelliteLayer.addTo(createMap);
-        }
-
-
-        // Call the function to add building labels
-        addBuildingLabels();
+            } else {
+                // Jika data lokasi ada dari backend, gunakan lokasi tersebut
+                loadMap(parseFloat(initialLat), parseFloat(initialLng));
+            }
+        });
     </script>
 @endpush

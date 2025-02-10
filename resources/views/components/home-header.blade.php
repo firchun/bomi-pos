@@ -2,7 +2,7 @@
 <header class="navigation">
     <nav class="navbar navbar-expand-xl navbar-light text-center">
         <div class="container">
-            <a class="navbar-brand" href="index.html">
+            <a class="navbar-brand" href="{{ route('homepage') }}">
                 <img loading="prelaod" decoding="async" class="img-fluid" width="100"
                     src="{{ asset('home/images/logo_kasir.png') }}" alt="Bomi-Pos">
             </a>
@@ -18,7 +18,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">
-                            Product
+                            Bomi Product
                         </a>
                     </li>
                     {{-- <li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="#"

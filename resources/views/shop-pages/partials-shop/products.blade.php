@@ -18,9 +18,8 @@
                     <!-- Tab Kategori Produk -->
                     @foreach ($categories as $category)
                         <li class="nav-item m-2" role="presentation">
-                            <a class="nav-link btn btn-outline-primary"
-                                id="pills-{{ $category->id }}-tab" data-bs-toggle="pill"
-                                href="#pills-{{ $category->id }}" role="tab"
+                            <a class="nav-link btn btn-outline-primary" id="pills-{{ $category->id }}-tab"
+                                data-bs-toggle="pill" href="#pills-{{ $category->id }}" role="tab"
                                 aria-controls="pills-{{ $category->id }}"
                                 aria-selected="false">{{ $category->name }}</a>
                         </li>
@@ -39,14 +38,14 @@
 
                     </div>
 
-                    <!-- Tab Per Kategori Produk -->
                     @foreach ($categories as $category)
                         <div class="tab-pane fade" id="pills-{{ $category->id }}" role="tabpanel"
                             aria-labelledby="pills-{{ $category->id }}-tab">
                             <div class="row d-flex flex-wrap" id="category-{{ $category->id }}-products">
-                                {{-- Javascript Content --}}
+                                {{-- Produk kategori --}}
                             </div>
-                            <div id="product-pagination" class="d-flex justify-content-center mt-4"></div>
+                            <div id="category-{{ $category->id }}-pagination"
+                                class="d-flex justify-content-center mt-4"></div>
                         </div>
                     @endforeach
                 </div>

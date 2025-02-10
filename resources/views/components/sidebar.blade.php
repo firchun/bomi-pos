@@ -1,10 +1,10 @@
 <div class="main-sidebar sidebar-style-2">
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">
-            <a href="{{ route('home') }}">Bomi POS</a>
+            <a href="{{ route('homepage') }}">Bomi POS</a>
         </div>
         <div class="sidebar-brand sidebar-brand-sm">
-            <a href="{{ route('home') }}">BP</a>
+            <a href="{{ route('homepage') }}">BP</a>
         </div>
         <div class="sidebar">
             <ul class="sidebar-menu">

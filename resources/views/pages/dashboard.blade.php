@@ -108,7 +108,7 @@
                                     </div>
                                     <div class="statistic-details-item">
                                         <div class="detail-value" id="weekSales">Rp 0</div>
-                                        <div class="detail-name">Penjualan Minggu Ini</div>
+                                        <div class="detail-name">Penjualan 7 Hari Terakhir</div>
                                         <span class="text-muted">
                                             <i class="fas fa-caret-up text-primary"></i>
                                             <span id="weekPercentage">0%</span>
@@ -116,7 +116,7 @@
                                     </div>
                                     <div class="statistic-details-item">
                                         <div class="detail-value" id="monthSales">Rp 0</div>
-                                        <div class="detail-name">Penjualan Bulan Ini</div>
+                                        <div class="detail-name">Penjualan 31 Hari Terakhir</div>
                                         <span class="text-muted">
                                             <i class="fas fa-caret-up text-primary"></i>
                                             <span id="monthPercentage">0%</span>
@@ -124,7 +124,7 @@
                                     </div>
                                     <div class="statistic-details-item">
                                         <div class="detail-value" id="yearSales">Rp 0</div>
-                                        <div class="detail-name">Penjualan Tahun Ini</div>
+                                        <div class="detail-name">Penjualan 12 Bulan Terakhir</div>
                                         <span class="text-muted">
                                             <i class="fas fa-caret-up text-primary"></i>
                                             <span id="yearPercentage">0%</span>

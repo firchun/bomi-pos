@@ -9,7 +9,7 @@
                         <h2 class="text-capitalize mb-4">Permudah pekerjaan kasir dengan Bomi Pos, semua transaksi beres
                             dalam hitungan detik!</h2>
                         <p class="mb-4">Kami telah mengumpulkan fitur terbaik untuk mendukung operasional kasir
-                            <br> Anda. Pilih solusi paling terbaik untuk bisnis Anda dengan cepat dan mudah!.
+                            Anda. Pilih solusi paling terbaik untuk bisnis Anda dengan cepat dan mudah!.
                         </p>
                         <a type="button" class="btn btn-primary" href="{{ route('register') }}">Daftar Sekarang <span style="font-size: 14px;"
                                 class="ms-2 fas fa-arrow-right"></span></a>

@@ -47,22 +47,32 @@ class ShopPageController extends Controller
     public function fetchProducts(Request $request, $shopId)
     {
         $shop = ShopProfile::findOrFail($shopId);
-
-        // Ambil user yang memiliki shop ini
         $user = $shop->user;
 
-        $products = Product::where('user_id', $shop->user_id)
-            ->paginate(6); // Batasi jumlah produk per halaman
+        // Produk untuk "All Products" menggunakan pagination
+        $productsPaginated = Product::where('user_id', $user->id)
+            ->where('status', true)
+            ->paginate(6);
 
-        // Ambil kategori produk berdasarkan user_id
+        // Ambil semua kategori
         $categories = Category::whereHas('products', function ($query) use ($user) {
             $query->where('user_id', $user->id)
-                ->where('status', true); // Pastikan hanya produk aktif
+                ->where('status', true);
         })->get();
 
+        // Ambil produk berdasarkan kategori dengan pagination masing-masing
+        $categoryProducts = [];
+        foreach ($categories as $category) {
+            $categoryProducts[$category->id] = Product::where('user_id', $user->id)
+                ->where('status', true)
+                ->where('category_id', $category->id)
+                ->paginate(6, ['*'], "category_page_{$category->id}");
+        }
+
         return response()->json([
-            'products' => $products,
-            'categories' => $categories,
+            'products' => $productsPaginated, // Produk "All Products"
+            'categories' => $categories, // Data kategori
+            'categoryProducts' => $categoryProducts, // Produk tiap kategori dengan pagination
         ]);
     }
 }

@@ -28,22 +28,11 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <!-- Dropdown untuk memilih toko -->
-                            <div class="mb-4">
-                                <label for="shop-select">Select Shop:</label>
-                                <select id="shop-select" class="form-control" onchange="loadComments(this.value)">
-                                    @foreach ($shops as $shop)
-                                        <option value="{{ $shop->id }}"
-                                            {{ $selectedShop && $shop->id == $selectedShop->id ? 'selected' : '' }}>
-                                            {{ $shop->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-
                             <!-- Kontainer untuk komentar -->
                             <div id="ratings-container">
+                                    @foreach ($shops as $shop)
 
+                                    @endforeach
                             </div>
 
                             <!-- Pagination -->

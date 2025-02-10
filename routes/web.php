@@ -53,6 +53,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/shop-profiles', [ShopProfileController::class, 'index'])->name('shop-profiles.index');
         Route::post('/shop-profiles', [ShopProfileController::class, 'store'])->name('shop-profiles.store');
         Route::put('/shop-profiles/{id}', [ShopProfileController::class, 'update'])->name('shop-profiles.update');
+        
         //post update products
         Route::post('products/update/{id}', [ProductController::class, 'update'])->name('products.newupdate');
         Route::get('/ratings', [RatingController::class, 'index'])->name('ratings.index');
