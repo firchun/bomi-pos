@@ -14,12 +14,9 @@
                 <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                     <li class="nav-item"> <a class="nav-link " href="{{ route('homepage') }}">Home</a>
                     </li>
-                    <li class="nav-item "> <a class="nav-link" href="{{ route('shop-page') }}">Restaurant</a>
+                    <li class="nav-item "> <a class="nav-link" href="{{ route('shop-page') }}">Outlet</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            Bomi Product
-                        </a>
+                    <li class="nav-item"> <a class="nav-link" href="{{ route('bomi-products.home') }}">Bomi Product</a>
                     </li>
                     {{-- <li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="#"
                             id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">About</a>

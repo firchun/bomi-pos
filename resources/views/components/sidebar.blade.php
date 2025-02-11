@@ -13,7 +13,7 @@
                     <a class="nav-link" href="{{ route('home') }}">
                         <i class="fas fa-gauge"></i><span class="nav-text">Dashboard</span>
                     </a>
-                </li>                
+                </li>
                 @if (Auth::user()->role != 'admin')
                     {{-- <li class='nav-item'>
                         <a class="nav-link" href="{{ route('user.pos') }}"><i
@@ -43,32 +43,41 @@
 
                     <li class="menu-header">User</li>
                     <li class='nav-item'>
-                        <a class="nav-link" href="{{ route('daily.report') }}"><i
-                                class="fas fa-chart-line"></i><span class="nav-text">Report</span></a>
+                        <a class="nav-link" href="{{ route('daily.report') }}"><i class="fas fa-chart-line"></i><span
+                                class="nav-text">Report</span></a>
                     </li>
                     <li class='nav-item {{ request()->is('shop-profiles*') ? 'active' : '' }}'>
-                        <a class="nav-link" href="{{ route('shop-profiles.index') }}"><i
-                                class="fas fa-store"></i><span class="nav-text">Shop Profile</span></a>
+                        <a class="nav-link" href="{{ route('shop-profiles.index') }}"><i class="fas fa-store"></i><span
+                                class="nav-text">Shop Profile</span></a>
                     </li>
                 @endif
 
                 @if (Auth::user()->role == 'admin')
+                    <li class="menu-header">Account</li>
                     <li class='nav-item {{ request()->is('users*') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ route('users.index') }}"><i class="fas fa-house-user"></i><span
                                 class="nav-text">Users</span></a>
                     </li>
-                    <li class='nav-item {{ request()->is('admin_profiles') ? 'active' : '' }}'>
-                        <a class="nav-link" href="{{ route('admin_profiles.index') }}"><i
-                                class="fas fa-house-user"></i>
-                            <span class="nav-text">Admin Profile</span>
+                    <li class="menu-header">Inventory</li>
+                    <li class='nav-item {{ request()->is('admin-products*') ? 'active' : '' }}'>
+                        <a class="nav-link" href="{{ route('admin-products.index') }}">
+                            <i class="fas fa-box"></i><span class="nav-text">Admin Products</span>
                         </a>
-                    </li>
+                    </li>                    
+                    <li class="menu-header">Chat</li>
                     <li class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('admin.dashboard') }}">
                             <i class="fas fa-comments"></i>
                             <span class="nav-text">Messages</span>
                             <span id="sidebar-unread-count" class="badge badge-pill badge-danger"
                                 style="display: none; position: absolute; top: 8px; right: 8px;">0</span>
+                        </a>
+                    </li>
+                    <li class="menu-header">Admin</li>
+                    <li class='nav-item {{ request()->is('admin_profiles') ? 'active' : '' }}'>
+                        <a class="nav-link" href="{{ route('admin_profiles.index') }}"><i
+                                class="fas fa-house-user"></i>
+                            <span class="nav-text">Admin Profile</span>
                         </a>
                     </li>
                 @endif

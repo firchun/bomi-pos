@@ -13,6 +13,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomePageController;
 use App\Http\Controllers\ShopPageController;
 use App\Http\Controllers\ShopProfileController;
+use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\AdminProfileController;
 
 /*
@@ -40,6 +41,9 @@ Route::get('/search', [SearchController::class, 'search'])->name('search');
 Route::get('/ajax/search', [SearchController::class, 'ajaxSearch'])->name('ajax.search');
 Route::get('/ajax/product/details', [SearchController::class, 'getProductDetails'])->name('ajax.product.details');
 
+Route::get('bomi-products', [AdminProductController::class, 'home'])->name('bomi-products.home');
+Route::get('bomi-products/fetch', [AdminProductController::class, 'fetchProducts'])->name('api.adminproducts');
+
 Route::get('/login', [HomeController::class, 'login'])->name('login');
 Route::get('/register', [HomeController::class, 'register'])->name('register');
 
@@ -53,7 +57,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/shop-profiles', [ShopProfileController::class, 'index'])->name('shop-profiles.index');
         Route::post('/shop-profiles', [ShopProfileController::class, 'store'])->name('shop-profiles.store');
         Route::put('/shop-profiles/{id}', [ShopProfileController::class, 'update'])->name('shop-profiles.update');
-        
+
         //post update products
         Route::post('products/update/{id}', [ProductController::class, 'update'])->name('products.newupdate');
         Route::get('/ratings', [RatingController::class, 'index'])->name('ratings.index');
@@ -73,10 +77,19 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/report/{id}/printTransaction', [ReportController::class, 'printTransaction'])->name('report.printTransaction');
 
         Route::get('/dashboard/transaction-data', [HomeController::class, 'getTransactionData']);
-        Route::get('/dashboard/sales-statistics', [HomeController::class, 'getSalesStatistics']);    
+        Route::get('/dashboard/sales-statistics', [HomeController::class, 'getSalesStatistics']);
     });
     Route::middleware(['role:admin'])->group(function () {
         Route::resource('users', UserController::class);
+
+        Route::prefix('admin-products')->name('admin-products.')->group(function () {
+            Route::get('/', [AdminProductController::class, 'index'])->name('index');
+            Route::get('/create', [AdminProductController::class, 'create'])->name('create'); 
+            Route::post('/', [AdminProductController::class, 'store'])->name('store');
+            Route::get('/{adminproduct}/edit', [AdminProductController::class, 'edit'])->name('edit');
+            Route::put('/{adminproduct}', [AdminProductController::class, 'update'])->name('update'); 
+            Route::delete('/{adminproduct}', [AdminProductController::class, 'destroy'])->name('destroy');
+        });
 
         Route::get('admin_profiles', [AdminProfileController::class, 'index'])->name('admin_profiles.index');
         Route::post('admin_profiles', [AdminProfileController::class, 'store'])->name('admin_profiles.store');
