@@ -16,7 +16,7 @@
                     </li>
                     <li class="nav-item "> <a class="nav-link" href="{{ route('shop-page') }}">Outlet</a>
                     </li>
-                    <li class="nav-item"> <a class="nav-link" href="/bomi-products">Bomi Product</a></li>                    
+                    <li class="nav-item"> <a class="nav-link" href="{{ url('bomi-products') }}">Bomi Product</a></li>                                        
                     {{-- <li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="#"
                             id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">About</a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
