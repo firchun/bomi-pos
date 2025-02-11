@@ -3,8 +3,8 @@
         <div class="row justify-content-center">
             <div class="col-lg-8 mb-4">
                 <div class="section-title text-center">
-                    <p class="text-purple text-uppercase fw-bold mb-3">Explore Our Shop</p>
-                    <h1>Browse Products and Share Your Feedback</h1>
+                    <p class="text-purple text-uppercase fw-bold mb-3">Explore Our Product</p>
+                    <h1>Browse Products</h1>
                 </div>
             </div>
             <div class="col-lg-10">

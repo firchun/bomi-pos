@@ -8,7 +8,7 @@
             <div class="row justify-content-center align-items-center mb-5">
                 <div class="col-lg-6">
                     <div class="section-title text-center">
-                        <p class="text-purple text-uppercase fw-bold mb-3">Our Store</p>
+                        <p class="text-purple text-uppercase fw-bold mb-3">Our Outlet</p>
                         <h1>Restaurant</h1>
                         <p>Your One-Stop Shop for Quality and Style. Discover Unique Finds That Inspire and Unleash Your
                             Style with Our Exclusive Collections.</p>

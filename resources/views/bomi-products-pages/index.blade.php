@@ -28,7 +28,8 @@
             <div class="row justify-content-center">
                 <div class="col-lg-8 mb-4">
                     <div class="section-title text-center">
-                        <h1 class="text-purple">Bomi Product</h1>
+                        <p class="text-purple text-uppercase fw-bold mb-3">Explore Our Product</p>
+                        <h1>Bomi Product</h1>
                     </div>
                 </div>
                 <div class="col-lg-10">
