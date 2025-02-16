@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\QRCodeController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SearchController;
@@ -78,6 +79,8 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('/dashboard/transaction-data', [HomeController::class, 'getTransactionData']);
         Route::get('/dashboard/sales-statistics', [HomeController::class, 'getSalesStatistics']);
+
+        Route::post('/generate-qrcode-pdf', [QRCodeController::class, 'generatePDF'])->name('qr.generate.pdf');
     });
     Route::middleware(['role:admin'])->group(function () {
         Route::resource('users', UserController::class);

@@ -38,9 +38,9 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Description</label>
-                                        <input type="text" class="form-control @error('description') is-invalid @enderror" name="description">
+                                        <textarea class="form-control @error('description') is-invalid @enderror" name="description" rows="4"></textarea>
                                         @error('description') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                                    </div>
+                                    </div>                                    
                                     <div class="form-group">
                                         <label>Price</label>
                                         <input type="number" class="form-control @error('price') is-invalid @enderror" name="price">

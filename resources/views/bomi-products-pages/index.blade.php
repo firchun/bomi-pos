@@ -23,94 +23,100 @@
         </div>
     </section>
 
-    <section class="homepage_tab position-relative">
-        <div class="section container">
-            <div class="row justify-content-center">
-                <div class="col-lg-8 mb-4">
+    <section class="section">
+        <div class="container">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-lg-6">
                     <div class="section-title text-center">
-                        <p class="text-purple text-uppercase fw-bold mb-3">Explore Our Product</p>
+                        <p class="text-primary text-uppercase fw-bold mb-3 text-purple">Explore Our Product</p>
                         <h1>Bomi Product</h1>
-                    </div>
-                </div>
-                <div class="col-lg-10">
-                    <div class="rounded shadow bg-white p-5 tab-content" id="pills-tabContent">
-                        <!-- Tab All Products -->
-                        <div class="tab-pane fade show active" id="pills-all-products" role="tabpanel">
-                            <div class="row" id="products-container">
-                                {{-- Products will be loaded here by AJAX --}}
-                            </div>
-                            <div id="product-pagination" class="d-flex justify-content-center mt-4">
-                                {{-- Pagination will be rendered here by AJAX --}}
-                            </div>
-                        </div>
+                        <p>Temukan berbagai produk terbaik dari Bomi dengan kualitas terbaik dan harga yang terjangkau.</p>
                     </div>
                 </div>
             </div>
+            <div class="row justify-content-center">
+                @foreach ($products as $product)
+                    <div class="icon-box-item col-lg-4 col-md-6">
+                        <div class="block">
+                            <img src="{{ $product->photo ? asset('storage/' . $product->photo) : asset('/images/default-product.png') }}" 
+                            class="card-img-top" 
+                            alt="{{ $product->name }}" 
+                            style="height: 300px; object-fit: cover;">
+                            <h3 class="mb-3 mt-3">{{ $product->name }}</h3>
+                            <p class="mb-0">{{ Str::limit($product->description, 100, '...') }}</p>
+                            <p class="text-purple mt-3"><strong>Price:</strong>
+                                Rp{{ number_format($product->price, 0, ',', '.') }}</p>
+                            <button class="btn btn-primary view-product" data-bs-toggle="modal"
+                                data-bs-target="#productModal" data-name="{{ $product->name }}"
+                                data-description="{{ $product->description }}" data-price="{{ $product->price }}"
+                                data-photo="{{ $product->photo }}" data-phone="{{ $product->phone_number }}">
+                                Baca Selengkapnya
+                            </button>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+            <!-- Pagination -->
+            <div class="d-flex justify-content-center mt-4">
+                {{ $products->links() }}
+            </div>
         </div>
     </section>
+
+    <!-- Modal Produk -->
+    <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productModalLabel">Detail Produk</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="modalProductImage" class="img-fluid mb-3 d-block mx-auto" style="height: 300px; object-fit: cover;">
+                    <h4 id="modalProductName"></h4>
+                    <p id="modalProductDescription"></p>
+                    <p class="text-purple"><strong>Harga:</strong> Rp<span id="modalProductPrice"></span></p>
+                    <a id="modalProductWhatsapp" class="btn btn-success" target="_blank">
+                        <i class="fab fa-whatsapp"></i> Hubungi via WhatsApp
+                    </a>
+                </div>                
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('js')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        function loadProducts(page = 1) {
-            $.ajax({
-                url: `{{ route('api.adminproducts') }}?page=${page}`,
-                method: 'GET',
-                success: function(response) {
-                    const productsContainer = $('#products-container');
-                    productsContainer.empty();
+        document.addEventListener("DOMContentLoaded", function() {
+            // Event listener untuk tombol "Baca Selengkapnya"
+            document.querySelectorAll('.view-product').forEach(button => {
+                button.addEventListener('click', function() {
+                    const name = this.getAttribute('data-name');
+                    const description = this.getAttribute('data-description') ||
+                        'No description available';
+                    const price = parseFloat(this.getAttribute('data-price')).toLocaleString();
+                    const photo = this.getAttribute('data-photo') ?
+                        `/storage/${this.getAttribute('data-photo')}` :
+                        '/images/default-product.png';
+                    const phone = this.getAttribute('data-phone');
 
-                    const products = response.products.data || [];
-                    if (products.length > 0) {
-                        products.forEach(product => {
-                            productsContainer.append(`
-                            <div class="col-md-4 mb-4">
-                                <div class="card h-100">
-                                    <img src="${product.photo ? `/storage/${product.photo}` : '/images/default-product.png'}" 
-                                        class="card-img-top" 
-                                        alt="${product.name}" 
-                                        style="height: 300px; object-fit: cover;">
-                                    <div class="card-body">
-                                        <h5 class="card-title">${product.name}</h5>
-                                        <p class="card-text">${product.description || 'No description available'}</p>
-                                        <p class="text-purple"><strong>Price:</strong> Rp${parseFloat(product.price).toLocaleString()}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        `);
-                        });
+                    document.getElementById('modalProductName').textContent = name;
+                    document.getElementById('modalProductDescription').textContent = description;
+                    document.getElementById('modalProductPrice').textContent = price;
+                    document.getElementById('modalProductImage').setAttribute('src', photo);
+
+                    if (phone) {
+                        const waLink =
+                            `https://wa.me/${phone}?text=Halo,%20saya%20tertarik%20dengan%20produk%20${name}`;
+                        document.getElementById('modalProductWhatsapp').setAttribute('href',
+                        waLink);
+                        document.getElementById('modalProductWhatsapp').style.display = 'block';
                     } else {
-                        productsContainer.append(
-                            '<div class="col-12 text-center text-muted">No products available.</div>'
-                        );
+                        document.getElementById('modalProductWhatsapp').style.display = 'none';
                     }
-
-                    renderPagination(response.products);
-                },
-                error: function(xhr) {
-                    console.error(xhr.responseText);
-                    alert('Failed to load products.');
-                }
+                });
             });
-        }
-
-        function renderPagination(response) {
-            const paginationContainer = $('#product-pagination');
-            paginationContainer.empty();
-
-            for (let i = 1; i <= response.last_page; i++) {
-                paginationContainer.append(`
-                <button class="btn ${response.current_page === i ? 'btn-primary' : 'btn-light'} mx-1"
-                    onclick="loadProducts(${i})">
-                    ${i}
-                </button>
-            `);
-            }
-        }
-
-        $(document).ready(function() {
-            loadProducts();
         });
     </script>
 @endpush

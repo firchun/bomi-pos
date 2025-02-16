@@ -4,6 +4,8 @@
 
 @push('style')
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="{{ asset('library/selectric/public/selectric.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         #create-map {
             height: 400px;
@@ -15,6 +17,26 @@
             margin-left: auto;
             margin-right: auto;
         }
+
+        .modal-backdrop {
+            display: none !important;
+        }
+
+        .custom-modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            /* Warna backdrop */
+            z-index: 2000;
+            /* Harus lebih rendah dari modal */
+        }
+
+        #qrModal {
+            z-index: 3000 !important;
+        }
     </style>
 @endpush
 
@@ -24,7 +46,7 @@
             <div class="section-header">
                 <h1>{{ isset($shopProfile) ? 'Update' : 'Create' }} Shop Profile</h1>
                 <div class="section-header-breadcrumb">
-                    <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
+                    <div class="breadcrumb-item active"><a href="{{ route('home') }}">Dashboard</a></div>
                     <div class="breadcrumb-item">Shop Profile</div>
                 </div>
             </div>
@@ -103,7 +125,7 @@
                                         @if (isset($shopProfile) && $shopProfile->photo)
                                             <div class="mt-2">
                                                 <img src="{{ Storage::url($shopProfile->photo) }}" alt="Shop Photo"
-                                                    class="img-thumbnail d-block mx-auto" style="max-width: 370px;">
+                                                    class="img-thumbnail d-block mx-auto">
                                             </div>
                                         @endif
                                         <input type="file" name="photo" id="photo" class="form-control mt-2">
@@ -115,7 +137,7 @@
                                             value="{{ old('latitude', $shopProfile->location->latitude ?? '-8.5003989') }}"
                                             required>
                                     </div>
-        
+
                                     <div class="form-group">
                                         <label for="longitude">Longitude</label>
                                         <input type="text" name="longitude" id="longitude" class="form-control"
@@ -132,16 +154,48 @@
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn btn-primary m-1">
                                 {{ isset($shopProfile) ? 'Update' : 'Create' }} Shop Profile
                             </button>
 
                             <!-- Lihat Shop Profile Button -->
                             @if (isset($shopProfile))
-                                <a href="{{ route('shop.details', $shopProfile->slug) }}" class="btn btn-secondary ms-2">
+                                <a href="{{ route('shop.details', $shopProfile->slug) }}" class="btn btn-secondary m-1">
                                     Lihat Shop Profile
                                 </a>
                             @endif
+
+                            <button type="button" class="btn btn-success m-1" data-bs-toggle="modal"
+                                data-bs-target="#qrModal">
+                                Generate QR Code Menu
+                            </button>
+
+                            <!-- Modal untuk Generate QR Code -->
+                            <div class="modal fade custom-modal-backdrop" id="qrModal" tabindex="-1"
+                                aria-labelledby="qrModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="qrModalLabel">Generate QR Code Menu</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Nama Toko: <strong>{{ $shopProfile->name }}</strong> - Menu</p>
+                                            <label for="qrCount">Masukkan jumlah QR Code:</label>
+                                            <input type="number" id="qrCount" class="form-control mb-3"
+                                                placeholder="Jumlah QR Code" min="1">
+                                            <label for="customTables">Atau masukkan nomor meja secara custom (pisahkan
+                                                dengan koma):</label>
+                                            <input type="text" id="customTables" class="form-control mb-3"
+                                                placeholder="Contoh: 1,2,3">
+                                            <button type="button" class="btn btn-primary w-100"
+                                                id="generateQrBtn">Generate</button>
+                                            <div id="qrResults" class="mt-4 text-center"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -151,8 +205,82 @@
 @endsection
 
 @push('scripts')
+    <script src="{{ asset('library/selectric/public/jquery.selectric.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('js/page/features-posts.js') }}"></script>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let qrModal = document.getElementById('qrModal');
+
+            qrModal.addEventListener('show.bs.modal', function() {
+                // Hapus backdrop default sebelum modal muncul
+                document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+            });
+
+            qrModal.addEventListener('hidden.bs.modal', function() {
+                // Hapus backdrop jika ada saat modal ditutup
+                document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+            });
+        });
+
+        // Pastikan mengirim array sebagai JSON
+        document.getElementById('generateQrBtn').addEventListener('click', function() {
+            const countInput = document.getElementById('qrCount');
+            const customInput = document.getElementById('customTables');
+
+            // Validasi input
+            let tables = [];
+            if (customInput.value.trim()) {
+                tables = customInput.value.split(',').map(t => t.trim()).filter(t => t !== "");
+            } else if (countInput.value > 0) {
+                tables = Array.from({
+                    length: countInput.value
+                }, (_, i) => (i + 1).toString());
+            }
+
+            if (tables.length === 0) {
+                alert('Mohon isi jumlah QR atau nomor meja!');
+                return;
+            }
+
+            // Kirim request
+            fetch("{{ route('qr.generate.pdf') }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    },
+                    body: JSON.stringify({
+                        tables
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) return response.json().then(err => {
+                        throw err;
+                    });
+                    return response.blob();
+                })
+                .then(blob => {
+                    const url = window.URL.createObjectURL(new Blob([blob], {
+                        type: 'application/pdf'
+                    }));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', 'qrcode.pdf');
+                    document.body.appendChild(link);
+                    link.click();
+                    link.remove();
+                })
+                .catch(error => {
+                    alert(error.error || 'Error: Cek input dan coba lagi!');
+                });
+        });
+
         document.addEventListener('DOMContentLoaded', function() {
             // Ambil data lokasi dari backend atau atur sebagai null jika tidak ada
             let initialLat = {{ $shopProfile->location->latitude ?? 'null' }};

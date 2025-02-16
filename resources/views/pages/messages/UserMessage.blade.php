@@ -79,7 +79,7 @@
             <div class="section-header">
                 <h1>Messages</h1>
                 <div class="section-header-breadcrumb">
-                    <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
+                    <div class="breadcrumb-item active"><a href="{{ route('home') }}">Dashboard</a></div>
                     <div class="breadcrumb-item">Messages</div>
                 </div>
             </div>

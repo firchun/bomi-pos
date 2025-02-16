@@ -87,19 +87,8 @@ class AdminProductController extends Controller
     public function home(Request $request)
     {
         $profile = AdminProfile::first();
-        return view('bomi-products-pages.index', compact('profile'));
-    }
-
-    public function fetchProducts(Request $request)
-    {
         $products = AdminProduct::paginate(6);
-
-        if ($request->ajax()) {
-            return response()->json([
-                'products' => $products,
-            ]);
-        }
-
-        return view('bomi-products-pages.index');
-    }
+    
+        return view('bomi-products-pages.index', compact('profile', 'products'));
+    }    
 }
