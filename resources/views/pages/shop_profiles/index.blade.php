@@ -265,17 +265,6 @@
                     });
                     return response.blob();
                 })
-                // .then(blob => {
-                //     const url = window.URL.createObjectURL(new Blob([blob], {
-                //         type: 'application/pdf'
-                //     }));
-                //     const link = document.createElement('a');
-                //     link.href = url;
-                //     link.setAttribute('download', 'qrcode.pdf');
-                //     document.body.appendChild(link);
-                //     link.click();
-                //     link.remove();
-                // })
                 .then(blob => {
                     const url = window.URL.createObjectURL(blob); // Buat URL dari Blob
                     window.open(url, "_blank"); // Buka di tab baru

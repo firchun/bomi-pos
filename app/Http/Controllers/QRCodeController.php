@@ -41,20 +41,6 @@ class QRCodeController extends Controller
 
             // Generate QR Code (gunakan PNG)
             $qrData = [];
-            // foreach ($tablesArray as $table) {
-            //     $url = route('shop.details', $shopProfile->slug);
-
-            //     $renderer = new ImageRenderer(
-            //         new RendererStyle(300),
-            //         new SvgImageBackEnd()
-            //     );
-
-            //     $qrCode = (new Writer($renderer))->writeString($url);
-            //     $qrData[] = [
-            //         'table' => $table,
-            //         'qrCode' => base64_encode($qrCode)
-            //     ];
-            // }
             foreach ($tablesArray as $table) {
                 $url = route('shop.details', $shopProfile->slug);
 
@@ -74,11 +60,6 @@ class QRCodeController extends Controller
                     'qrCode' => 'data:image/png;base64,' . $qrCodeBase64 // Base64 untuk gambar PNG
                 ];
             }
-
-            // $pdf = PDF::loadView('pages.shop_profiles.partials.qrcode', [
-            //     'shopName' => $shopProfile->name,
-            //     'qrData' => $qrData
-            // ]);
 
             // return $pdf->stream('qrcode.pdf');
             return view('pages.shop_profiles.partials.qrcode', [

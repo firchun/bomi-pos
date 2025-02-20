@@ -7,7 +7,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         @page {
-
             size: A4 portrait;
             margin: 5px;
         }
@@ -24,11 +23,10 @@
             weight: 297mm;
             display: flex;
             flex-direction: column;
-            /* Membuat 2 baris */
             justify-content: space-between;
-            /* Jarak antara baris */
             padding: 10mm;
             box-sizing: border-box;
+            page-break-after: always;
         }
 
         .row {
@@ -41,12 +39,12 @@
         }
 
         .qr-item {
-            width: 60mm;
+            width: 90mm;
             /* Lebar sesuai kebutuhan */
-            height: 90mm;
+            height: 130mm;
             /* Tinggi sesuai kebutuhan */
             background: rgba(255, 255, 255, 0.9);
-            padding: 5px;
+            margin: 10px;
             text-align: center;
             display: flex;
             flex-direction: column;
@@ -61,11 +59,11 @@
 
         .qr-box img {
             border-radius: 10px;
-            margin-top: 0rem;
-            margin-bottom: 1rem;
-            width: 40mm;
+            margin-top: 1rem;
+            margin-bottom: 2rem;
+            width: 57mm;
             /* Ukuran QR Code */
-            height: 40mm;
+            height: 57mm;
         }
 
         h5 {
@@ -86,8 +84,8 @@
     </style>
 </head>
 
-<body>
-    @foreach (array_chunk($qrData, 6) as $qrPage)
+<body onload="window.print()">
+    @foreach (array_chunk($qrData, 4) as $qrPage)
         <div class="page">
             <!-- Baris Pertama (3 QR Code) -->
             <div class="row">
