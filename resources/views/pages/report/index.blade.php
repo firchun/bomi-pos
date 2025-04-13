@@ -7,19 +7,19 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.css" />
 
     <style>
-        #report-table thead th {
-            background-color: #9900CC;
-            color: white;
-            text-align: center;
-        }
+        /* #report-table thead th {
+                        background-color: #9900CC;
+                        color: white;
+                        text-align: center;
+                    } */
 
-        #report-table tbody tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
+        /* #report-table tbody tr:nth-child(even) {
+                    background-color: #f9f9f9;
+                }
 
-        #report-table tbody tr:hover {
-            background-color: rgba(153, 0, 204, 0.2);
-        }
+                #report-table tbody tr:hover {
+                    background-color: rgba(153, 0, 204, 0.2);
+                } */
     </style>
 @endpush
 
@@ -62,18 +62,28 @@
                                 </div>
 
                                 <div class="table-responsive">
-                                    <table class="table-striped table" id="report-table">
+                                    <table class="table-striped table-hover table table-sm" id="report-table">
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
                                                 <th>No Invoice</th>
-                                                <th>Tanggal Transaksi</th>
-                                                <th>Jumlah Beli</th>
-                                                <th>Total Keseluruhan</th>
-                                                <th>Aksi</th>
+                                                <th>Date</th>
+                                                <th>Quantity</th>
+                                                <th>Total</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>No Invoice</th>
+                                                <th>Date</th>
+                                                <th>Quantity</th>
+                                                <th>Total</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </tfoot>
                                     </table>
                                 </div>
                             </div>
@@ -139,7 +149,7 @@
                         name: 'total',
                         className: 'text-left',
                         render: function(data) {
-                            return 'Rp' + new Intl.NumberFormat('id-ID').format(data);
+                            return 'Rp ' + new Intl.NumberFormat('id-ID').format(data);
                         }
                     },
                     {

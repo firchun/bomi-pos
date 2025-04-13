@@ -27,14 +27,10 @@
                         @include('layouts.alert')
                     </div>
                 </div>
-
-
                 <div class="row mt-4">
                     <div class="col-12">
                         <div class="card">
-
                             <div class="card-body">
-
                                 <div class="float-right">
                                     <form method="GET" action="{{ route('categories.index') }}">
                                         <div class="input-group">
@@ -51,18 +47,14 @@
                                 <div class="table-responsive">
                                     <table class="table-striped table">
                                         <tr>
-
                                             <th>Name</th>
-
                                             <th>Create At</th>
                                             <th>Action</th>
                                         </tr>
                                         @foreach ($categories as $category)
                                             <tr>
-
                                                 <td>{{ $category->name }}
                                                 </td>
-
                                                 <td>{{ $category->created_at }}</td>
                                                 <td>
                                                     <div class="d-flex justify-content-center">
@@ -71,7 +63,6 @@
                                                             <i class="fas fa-edit"></i>
                                                             Edit
                                                         </a>
-
                                                         <form action="{{ route('categories.destroy', $category->id) }}"
                                                             method="POST" class="ml-2">
                                                             <input type="hidden" name="_method" value="DELETE" />
@@ -85,8 +76,6 @@
                                                 </td>
                                             </tr>
                                         @endforeach
-
-
                                     </table>
                                 </div>
                                 <div class="float-right">
@@ -104,7 +93,6 @@
 @push('scripts')
     <!-- JS Libraies -->
     <script src="{{ asset('library/selectric/public/jquery.selectric.min.js') }}"></script>
-
     <!-- Page Specific JS File -->
     <script src="{{ asset('js/page/features-posts.js') }}"></script>
 @endpush

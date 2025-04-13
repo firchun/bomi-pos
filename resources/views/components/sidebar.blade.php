@@ -14,7 +14,8 @@
                         <i class="fas fa-gauge"></i><span class="nav-text">Dashboard</span>
                     </a>
                 </li>
-                @if (Auth::user()->role != 'admin')
+                {{-- menu kasir --}}
+                @if (Auth::user()->role == 'user')
                     {{-- <li class='nav-item'>
                         <a class="nav-link" href="{{ route('user.pos') }}"><i
                                 class="fas fa-folder-open"></i><span class="nav-text badge bg-danger rounded-pill ms-2 px-3 py-1 text-white">POS SOON</span></a>
@@ -23,7 +24,7 @@
                     <li class="menu-header">Inventory</li>
                     <li class='nav-item {{ request()->is('products*') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ route('products.index') }}"><i class="fas fa-folder-open"></i><span
-                                class="nav-text">Products</span></a>
+                                class="nav-text">{{ __('general.products') }}</span></a>
                     </li>
                     {{-- <li class='nav-item {{ request()->is('categories*') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ route('categories.index') }}"><i class="fas fa-sitemap"></i><span
@@ -33,25 +34,66 @@
                     <li class="menu-header">Chat</li>
                     <li class="nav-item {{ request()->routeIs('user.dashboard') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('user.dashboard') }}">
-                            <i class="fas fa-comments"></i><span class="nav-text">Messages</span>
+                            <i class="fas fa-comments"></i><span class="nav-text">{{ __('general.messages') }}</span>
                         </a>
                     </li>
                     <li class='nav-item {{ request()->is('ratings*') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ route('ratings.index') }}">
-                            <i class="fas fa-star"></i><span class="nav-text">Comment & Rating</span></a>
+                            <i class="fas fa-star"></i><span
+                                class="nav-text">{{ __('general.comment & rating') }}</span></a>
                     </li>
-
-                    <li class="menu-header">User</li>
-                    <li class='nav-item'>
+                    <li class="menu-header">{{ __('general.report') }}</li>
+                    <li class="nav-item dropdown {{ Request::is('financial*') ? 'active' : '' }}">
+                        <a href="#" class="nav-link has-dropdown">
+                            <i class="fas fa-money-bill-1-wave"></i><span>
+                                {{ __('general.financial statement') }}</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            {{-- categories --}}
+                            <li class="{{ Request::is('financial/category') ? 'active' : '' }}">
+                                <a href="{{ route('financial.category') }}" class="nav-link">
+                                    {{ __('general.categories') }}
+                                </a>
+                            </li>
+                            {{-- Menu Income --}}
+                            <li class="{{ Request::is('financial/income') ? 'active' : '' }}">
+                                <a href="{{ route('financial.income') }}" class="nav-link">
+                                    {{ __('general.income') }}
+                                </a>
+                            </li>
+                            {{-- pengeluaran --}}
+                            <li class="{{ Request::is('financial/expenses') ? 'active' : '' }}">
+                                <a href="{{ route('financial.expenses') }}" class="nav-link">
+                                    {{ __('general.expense') }}
+                                </a>
+                            </li>
+                            {{-- laba rugi  --}}
+                            {{-- <li><a href="">Profit & Loss</a></li> --}}
+                            {{-- kas harian --}}
+                            {{-- <li><a href="">Daily Cash</a></li> --}}
+                            {{-- neraca saldo --}}
+                            {{-- <li><a href="">Trial Balance</a></li> --}}
+                            {{-- piutang --}}
+                            {{-- <li><a href="">Receivables</a></li> --}}
+                            {{-- pencatatan modal dan prive --}}
+                            {{-- <li><a href="">Capital & Withdrawal</a></li> --}}
+                            {{-- jurnal --}}
+                            {{-- <li><a href="">Journal</a></li> --}}
+                            {{-- perpajakan --}}
+                            {{-- <li><a href="">Taxation</a></li> --}}
+                        </ul>
+                    </li>
+                    <li class='nav-item {{ request()->is('daily-report*') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ route('daily.report') }}"><i class="fas fa-chart-line"></i><span
-                                class="nav-text">Report</span></a>
+                                class="nav-text">{{ __('general.daily order') }}</span></a>
                     </li>
+                    <li class="menu-header">Shop Setting</li>
                     <li class='nav-item {{ request()->is('shop-profiles*') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ route('shop-profiles.index') }}"><i class="fas fa-store"></i><span
                                 class="nav-text">Shop Profile</span></a>
                     </li>
                 @endif
-
+                {{-- menu admin --}}
                 @if (Auth::user()->role == 'admin')
                     <li class="menu-header">Account</li>
                     <li class='nav-item {{ request()->is('users*') ? 'active' : '' }}'>
@@ -63,7 +105,7 @@
                         <a class="nav-link" href="{{ route('admin-products.index') }}">
                             <i class="fas fa-box"></i><span class="nav-text">Admin Products</span>
                         </a>
-                    </li>                    
+                    </li>
                     <li class="menu-header">Chat</li>
                     <li class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('admin.dashboard') }}">
@@ -81,6 +123,7 @@
                         </a>
                     </li>
                 @endif
+                <li class="menu-header">Akun</li>
                 <li class='nav-item {{ request()->is('profile*') ? 'active' : '' }}'>
                     <a class="nav-link" href="{{ route('profile') }}"><i class="fas fa-user"></i><span
                             class="nav-text">Profile</span></a>

@@ -9,6 +9,7 @@ use App\Models\ShopProfile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
 
 class ReportController extends Controller
 {
@@ -52,11 +53,11 @@ class ReportController extends Controller
         foreach ($orders as $order) {
             $reportData[] = [
                 'id' => $order->id,
-                'no_invoice' => $order->no_invoice,
+                'no_invoice' => $order->no_invoice ?? '-',
                 'tanggal_transaksi' => Carbon::parse($order->transaction_time)->format('d/m/Y H:i'),
                 'jumlah_beli' => $order->total_item,
                 'total_keseluruhan' => $order->total,
-                'detail_button' => '<a href="' . route('report.show', $order->id) . '" class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></a>'
+                'detail_button' => '<a href="' . route('report.show', $order->id) . '" class="btn btn-sm btn-primary">View</a>'
             ];
         }
 
@@ -71,6 +72,35 @@ class ReportController extends Controller
         }
 
         return view('pages.report.index', compact('date'));
+    }
+    public function dailyReportDatatable(Request $request)
+    {
+        $user = Auth::user();
+        $date = $request->input('date');
+
+        $ordersQuery = Order::query()
+            ->when($date, function ($query, $date) {
+                $query->whereDate('transaction_time', $date);
+            });
+
+        return DataTables::of($ordersQuery)
+            ->filter(function ($query) use ($request) {
+                $search = $request->input('search.value');
+                if ($search) {
+                    $query->where(function ($q) use ($search) {
+                        $q->where('no_invoice', 'like', "%$search%")
+                            ->orWhere('transaction_time', 'like', "%$search%");
+                    });
+                }
+            })
+            ->editColumn('transaction_time', function ($order) {
+                return Carbon::parse($order->transaction_time)->format('d/m/Y H:i');
+            })
+            ->addColumn('detail_button', function ($order) {
+                return '<a href="' . route('report.show', $order->id) . '" class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></a>';
+            })
+            ->rawColumns(['detail_button'])
+            ->make(true);
     }
 
     // ReportController.php

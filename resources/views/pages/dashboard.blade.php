@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'General Dashboard')
+@section('title', 'Dashboard')
 
 @push('style')
     <!-- CSS Libraries -->
@@ -12,7 +12,7 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>Dashboard {{ Auth::user()->role == 'admin' ? 'Administrator' : 'Penjualan' }}</h1>
+                <h1>Dashboard {{ Auth::user()->role == 'admin' ? 'Administrator' : 'Sales' }}</h1>
             </div>
 
             <div class="section-body">
@@ -60,6 +60,82 @@
                                     </div>
                                     <div class="card-body">
                                         {{ $categories }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{-- Chart Tambahan --}}
+                        <div class="col-md-6 mt-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Penjualan per Kategori</h4>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="categoryChart" height="200"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mt-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Pendapatan vs Pengeluaran</h4>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="financeChart" height="200"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Summary Penjualan --}}
+                        <div class="col-md-12 mt-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Ringkasan Penjualan</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <h6>Produk Terlaris</h6>
+                                            <ul class="list-group">
+                                                <li class="list-group-item d-flex justify-content-between">
+                                                    Kopi Hitam <span>120x</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between">
+                                                    Roti Bakar <span>95x</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between">
+                                                    Teh Manis <span>80x</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h6>Metode Pembayaran Terbanyak</h6>
+                                            <ul class="list-group">
+                                                <li class="list-group-item d-flex justify-content-between">
+                                                    Tunai <span>60%</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between">
+                                                    QRIS <span>30%</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between">
+                                                    Transfer <span>10%</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h6>Pelanggan Terbaik</h6>
+                                            <ul class="list-group">
+                                                <li class="list-group-item d-flex justify-content-between">
+                                                    Andi <span>Rp 1.500.000</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between">
+                                                    Budi <span>Rp 1.200.000</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between">
+                                                    Citra <span>Rp 1.050.000</span>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -132,7 +208,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- Card produk terpopuler -->
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -147,11 +222,9 @@
                                             <h5 class="badge bg-primary rounded-pill text-white">{{ $category->name }}</h5>
                                             <ul class="list-group">
                                                 @foreach ($category->products as $product)
-                                                    <li class="list-group-item d-flex justify-content-between align-items-center border-0">
+                                                    <li
+                                                        class="list-group-item d-flex justify-content-between align-items-center border-0">
                                                         {{ $product->name }}
-                                                        {{-- <span class="badge bg-primary rounded-pill">
-                                                            {{ $product->total_ordered ?? 0 }} Terjual
-                                                        </span> --}}
                                                     </li>
                                                 @endforeach
                                             </ul>
@@ -171,21 +244,72 @@
 
 @push('scripts')
     <!-- JS Libraies -->
-    <script src="{{ asset('library/simpleweather/jquery.simpleWeather.min.js') }}"></script>
+    {{-- <script src="{{ asset('library/simpleweather/jquery.simpleWeather.min.js') }}"></script>
     <script src="{{ asset('library/chart.js/dist/Chart.min.js') }}"></script>
     <script src="{{ asset('library/jqvmap/dist/jquery.vmap.min.js') }}"></script>
     <script src="{{ asset('library/jqvmap/dist/maps/jquery.vmap.world.js') }}"></script>
     <script src="{{ asset('library/summernote/dist/summernote-bs4.min.js') }}"></script>
-    <script src="{{ asset('library/chocolat/dist/js/jquery.chocolat.min.js') }}"></script>
+    <script src="{{ asset('library/chocolat/dist/js/jquery.chocolat.min.js') }}"></script> --}}
     <script src="{{ asset('library/selectric/public/jquery.selectric.min.js') }}"></script>
 
     <!-- Page Specific JS File -->
-    <script src="{{ asset('js/page/index-0.js') }}"></script>
+    {{-- <script src="{{ asset('js/page/index-0.js') }}"></script> --}}
     <script src="{{ asset('js/page/features-posts.js') }}"></script>
 
     {{-- chart js --}}
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
     <script>
+        // Chart Dummy: Penjualan per Kategori
+        const categoryChartCtx = document.getElementById('categoryChart').getContext('2d');
+        new Chart(categoryChartCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Minuman', 'Makanan', 'Snack', 'Toping'],
+                datasets: [{
+                    label: 'Jumlah Terjual',
+                    data: [120, 95, 45, 20],
+                    backgroundColor: ['#6777ef', '#ffa426', '#63ed7a', '#fc544b']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Chart Dummy: Pendapatan vs Pengeluaran
+        const financeChartCtx = document.getElementById('financeChart').getContext('2d');
+        new Chart(financeChartCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Pendapatan', 'Pengeluaran'],
+                datasets: [{
+                    data: [15000000, 8000000],
+                    backgroundColor: ['#3abaf4', '#fc544b']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => formatRupiah(ctx.raw)
+                        }
+                    }
+                }
+            }
+        });
+        // Inisialisasi Chart
         const chartContext = document.getElementById('Chart').getContext('2d');
         let transactionChart;
         let lastFilter = 'week';
