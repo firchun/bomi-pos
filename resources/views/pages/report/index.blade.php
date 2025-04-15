@@ -8,18 +8,18 @@
 
     <style>
         /* #report-table thead th {
-                        background-color: #9900CC;
-                        color: white;
-                        text-align: center;
-                    } */
+                                                    background-color: #9900CC;
+                                                    color: white;
+                                                    text-align: center;
+                                                } */
 
         /* #report-table tbody tr:nth-child(even) {
-                    background-color: #f9f9f9;
-                }
+                                                background-color: #f9f9f9;
+                                            }
 
-                #report-table tbody tr:hover {
-                    background-color: rgba(153, 0, 204, 0.2);
-                } */
+                                            #report-table tbody tr:hover {
+                                                background-color: rgba(153, 0, 204, 0.2);
+                                            } */
     </style>
 @endpush
 
@@ -37,14 +37,14 @@
             <div class="section-body">
                 <div class="row">
                     <div class="col-md-4">
-                        <div class="card bg-primary text-white">
+                        <div class="card bg-primary text-white" style="border-radius: 10px;">
                             <div class="card-body">
-                                <h4 class="mt-3"><strong>Cash: Rp. <span id="total-revenue">0</span></strong></h4>
+                                <h4>Cash : Rp. <span id="total-revenue">0</span></h4>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row mt-4">
+                <div class="row ">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">

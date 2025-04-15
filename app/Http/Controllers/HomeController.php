@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\OrderItem;
+use App\Models\Rating;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -110,7 +111,7 @@ class HomeController extends Controller
             'week' => Order::whereBetween('transaction_time', [$now->copy()->subDays(6)->toDateTimeString(), $now->toDateTimeString()])->sum('total'),
             'month' => Order::whereBetween('transaction_time', [$now->copy()->subDays(30)->toDateTimeString(), $now->toDateTimeString()])->sum('total'),
             'year' => Order::whereBetween('transaction_time', [$now->copy()->subMonths(11)->startOfMonth()->toDateTimeString(), $now->toDateTimeString()])->sum('total')
-        ]);        
+        ]);
     }
 
     public function profile()
@@ -141,5 +142,33 @@ class HomeController extends Controller
     public function register()
     {
         return view('pages.auth.register');
+    }
+    public function getDashboardData()
+    {
+        $pending = Order::where('status', 'pending')->count();
+        $shipping = Order::where('status', 'shipping')->count();
+        $completed = Order::where('status', 'completed')->count();
+        $balance = number_format(Order::sum('total'), 2);
+        $sales = Order::where('user_id', Auth::id())->count();
+        $ratings = Rating::where('shop_profile_id', Auth::id())->count();
+
+        $topProducts = Product::withCount('orders')
+            ->orderBy('orders_count', 'desc')
+            ->where('user_id', Auth::id())
+            ->take(5)
+            ->get(['name', 'price', 'budget']);
+
+        return response()->json([
+            'order' => [
+                'pending' => $pending,
+                'shipping' => $shipping,
+                'completed' => $completed,
+                'total' => $pending + $shipping + $completed,
+            ],
+            'balance' => $balance,
+            'sales' => $sales,
+            'ratings' => $ratings,
+            'top_products' => $topProducts
+        ]);
     }
 }

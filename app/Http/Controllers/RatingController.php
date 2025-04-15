@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Notification;
 use App\Models\Rating;
 use App\Models\ShopProfile;
 use Illuminate\Http\Request;
@@ -26,6 +27,15 @@ class RatingController extends Controller
             'rating' => $request->rating,
             'comment' => $request->comment,
         ]);
+        if ($shop->user_id) {
+            Notification::create([
+                'id_user' => $shop->user_id,
+                'message' => 'You received a new rating of ' . $request->rating . ' stars' .
+                    ($request->comment ? ' with comment: "' . $request->comment . '"' : '') . '.',
+                'read_at' => null,
+            ]);
+        }
+
 
         if ($request->ajax()) {
             return $this->fetchRatings($request, $slug);
@@ -38,27 +48,31 @@ class RatingController extends Controller
     public function fetchComments(Request $request, $shopId)
     {
         $shop = ShopProfile::findOrFail($shopId);
-        // Ambil komentar dengan pagination, urutkan berdasarkan waktu input terbaru
+        $keyword = $request->input('keyword'); // Ambil keyword dari input
+
         $comments = Rating::where('shop_profile_id', $shop->id)
-            ->orderBy('created_at', 'desc') // Urutkan berdasarkan created_at terbaru
-            ->paginate(5); // Batasi jumlah komentar per halaman
+            ->when($keyword, function ($query) use ($keyword) {
+                $query->where('comment', 'like', '%' . $keyword . '%');
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(5);
+
         return response()->json($comments);
     }
 
     public function index()
     {
-        // Ambil toko yang dimiliki oleh pengguna yang login
-        $shops = ShopProfile::where('user_id', Auth::id())->get();
 
-        // Ambil toko pertama milik pengguna sebagai default
-        $selectedShop = $shops->first();
+        $shop = ShopProfile::where('user_id', Auth::id())->first();
+
+
 
         // Ambil komentar dan rating untuk toko yang dipilih (atau null jika tidak ada toko)
-        $ratings = $selectedShop
-            ? Rating::where('shop_profile_id', $selectedShop->id)->latest()->paginate(5)
+        $ratings = $shop
+            ? Rating::where('shop_profile_id', $shop->id)->latest()->paginate(5)
             : null;
 
-        return view('pages.ratings.index', compact('shops', 'selectedShop', 'ratings'));
+        return view('pages.ratings.index', compact('shop', 'ratings'));
     }
 
     public function fetchCommentsAdmin($shopId, Request $request)

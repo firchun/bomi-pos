@@ -7,9 +7,24 @@
             <a href="{{ route('homepage') }}">BP</a>
         </div>
         <div class="sidebar">
+            @if (!auth()->user()->is_subscribed || now()->gt(auth()->user()->subscription_expires_at))
+                <div class="mt-4 mb-2 p-3 hide-sidebar-mini">
+                    <button class="btn btn-primary btn-lg btn-block btn-icon-split" data-toggle="modal"
+                        data-target="#upgradeModal">
+                        <i class="fas fa-rocket"></i> Upgrade to Pro
+                    </button>
+                </div>
+            @else
+                <div class="mt-4 mb-2 p-3 hide-sidebar-mini">
+                    <button class="btn btn-outline-primary btn-lg btn-block btn-icon-split" data-toggle="modal"
+                        data-target="#upgradeModal">
+                        <i class="fas fa-rocket"></i> Pro Account
+                    </button>
+                </div>
+            @endif
             <ul class="sidebar-menu">
                 <li class="menu-header">Dashboard</li>
-                <li class='nav-item {{ request()->routeIs('home') ? 'active' : '' }}'>
+                <li class='nav-item {{ request()->routeIs('home*') ? 'active' : '' }}'>
                     <a class="nav-link" href="{{ route('home') }}">
                         <i class="fas fa-gauge"></i><span class="nav-text">Dashboard</span>
                     </a>
@@ -31,12 +46,7 @@
                                 class="nav-text">Categories</span></a>
                     </li> --}}
 
-                    <li class="menu-header">Chat</li>
-                    <li class="nav-item {{ request()->routeIs('user.dashboard') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('user.dashboard') }}">
-                            <i class="fas fa-comments"></i><span class="nav-text">{{ __('general.messages') }}</span>
-                        </a>
-                    </li>
+                    <li class="menu-header">Rating</li>
                     <li class='nav-item {{ request()->is('ratings*') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ route('ratings.index') }}">
                             <i class="fas fa-star"></i><span
@@ -53,18 +63,27 @@
                             <li class="{{ Request::is('financial/category') ? 'active' : '' }}">
                                 <a href="{{ route('financial.category') }}" class="nav-link">
                                     {{ __('general.categories') }}
+                                    @if (!auth()->user()->is_subscribed || now()->gt(auth()->user()->subscription_expires_at))
+                                        <span class="badge badge-danger m-2 p-1">Pro</span>
+                                    @endif
                                 </a>
                             </li>
                             {{-- Menu Income --}}
                             <li class="{{ Request::is('financial/income') ? 'active' : '' }}">
                                 <a href="{{ route('financial.income') }}" class="nav-link">
                                     {{ __('general.income') }}
+                                    @if (!auth()->user()->is_subscribed || now()->gt(auth()->user()->subscription_expires_at))
+                                        <span class="badge badge-danger m-2 p-1">Pro</span>
+                                    @endif
                                 </a>
                             </li>
                             {{-- pengeluaran --}}
                             <li class="{{ Request::is('financial/expenses') ? 'active' : '' }}">
                                 <a href="{{ route('financial.expenses') }}" class="nav-link">
                                     {{ __('general.expense') }}
+                                    @if (!auth()->user()->is_subscribed || now()->gt(auth()->user()->subscription_expires_at))
+                                        <span class="badge badge-danger m-2 p-1">Pro</span>
+                                    @endif
                                 </a>
                             </li>
                             {{-- laba rugi  --}}
@@ -91,6 +110,12 @@
                     <li class='nav-item {{ request()->is('shop-profiles*') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ route('shop-profiles.index') }}"><i class="fas fa-store"></i><span
                                 class="nav-text">Shop Profile</span></a>
+                    </li>
+                    <li class="menu-header">Support</li>
+                    <li class="nav-item {{ request()->routeIs('user.dashboard') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('user.dashboard') }}">
+                            <i class="fas fa-comments"></i><span class="nav-text">{{ __('general.messages') }}</span>
+                        </a>
                     </li>
                 @endif
                 {{-- menu admin --}}
@@ -120,6 +145,13 @@
                         <a class="nav-link" href="{{ route('admin_profiles.index') }}"><i
                                 class="fas fa-house-user"></i>
                             <span class="nav-text">Admin Profile</span>
+                        </a>
+                    </li>
+                    <li class="menu-header">Subscription</li>
+                    <li class='nav-item {{ request()->is('subscription*') ? 'active' : '' }}'>
+                        <a class="nav-link" href="{{ route('subscription.index') }}"><i
+                                class="fas fa-house-user"></i>
+                            <span class="nav-text">Update Subscription</span>
                         </a>
                     </li>
                 @endif

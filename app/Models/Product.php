@@ -30,4 +30,11 @@ class Product extends Model
     {
         return $this->hasMany(OrderItem::class, 'product_id');
     }
+    // App\Models\Product.php
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class, 'order_items')
+            ->withPivot('quantity', 'price') // sesuaikan jika ada
+            ->withTimestamps();
+    }
 }

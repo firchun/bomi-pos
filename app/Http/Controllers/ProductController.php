@@ -10,9 +10,18 @@ use Illuminate\Support\Facades\DB;
 class ProductController extends Controller
 {
     // index
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::where('user_id', Auth::id())->paginate(10);
+        $products = Product::with(['category'])
+            ->when($request->name, fn($query, $name) => $query->where('name', 'like', "%$name%"))
+            ->orderBy('created_at', 'desc')
+            ->where('user_id', Auth::id())
+            ->paginate(10);
+
+        if ($request->ajax()) {
+            return view('pages.products._table', compact('products'))->render();
+        }
+
         return view('pages.products.index', compact('products'));
     }
 

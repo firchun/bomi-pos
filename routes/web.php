@@ -19,6 +19,7 @@ use App\Http\Controllers\AdminProfileController;
 use App\Http\Controllers\IncomeExpenseCategoryController;
 use App\Http\Controllers\IncomeExpenseController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\SubscriptionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,13 +54,24 @@ Route::get('/register', [HomeController::class, 'register'])->name('register');
 // languange
 Route::post('/change-language', [App\Http\Controllers\LanguageController::class, 'change'])->name('change.language');
 Route::middleware(['auth'])->group(function () {
+
     Route::get('dashboard', [HomeController::class, 'index'])->name('home');
+    Route::get('/dashboard-data', [HomeController::class, 'getDashboardData'])->name('dashboard.data');
     Route::get('profile', [HomeController::class, 'profile'])->name('profile');
     // notification
     Route::get('data-notification', [NotificationController::class, 'getNotifications'])->name('data-notification');
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/read/{id}', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
     // profile
+    // subscribtion
+    Route::get('/subscribe', [SubscriptionController::class, 'index'])->name('subscribe');
+    Route::post('/subscribe', [SubscriptionController::class, 'store']);
     Route::put('profile/update/{id}', [UserController::class, 'update'])->name('profile.update');
     Route::middleware(['role:user'])->group(function () {
+
+        // update pro
+        Route::post('/subscription/update-pro/{userId}', [SubscriptionController::class, 'updatePro'])->name('subscription.updatePro');
+        // product
         Route::resource('products', ProductController::class);
         Route::resource('categories', CategoryController::class);
         Route::get('/shop-profiles', [ShopProfileController::class, 'index'])->name('shop-profiles.index');
@@ -89,17 +101,19 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/dashboard/sales-statistics', [HomeController::class, 'getSalesStatistics']);
 
         Route::post('/generate-qrcode-pdf', [QRCodeController::class, 'generatePDF'])->name('qr.generate.pdf');
-        //finance 
-        // finance category
-        Route::get('/financial/category', [IncomeExpenseCategoryController::class, 'index'])->name('financial.category');
-        Route::post('/financial/category-store', [IncomeExpenseCategoryController::class, 'store'])->name('financial.category-store');
-        Route::delete('/financial/category-destroy/{id}', [IncomeExpenseCategoryController::class, 'destroy'])->name('financial.category-destroy');
-        Route::put('/financial/category/{id}/update', [IncomeExpenseCategoryController::class, 'update'])->name('financial.category-update');
-        // finance income
-        Route::get('/financial/income', [IncomeExpenseController::class, 'income'])->name('financial.income');
-        Route::get('/financial/income-expense-store', [IncomeExpenseController::class, 'store'])->name('financial.income-expense-store');
-        // finance expenses
-        Route::get('/financial/expenses', [IncomeExpenseController::class, 'expenses'])->name('financial.expenses');
+        //finance for subscribtion
+        Route::middleware(['check.subscription'])->group(function () {
+            // finance category
+            Route::get('/financial/category', [IncomeExpenseCategoryController::class, 'index'])->name('financial.category');
+            Route::post('/financial/category-store', [IncomeExpenseCategoryController::class, 'store'])->name('financial.category-store');
+            Route::delete('/financial/category-destroy/{id}', [IncomeExpenseCategoryController::class, 'destroy'])->name('financial.category-destroy');
+            Route::put('/financial/category/{id}/update', [IncomeExpenseCategoryController::class, 'update'])->name('financial.category-update');
+            // finance income
+            Route::get('/financial/income', [IncomeExpenseController::class, 'income'])->name('financial.income');
+            Route::get('/financial/income-expense-store', [IncomeExpenseController::class, 'store'])->name('financial.income-expense-store');
+            // finance expenses
+            Route::get('/financial/expenses', [IncomeExpenseController::class, 'expenses'])->name('financial.expenses');
+        });
     });
     Route::middleware(['role:admin'])->group(function () {
         Route::resource('users', UserController::class);
@@ -122,5 +136,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/admin/get-messages', [ChatController::class, 'getAdminMessages'])->name('admin.getMessages');
         Route::post('/admin/send-message', [ChatController::class, 'sendMessageToUser'])->name('admin.sendMessage');
         Route::get('/admin/get-unread-counts', [ChatController::class, 'getUnreadCounts'])->name('admin.getUnreadCounts');
+        // subscription
+        Route::get('/admin/subscriptions', [SubscriptionController::class, 'index'])->name('subscription.index');
+        Route::post('/admin/subscriptions/update', [SubscriptionController::class, 'update'])->name('subscription.update');
     });
 });

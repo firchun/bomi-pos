@@ -9,11 +9,7 @@ class Rating extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'shop_profile_id',
-        'rating',
-        'comment',
-    ];
+    protected $guarded = [];
 
     public function shop()
     {

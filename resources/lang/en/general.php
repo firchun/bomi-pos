@@ -22,4 +22,5 @@ return [
   'save' => 'Save',
   'action' => 'Action',
   'choose language' => 'Choose Language',
+  'hi' => 'Hi',
 ];
