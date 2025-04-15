@@ -22,37 +22,52 @@
                             <div class="card-stats-title">Order Statistics -
                                 <div class="dropdown d-inline">
                                     <a class="font-weight-600 dropdown-toggle" data-toggle="dropdown" href="#"
-                                        id="orders-month" aria-expanded="false">August</a>
+                                        id="orders-month" aria-expanded="false">Select Month</a>
                                     <ul class="dropdown-menu dropdown-menu-sm" x-placement="bottom-start"
                                         style="position: absolute; transform: translate3d(0px, 18px, 0px); top: 0px; left: 0px; will-change: transform;">
                                         <li class="dropdown-title">Select Month</li>
-                                        <li><a href="#" class="dropdown-item">January</a></li>
-                                        <li><a href="#" class="dropdown-item">February</a></li>
-                                        <li><a href="#" class="dropdown-item">March</a></li>
-                                        <li><a href="#" class="dropdown-item">April</a></li>
-                                        <li><a href="#" class="dropdown-item">May</a></li>
-                                        <li><a href="#" class="dropdown-item">June</a></li>
-                                        <li><a href="#" class="dropdown-item">July</a></li>
-                                        <li><a href="#" class="dropdown-item active">August</a></li>
-                                        <li><a href="#" class="dropdown-item">September</a></li>
-                                        <li><a href="#" class="dropdown-item">October</a></li>
-                                        <li><a href="#" class="dropdown-item">November</a></li>
-                                        <li><a href="#" class="dropdown-item">December</a></li>
+                                        <li><a href="#" class="dropdown-item" data-month="1">January</a></li>
+                                        <li><a href="#" class="dropdown-item" data-month="2">February</a></li>
+                                        <li><a href="#" class="dropdown-item" data-month="3">March</a></li>
+                                        <li><a href="#" class="dropdown-item" data-month="4">April</a></li>
+                                        <li><a href="#" class="dropdown-item" data-month="5">May</a></li>
+                                        <li><a href="#" class="dropdown-item" data-month="6">June</a></li>
+                                        <li><a href="#" class="dropdown-item" data-month="7">July</a></li>
+                                        <li><a href="#" class="dropdown-item" data-month="8">August</a></li>
+                                        <li><a href="#" class="dropdown-item" data-month="9">September</a></li>
+                                        <li><a href="#" class="dropdown-item" data-month="10">October</a></li>
+                                        <li><a href="#" class="dropdown-item" data-month="11">November</a></li>
+                                        <li><a href="#" class="dropdown-item" data-month="12">December</a></li>
+                                    </ul>
+                                </div>
+                                <div class="dropdown d-inline">
+                                    <a class="font-weight-600 dropdown-toggle" data-toggle="dropdown" href="#"
+                                        id="orders-year" aria-expanded="false">{{ date('Y') }}</a>
+                                    <ul class="dropdown-menu dropdown-menu-sm .year" x-placement="bottom-start"
+                                        style="position: absolute; transform: translate3d(0px, 18px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                        <li class="dropdown-title">Select Year</li>
+                                        <li><a href="#" class="dropdown-item"
+                                                data-year="{{ date('Y') }}">{{ date('Y') }}</a>
+                                        </li>
+                                        <li><a href="#" class="dropdown-item"
+                                                data-year="{{ date('Y') - 1 }}">{{ date('Y') - 1 }}</a>
+                                        </li>
+
                                     </ul>
                                 </div>
                             </div>
                             <div class="card-stats-items">
                                 <div class="card-stats-item">
-                                    <div class="card-stats-item-count-pending">0</div>
-                                    <div class="card-stats-item-label">Pending</div>
+                                    <div class="card-stats-item-count-table">0</div>
+                                    <div class="card-stats-item-label">With Table</div>
                                 </div>
                                 <div class="card-stats-item">
-                                    <div class="card-stats-item-count-shipping">0</div>
-                                    <div class="card-stats-item-label">Shipping</div>
+                                    <div class="card-stats-item-count-discount">0</div>
+                                    <div class="card-stats-item-label">Discounted</div>
                                 </div>
                                 <div class="card-stats-item">
-                                    <div class="card-stats-item-count-completed">0</div>
-                                    <div class="card-stats-item-label">Completed</div>
+                                    <div class="card-stats-item-count-service-charge">0</div>
+                                    <div class="card-stats-item-label">Other</div>
                                 </div>
                             </div>
                         </div>
@@ -94,7 +109,7 @@
                                 <h4>Balance</h4>
                             </div>
                             <div class="card-body">
-                                $187,13
+                                Rp 0
                             </div>
                         </div>
                     </div>
@@ -124,87 +139,88 @@
                                 <h4>Sales</h4>
                             </div>
                             <div class="card-body">
-                                4,732
+                                0
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row justify-content-center">
-                @if (Auth::user()->role == 'admin')
-                    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                        <div class="card card-statistic-1">
-                            <div class="card-icon bg-primary">
-                                <i class="far fa-user"></i>
-                            </div>
-                            <div class="card-wrap">
-                                <div class="card-header">
-                                    <h4> Admin</h4>
-                                </div>
-                                <div class="card-body">
-                                    {{ $admin }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                        <div class="card card-statistic-1">
-                            <div class="card-icon bg-danger">
-                                <i class="far fa-user"></i>
-                            </div>
-                            <div class="card-wrap">
-                                <div class="card-header">
-                                    <h4>User</h4>
-                                </div>
-                                <div class="card-body">
-                                    {{ $user }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @else
-                    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                        <div class="card card-statistic-1">
-                            <div class="card-icon bg-primary">
-                                <i class="far fa-sitemap"></i>
-                            </div>
-                            <div class="card-wrap">
-                                <div class="card-header">
-                                    <h4>Category</h4>
-                                </div>
-                                <div class="card-body">
-                                    {{ $categories }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endif
-                <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                    <div class="card card-statistic-1">
-                        <div class="card-icon bg-warning">
-                            <i class="far fa-folder-open"></i>
-                        </div>
-                        <div class="card-wrap">
-                            <div class="card-header">
-                                <h4>Product</h4>
-                            </div>
-                            <div class="card-body">
-                                {{ $product }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
             <div class="row">
                 <div class="col-md-8">
-                    <div class="card">
+                    <div class="row justify-content-center">
+                        @if (Auth::user()->role == 'admin')
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="card card-statistic-1">
+                                    <div class="card-icon bg-primary">
+                                        <i class="far fa-user"></i>
+                                    </div>
+                                    <div class="card-wrap">
+                                        <div class="card-header">
+                                            <h4> Admin</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            {{ $admin }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="card card-statistic-1">
+                                    <div class="card-icon bg-danger">
+                                        <i class="far fa-user"></i>
+                                    </div>
+                                    <div class="card-wrap">
+                                        <div class="card-header">
+                                            <h4>User</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            {{ $user }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @else
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="card card-statistic-1">
+                                    <div class="card-icon bg-success">
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                    <div class="card-wrap">
+                                        <div class="card-header">
+                                            <h4>Rating</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            {{ $average_rating }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="card card-statistic-1">
+                                <div class="card-icon bg-warning">
+                                    <i class="far fa-folder-open"></i>
+                                </div>
+                                <div class="card-wrap">
+                                    <div class="card-header">
+                                        <h4>Product</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        {{ $product }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mt-2">
                         <div class="card-header">
                             <h4>Transaction Statistics</h4>
                             <div class="card-header-action">
                                 <div class="btn-group">
-                                    <a href="#" class="btn btn-primary" id="weekFilter">Minggu</a>
-                                    <a href="#" class="btn" id="monthFilter">Bulan</a>
-                                    <a href="#" class="btn" id="yearFilter">Tahun</a>
+                                    <a href="#" class="btn btn-primary" id="weekFilter">Week</a>
+                                    <a href="#" class="btn" id="monthFilter">Month</a>
+                                    <a href="#" class="btn" id="yearFilter">Year</a>
                                 </div>
                             </div>
                         </div>
@@ -269,55 +285,22 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card card-hero">
+                    <div class="card card-hero mt-2">
                         <div class="card-header">
                             <div class="card-icon">
                                 <i class="far fa-star"></i>
                             </div>
-                            <h4>{{ App\Models\Rating::where('shop_profile_id', Auth::id())->count() }}</h4>
+                            <h1 id="total-rating"></h1>
                             <div class="card-description">Customers reviews</div>
                         </div>
                         <div class="card-body p-0">
                             <div class="tickets-list">
-                                <a href="#" class="ticket-item">
-                                    <div class="ticket-title">
-                                        <h4>My order hasn't arrived yet</h4>
-                                    </div>
-                                    <div class="ticket-info">
-                                        <div>Laila Tazkiah</div>
-                                        <div class="bullet"></div>
-                                        <div class="text-primary">1 min ago</div>
-                                    </div>
-                                </a>
-                                <a href="#" class="ticket-item">
-                                    <div class="ticket-title">
-                                        <h4>Please cancel my order</h4>
-                                    </div>
-                                    <div class="ticket-info">
-                                        <div>Rizal Fakhri</div>
-                                        <div class="bullet"></div>
-                                        <div>2 hours ago</div>
-                                    </div>
-                                </a>
-                                <a href="#" class="ticket-item">
-                                    <div class="ticket-title">
-                                        <h4>Do you see my mother?</h4>
-                                    </div>
-                                    <div class="ticket-info">
-                                        <div>Syahdan Ubaidillah</div>
-                                        <div class="bullet"></div>
-                                        <div>6 hours ago</div>
-                                    </div>
-                                </a>
-                                <a href="features-tickets.html" class="ticket-item ticket-more">
-                                    View All <i class="fas fa-chevron-right"></i>
-                                </a>
                             </div>
                         </div>
                     </div>
+
                 </div>
+
             </div>
         </section>
 
@@ -342,56 +325,137 @@
     {{-- chart js --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
     {{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            fetch('{{ route('dashboard.data') }}')
-                .then(response => response.json())
+            fetch('{{ route('dashboard.reviews') }}')
+                .then(res => res.json())
                 .then(data => {
-                    // Order Stats
-                    document.querySelector(".card-stats-item-count-pending").innerText = data.order
-                        .pending;
-                    document.querySelector(".card-stats-item-count-shipping").innerText = data.order
-                        .shipping;
-                    document.querySelector(".card-stats-item-count-completed").innerText = data.order
-                        .completed;
-                    document.querySelector(".card-body").innerText = data.order.total;
+                    // Tampilkan total rating
+                    document.getElementById('total-rating').innerText = data.total;
 
-                    // Balance
-                    document.querySelectorAll(".card-body")[1].innerText = 'Rp ' + data.balance;
+                    const list = document.querySelector('.tickets-list');
+                    list.innerHTML = '';
 
-                    // Sales
-                    document.querySelectorAll(".card-body")[2].innerText = data.sales;
-
-                    // Ratings
-                    document.querySelector(".card-hero .card-header h4").innerText = data.ratings;
-
-                    // Top Products (optional render ulang list)
-                    let productList = '';
-                    data.top_products.forEach(product => {
-                        productList += `
-                        <li class="media">
-                            <img class="mr-3 rounded" width="55" height="55" src="${product.image} " alt="product">
-                            <div class="media-body">
-                                <div class="float-right">
-                                    <div class="font-weight-600 text-muted text-small">${product.orders_count} Sales</div>
+                    data.reviews.forEach(review => {
+                        list.innerHTML += `
+                            <a href="/ratings" class="ticket-item">
+                                <div class="ticket-title">
+                                    <h4>${review.message}</h4>
                                 </div>
-                                <div class="media-title">${product.name}</div>
-                                <div class="mt-1">
-                                    <div class="budget-price">
-                                        <div class="budget-price-square bg-primary" style="width: 35%;"></div>
-                                        <div class="budget-price-label">Rp ${product.price}</div>
-                                    </div>
-                                    <div class="budget-price">
-                                        <div class="budget-price-square bg-danger" style="width: 28%;"></div>
-                                        <div class="budget-price-label">Rp 0</div>
-                                    </div>
+                                <div class="ticket-info">
+                                    <div>Anonymous</div>
+                                    <div class="bullet"></div>
+                                    <div class="text-primary">${review.time_ago}</div>
                                 </div>
-                            </div>
-                        </li>`;
+                            </a>`;
                     });
-                    document.querySelector("#top-5-scroll ul").innerHTML = productList;
+                    list.innerHTML += `
+                        <a href="/ratings" class="ticket-item ticket-more">
+                            View All <i class="fas fa-chevron-right"></i>
+                        </a>`;
                 });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Element judul bulan dan tahun
+            const monthTitle = document.getElementById('orders-month'); // pastikan ini sesuai dengan id di HTML
+            const yearTitle = document.getElementById('orders-year'); // tambahkan elemen dengan id ini di HTML
+
+            // Dropdown bulan dan tahun
+            const monthDropdown = document.querySelectorAll('.dropdown-item[data-month]');
+            const yearDropdown = document.querySelectorAll('.dropdown-item[data-year]');
+
+            // State saat ini
+            let selectedMonth = new Date().getMonth() + 1;
+            let selectedYear = new Date().getFullYear();
+            // Ambil bulan dan tahun aktif dari dropdown
+            let activeMonth = new Date().getMonth() + 1; // Default: bulan saat ini (1-12)
+            let activeYear = new Date().getFullYear();
+
+            const fetchDashboardData = (month = activeMonth, year = activeYear) => {
+                activeMonth = month;
+                activeYear = year;
+
+                fetch(`{{ route('dashboard.data') }}?month=${month}&year=${year}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Order Stats
+                        document.querySelector(".card-stats-item-count-table").innerText = data.order.table;
+                        document.querySelector(".card-stats-item-count-discount").innerText = data.order
+                            .discount;
+                        document.querySelector(".card-stats-item-count-service-charge").innerText = data
+                            .order.service_charge ?? 0;
+                        document.querySelector(".card-body").innerText = data.order.total;
+
+                        // Balance
+                        document.querySelectorAll(".card-body")[1].innerText = 'Rp ' + data.balance;
+
+                        // Sales
+                        document.querySelectorAll(".card-body")[2].innerText = data.sales;
+
+                        // Ratings
+                        // document.querySelector(".card-hero .card-header h4").innerText = data.ratings;
+
+                        // Top Products
+                        let productList = '';
+                        data.top_products.forEach(product => {
+                            productList += `
+                            <li class="media">
+                                <img class="mr-3 rounded" width="55" height="55" src="${product.image}" alt="product">
+                                <div class="media-body">
+                                    <div class="float-right">
+                                        <div class="font-weight-600 text-muted text-small">${product.orders_count} Sales</div>
+                                    </div>
+                                    <div class="media-title">${product.name}</div>
+                                    <div class="mt-1">
+                                        <div class="budget-price">
+                                            <div class="budget-price-square bg-primary" style="width: 10%;"></div>
+                                            <div class="budget-price-label">Rp ${product.price}</div>
+                                        </div>
+                                        <div class="budget-price">
+                                            <div class="budget-price-square bg-danger" style="width: 10%;"></div>
+                                            <div class="budget-price-label">Rp ${product.total_price}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>`;
+                        });
+                        document.querySelector("#top-5-scroll ul").innerHTML = productList;
+                    });
+            };
+            //month
+            monthDropdown.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const selectedMonth = parseInt(this.getAttribute('data-month'));
+                    monthTitle.textContent = this.textContent;
+
+                    fetchDashboardData(selectedMonth, activeYear); // pakai activeYear
+                });
+            });
+            // Listener klik dropdown tahun
+            yearDropdown.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const selectedYear = parseInt(this.getAttribute('data-year'));
+                    yearTitle.textContent = this.textContent;
+
+                    fetchDashboardData(activeMonth, selectedYear); // pakai activeMonth
+                });
+            });
+
+            const currentMonthItem = [...monthDropdown].find(item =>
+                parseInt(item.getAttribute('data-month')) === selectedMonth
+            );
+            const currentYearItem = [...yearDropdown].find(item =>
+                parseInt(item.getAttribute('data-year')) === selectedYear
+            );
+
+            if (currentMonthItem) monthTitle.textContent = currentMonthItem.textContent;
+            if (currentYearItem) yearTitle.textContent = currentYearItem.textContent;
+
+            fetchDashboardData(selectedMonth, selectedYear);
         });
 
 
@@ -434,7 +498,7 @@
                     data: {
                         labels: labels,
                         datasets: [{
-                            label: 'Income',
+                            label: 'Orders',
                             data: data,
                             borderWidth: 0,
                             backgroundColor: "#9900CC",

@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\OrderItem;
 use App\Models\Rating;
+use App\Models\ShopProfile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -42,10 +43,11 @@ class HomeController extends Controller
                 ->orderByDesc('total_ordered')
                 ->take(3);
         }])->get();
+        $shop = ShopProfile::where('user_id', Auth::id())->first();
         $data = [
             'admin' => User::where('role', 'admin')->count(),
             'user' => User::where('role', 'user')->count(),
-            'categories' => $categories->count(),
+            'average_rating' => round(Rating::where('shop_profile_id', $shop->id)->avg('rating'), 2),
             'product' => $product->count(),
             'popularCategories' => $popularCategories,
         ];
@@ -143,32 +145,81 @@ class HomeController extends Controller
     {
         return view('pages.auth.register');
     }
-    public function getDashboardData()
+    public function getDashboardData(Request $request)
     {
-        $pending = Order::where('status', 'pending')->count();
-        $shipping = Order::where('status', 'shipping')->count();
-        $completed = Order::where('status', 'completed')->count();
-        $balance = number_format(Order::sum('total'), 2);
-        $sales = Order::where('user_id', Auth::id())->count();
+        $month = $request->input('month', date('n'));
+        $year = $request->input('year', date('Y'));
+
+        $table = Order::whereYear('created_at', $year)
+            ->whereMonth('created_at', $month)
+            ->where('id_kasir', Auth::id())
+            ->whereNotNull('table_number')
+            ->count();
+
+        $discount = Order::whereYear('created_at', $year)
+            ->whereMonth('created_at', $month)
+            ->where('id_kasir', Auth::id())
+            ->where('discount', '>', 0)
+            ->count();
+
+        $service_charge = Order::whereYear('created_at', $year)
+            ->whereMonth('created_at', $month)
+            ->where('id_kasir', Auth::id())
+            ->count() - $table - $discount;
+
+        $balance = number_format(Order::whereYear('created_at', $year)
+            ->whereMonth('created_at', $month)
+            ->where('id_kasir', Auth::id())
+            ->sum('total'), 2);
+
+        $sales = Order::whereYear('created_at', $year)
+            ->whereMonth('created_at', $month)
+            ->where('id_kasir', Auth::id())
+            ->sum('total_item');
         $ratings = Rating::where('shop_profile_id', Auth::id())->count();
 
         $topProducts = Product::withCount('orders')
             ->orderBy('orders_count', 'desc')
             ->where('user_id', Auth::id())
             ->take(5)
-            ->get(['name', 'price', 'budget']);
+            ->get(['name', 'price', 'budget'])
+            ->map(function ($product) {
+                $product->total_price = $product->price * $product->orders_count;
+                return $product;
+            });
 
         return response()->json([
             'order' => [
-                'pending' => $pending,
-                'shipping' => $shipping,
-                'completed' => $completed,
-                'total' => $pending + $shipping + $completed,
+                'table' => $table,
+                'discount' => $discount,
+                'service_charge' => $service_charge,
+                'total' => $table + $discount + $service_charge,
             ],
             'balance' => $balance,
             'sales' => $sales,
             'ratings' => $ratings,
             'top_products' => $topProducts
+        ]);
+    }
+    public function getReviews(Request $request)
+    {
+        $shop = ShopProfile::where('user_id', Auth::id())->first();
+
+        $reviews = Rating::query()
+            ->latest()
+            ->take(5)
+            ->get()
+            ->map(function ($review) {
+                return [
+                    'message' => $review->comment ?? 'No message',
+                    'time_ago' => $review->created_at->diffForHumans(),
+                ];
+            });
+        $total = Rating::where('shop_profile_id', $shop->id)->count();
+
+        return response()->json([
+            'total' => $total,
+            'reviews' => $reviews
         ]);
     }
 }

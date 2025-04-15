@@ -57,6 +57,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('dashboard', [HomeController::class, 'index'])->name('home');
     Route::get('/dashboard-data', [HomeController::class, 'getDashboardData'])->name('dashboard.data');
+    Route::get('/dashboard/reviews', [HomeController::class, 'getReviews'])->name('dashboard.reviews');
     Route::get('profile', [HomeController::class, 'profile'])->name('profile');
     // notification
     Route::get('data-notification', [NotificationController::class, 'getNotifications'])->name('data-notification');
