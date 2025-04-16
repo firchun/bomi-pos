@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Fortify;
+use App\Listeners\LogLoginListener;
+use Illuminate\Auth\Events\Login;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -28,6 +30,9 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Daftarkan listener untuk event login
+        \Event::listen(Login::class, LogLoginListener::class);
+
         Fortify::createUsersUsing(CreateNewUser::class);
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);

@@ -41,6 +41,25 @@
                         <a class="nav-link" href="{{ route('products.index') }}"><i class="fas fa-folder-open"></i><span
                                 class="nav-text">{{ __('general.products') }}</span></a>
                     </li>
+                    <li class="menu-header">Ingredient</li>
+                    <li class='nav-item {{ request()->is('ingredient-category*') ? 'active' : '' }}'>
+                        <a class="nav-link" href="{{ route('ingredient-category') }}"><i class="fas fa-box"></i><span
+                                class="nav-text">Category</span></a>
+                    </li>
+                    <li class='nav-item {{ request()->is('ingredient') ? 'active' : '' }}'>
+                        <a class="nav-link" href="{{ route('ingredient') }}"><i class="fas fa-box"></i><span
+                                class="nav-text">Ingredient</span></a>
+                    </li>
+
+                    <li class="menu-header">Order</li>
+                    <li class='nav-item {{ request()->is('calendar*') ? 'active' : '' }}'>
+                        <a class="nav-link" href="{{ route('calendar') }}"><i class="fas fa-calendar"></i><span
+                                class="nav-text">Calendar</span></a>
+                    </li>
+                    <li class='nav-item {{ request()->is('daily-report*') ? 'active' : '' }}'>
+                        <a class="nav-link" href="{{ route('daily.report') }}"><i class="fas fa-chart-line"></i><span
+                                class="nav-text">{{ __('general.daily order') }}</span></a>
+                    </li>
                     {{-- <li class='nav-item {{ request()->is('categories*') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ route('categories.index') }}"><i class="fas fa-sitemap"></i><span
                                 class="nav-text">Categories</span></a>
@@ -102,10 +121,7 @@
                             {{-- <li><a href="">Taxation</a></li> --}}
                         </ul>
                     </li>
-                    <li class='nav-item {{ request()->is('daily-report*') ? 'active' : '' }}'>
-                        <a class="nav-link" href="{{ route('daily.report') }}"><i class="fas fa-chart-line"></i><span
-                                class="nav-text">{{ __('general.daily order') }}</span></a>
-                    </li>
+
                     <li class="menu-header">Shop Setting</li>
                     <li class='nav-item {{ request()->is('shop-profiles*') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ route('shop-profiles.index') }}"><i class="fas fa-store"></i><span

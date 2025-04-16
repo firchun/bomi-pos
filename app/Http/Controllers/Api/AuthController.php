@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use SecurityLogService;
 
 class AuthController extends Controller
 {
@@ -21,6 +22,7 @@ class AuthController extends Controller
         //check if the user exists
         $user = User::where('email', $request->email)->first();
         if (!$user) {
+            SecurityLogService::logFailedLogin($request->email);
             return response()->json([
                 'status' => 'error',
                 'message' => 'User not found'
@@ -29,6 +31,7 @@ class AuthController extends Controller
 
         //check if the password is correct
         if (!Hash::check($request->password, $user->password)) {
+            SecurityLogService::logFailedLogin($request->email);
             return response()->json([
                 'status' => 'error',
                 'message' => 'Invalid credentials'
@@ -37,6 +40,8 @@ class AuthController extends Controller
 
         //generate token
         $token = $user->createToken('auth-token')->plainTextToken;
+        // Log successful login
+        SecurityLogService::logLogin($user);
 
         return response()->json([
             'status' => 'success',
@@ -48,6 +53,9 @@ class AuthController extends Controller
     //logout
     public function logout(Request $request)
     {
+        // Log logout
+        SecurityLogService::logLogout($request->user());
+
         $request->user()->currentAccessToken()->delete();
 
         return response()->json([

@@ -8,15 +8,16 @@
 @endpush
 
 @section('main')
+    <p class="text-center text-mutted">
+        Selamat datang di <span class="text-primary">Bomi POS</span>, Silahkan login terlebih dahulu..
+    </p>
     <div class="card card-primary">
         <div class="card-header">
             <h4>Login</h4>
         </div>
 
         <div class="card-body">
-            <p class="text-center text-mutted">
-                Selamat datang di <span class="text-primary">Bomi POS</span>, Silahkan login terlebih dahulu..
-            </p>
+
 
             <form method="POST" action="{{ route('login') }}" class="needs-validation" novalidate="">
                 @csrf
@@ -68,10 +69,11 @@
                     </button>
                 </div>
             </form>
-            <div class="text-center mt-3">
-                <p>Belum punya akun? <a href="{{ route('register') }}" class="text-primary">Daftar Sekarang</a></p>
-            </div>
+
         </div>
+    </div>
+    <div class="text-center mt-3">
+        <p>Belum punya akun? <a href="{{ route('register') }}" class="text-primary">Daftar Sekarang</a></p>
     </div>
 @endsection
 

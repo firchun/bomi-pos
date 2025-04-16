@@ -16,8 +16,11 @@ use App\Http\Controllers\ShopPageController;
 use App\Http\Controllers\ShopProfileController;
 use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\AdminProfileController;
+use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\IncomeExpenseCategoryController;
 use App\Http\Controllers\IncomeExpenseController;
+use App\Http\Controllers\IngredientCategoryController;
+use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SubscriptionController;
 
@@ -72,9 +75,19 @@ Route::middleware(['auth'])->group(function () {
 
         // update pro
         Route::post('/subscription/update-pro/{userId}', [SubscriptionController::class, 'updatePro'])->name('subscription.updatePro');
+        // calendar
+        Route::get('/calendar', [CalendarController::class, 'index'])->name('calendar');
         // product
         Route::resource('products', ProductController::class);
         Route::resource('categories', CategoryController::class);
+        // ingredient
+        Route::get('/ingredient', [IngredientController::class, 'index'])->name('ingredient');
+        // ingredient category
+        Route::get('/ingredient-category', [IngredientCategoryController::class, 'index'])->name('ingredient-category');
+        Route::post('/ingredient-category/store', [IngredientCategoryController::class, 'store'])->name('ingredient-category.store');
+        Route::delete('/ingredient-category/delete/{id}', [IngredientCategoryController::class, 'destroy'])->name('ingredient-category.delete');
+        Route::put('/ingredient-category/update/{id}', [IngredientCategoryController::class, 'update'])->name('ingredient-category.update');
+        // profiles
         Route::get('/shop-profiles', [ShopProfileController::class, 'index'])->name('shop-profiles.index');
         Route::post('/shop-profiles', [ShopProfileController::class, 'store'])->name('shop-profiles.store');
         Route::put('/shop-profiles/{id}', [ShopProfileController::class, 'update'])->name('shop-profiles.update');

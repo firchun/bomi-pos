@@ -102,10 +102,11 @@
                     </button>
                 </div>
             </form>
-            <div class="text-center mt-3">
-                <p>Sudah punya akun? <a href="{{ route('login') }}" class="text-primary">Masuk Sekarang</a></p>
-            </div>
+
         </div>
+    </div>
+    <div class="text-center mt-3">
+        <p>Sudah punya akun? <a href="{{ route('login') }}" class="text-primary">Masuk Sekarang</a></p>
     </div>
 @endsection
 
