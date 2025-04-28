@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
@@ -17,21 +18,9 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
+
 <body>
-    <div id="app">
-        <div class="wrapper">
-            <!-- Sidebar -->
-            @include('components.pos-header')
-            
-            <!-- Header -->
-            <div id="main-content" class="container">
-                @include('components.pos-sidebar')
-                
-            </div>
-            
-            {{ $slot }}
-        </div>
-    </div>
+    {{ $slot }}
 
     <!-- General JS Scripts -->
     <script src="{{ asset('pos/js/script.js') }}"></script>
@@ -41,4 +30,5 @@
     @stack('scripts')
     @livewireScripts
 </body>
+
 </html>

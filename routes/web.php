@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Pos;
+use App\Livewire\Payment;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\HomeController;
@@ -105,6 +106,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/user/send-message', [ChatController::class, 'sendMessageToAdmin'])->name('user.sendMessage');
 
         Route::get('/home-pos', Pos::class)->name('user.pos');
+        Route::get('/payment', Payment::class)->name('user.payment');
 
         Route::get('/daily-report', [ReportController::class, 'dailyReport'])->name('daily.report');
         Route::get('/daily-report-datatable', [ReportController::class, 'dailyReportDatatable'])->name('daily-report-datatable');

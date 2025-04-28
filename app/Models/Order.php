@@ -23,7 +23,10 @@ class Order extends Model
         'user_id',
         'nama_kasir',
         'transaction_time',
-        'no_invoice'
+        'no_invoice',
+        'table_number',
+        'customer_name',
+        'status'
     ];
 
     public function items()
