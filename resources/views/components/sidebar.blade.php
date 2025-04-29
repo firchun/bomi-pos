@@ -15,11 +15,18 @@
                     </button>
                 </div>
             @else
-                <div class="mt-4 mb-2 p-3 hide-sidebar-mini">
+                <div class="mt-4 p-3 hide-sidebar-mini">
                     <button class="btn btn-outline-primary btn-lg btn-block btn-icon-split" data-toggle="modal"
                         data-target="#upgradeModal">
                         <i class="fas fa-rocket"></i> Pro Account
                     </button>
+                </div>
+            @endif
+            @if (Auth::user()->role == 'user')
+                <div class=" mb-2 p-3 hide-sidebar-mini">
+                    <a class="btn btn-warning btn-lg btn-block btn-icon-split" href="{{ route('user.pos') }}">
+                        <i class="fas fa-cash-register"></i>Open Cashier
+                    </a>
                 </div>
             @endif
             <ul class="sidebar-menu">

@@ -165,7 +165,6 @@
                             <thead class="thead-light">
                                 <tr>
                                     <th>#</th>
-                                    <th>Invoice</th>
                                     <th>Tanggal</th>
                                     <th>Kasir</th>
                                     <th>Subtotal</th>

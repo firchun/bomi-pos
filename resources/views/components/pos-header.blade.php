@@ -41,13 +41,17 @@
                 </div>
             </div>
 
-            <form method="get" action="{{ route('home') }}">
+            {{-- <form method="get" action="{{ route('home') }}">
                 @csrf
                 <button type="submit" class="btn p-1 border border-danger bg-danger text-white rounded" title="Logout"
                     style="width: 40px; height: 40px;">
                     <i class="bi bi-box-arrow-right" style="font-size: 1.2rem;"></i>
                 </button>
-            </form>
+            </form> --}}
+            <a href="{{route('home')}}" class="btn p-1 border border-danger bg-danger text-white rounded" title="Logout"
+                style="width: 40px; height: 40px;">
+                <i class="bi bi-box-arrow-right" style="font-size: 1.2rem;"></i>
+            </a>
         </div>
     </div>
 </nav>
