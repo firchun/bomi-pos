@@ -11,7 +11,7 @@ class ShopPageController extends Controller
 {
     public function shop_page()
     {
-        $shops = ShopProfile::all();
+        $shops = ShopProfile::paginate(1);
         return view('shop-pages.shop_page', compact('shops'));
     }
 
@@ -50,9 +50,9 @@ class ShopPageController extends Controller
         $user = $shop->user;
 
         // Produk untuk "All Products" menggunakan pagination
-        $productsPaginated = Product::where('user_id', $user->id)
+        $productsPaginated = Product::with('category')->where('user_id', $user->id)
             ->where('status', true)
-            ->paginate(6);
+            ->paginate(12);
 
         // Ambil semua kategori
         $categories = Category::whereHas('products', function ($query) use ($user) {
@@ -66,7 +66,7 @@ class ShopPageController extends Controller
             $categoryProducts[$category->id] = Product::where('user_id', $user->id)
                 ->where('status', true)
                 ->where('category_id', $category->id)
-                ->paginate(6, ['*'], "category_page_{$category->id}");
+                ->paginate(12, ['*'], "category_page_{$category->id}");
         }
 
         return response()->json([

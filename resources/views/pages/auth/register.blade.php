@@ -1,137 +1,97 @@
 @extends('layouts.auth')
 
-@section('title', 'Register')
-
-@push('style')
-    <!-- CSS Libraries -->
-    <link rel="stylesheet" href="{{ asset('library/selectric/public/selectric.css') }}">
-@endpush
+@section('title', 'Sign Up')
 
 @section('main')
-    <div class="card card-primary">
-        <div class="card-header">
-            <h4>Register</h4>
-        </div>
+    <div class="bg-white/70 dark:bg-zinc-800/70 shadow-md rounded-2xl px-8 py-6 mt-10">
+        <h2 class="text-2xl font-bold mb-6 text-center text-zinc-800 dark:text-white">Sign Up to Manage Your Business</h2>
 
-        <div class="card-body">
-            <form method="POST" action="{{ route('register') }}">
-                @csrf
-                <div class="form-group">
-                    <label for="frist_name">Name</label>
-                    <input id="frist_name" type="text"
-                        class="form-control @error('name')
-                        is-invalid
-                    @enderror"
-                        name="name" autofocus>
-                    @error('name')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>
-                    @enderror
-                </div>
+        <form method="POST" action="{{ route('register') }}">
+            @csrf
 
-                <div class="form-group">
-                    <label for="frist_name">Business Name</label>
-                    <input id="frist_name" type="text"
-                        class="form-control @error('business_name')
-                        is-invalid
-                    @enderror"
-                        autofocus name="business_name">
-                    @error('business_name')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>
-                    @enderror
-                </div>
-
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input id="email" type="email"
-                        class="form-control @error('email')
-                        is-invalid
-                    @enderror"
-                        name="email">
-                    @error('email')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>
-                    @enderror
-                </div>
-
-
-                <div class="form-group">
-                    <label for="password" class="d-block">Password</label>
-                    <div class="input-group">
-                        <input id="password" type="password"
-                            class="form-control pwstrength @error('password') is-invalid @enderror"
-                            data-indicator="pwindicator" name="password">
-                        <div class="input-group-append">
-                            <button type="button" class="btn btn-outline-secondary" id="togglePassword">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </div>
-                    </div>
-                    @error('password')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>
-                    @enderror
-                    <div id="pwindicator" class="pwindicator">
-                        <div class="bar"></div>
-                        <div class="label"></div>
-                    </div>
-                </div>
-
-                <div class="form-group ">
-                    <label for="password2" class="d-block">Password Confirmation</label>
-                    <input id="password2" type="password"
-                        class="form-control @error('password_confirmation')
-                        is-invalid
-                    @enderror"
-                        name="password_confirmation">
-                </div>
-                @error('password_confirmation')
-                    <div class="invalid-feedback">
-                        {{ $message }}
-                    </div>
+            <!-- Name -->
+            <div class="mb-4">
+                <label for="name" class="block text-sm font-medium mb-1 dark:text-gray-200">Name</label>
+                <input id="name" type="text" name="name"
+                    class="w-full px-4 py-2 rounded-2xl border border-gray-300 dark:border-zinc-600 bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    value="{{ old('name') }}" autofocus>
+                @error('name')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
+            </div>
 
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary btn-lg btn-block">
-                        Register
+            <!-- Business Name -->
+            <div class="mb-4">
+                <label for="business_name" class="block text-sm font-medium mb-1 dark:text-gray-200">Business Name</label>
+                <input id="business_name" type="text" name="business_name"
+                    class="w-full px-4 py-2 rounded-2xl border border-gray-300 dark:border-zinc-600 bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    value="{{ old('business_name') }}">
+                @error('business_name')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <!-- Email -->
+            <div class="mb-4">
+                <label for="email" class="block text-sm font-medium mb-1 dark:text-gray-200">Email</label>
+                <input id="email" type="email" name="email"
+                    class="w-full px-4 py-2 rounded-2xl border border-gray-300 dark:border-zinc-600 bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    value="{{ old('email') }}">
+                @error('email')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <!-- Password -->
+            <div class="mb-4">
+                <label for="password" class="block text-sm font-medium mb-1 dark:text-gray-200">Password</label>
+                <div class="relative">
+                    <input id="password" type="password" name="password"
+                        class="w-full px-4 py-2 pr-10 rounded-2xl border border-gray-300 dark:border-zinc-600 bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-600 dark:text-gray-300">
+                        <i class="fas fa-eye"></i>
                     </button>
                 </div>
-            </form>
+                @error('password')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
 
-        </div>
+            <!-- Confirm Password -->
+            <div class="mb-4">
+                <label for="password_confirmation" class="block text-sm font-medium mb-1 dark:text-gray-200">Confirm Password</label>
+                <input id="password_confirmation" type="password" name="password_confirmation"
+                    class="w-full px-4 py-2 rounded-2xl border border-gray-300 dark:border-zinc-600 bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                @error('password_confirmation')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="mt-6">
+                <button type="submit"
+                    class="w-full bg-primary text-white py-2 rounded-2xl hover:bg-purple-700 transition">
+                    Sign Up
+                </button>
+            </div>
+        </form>
     </div>
-    <div class="text-center mt-3">
-        <p>Sudah punya akun? <a href="{{ route('login') }}" class="text-primary">Masuk Sekarang</a></p>
+
+    <div class="text-center mt-4 text-sm text-gray-600 dark:text-gray-300">
+        Already have an account? <a href="{{ route('login') }}" class="text-primary hover:underline">Sign In Now</a>
     </div>
 @endsection
 
 @push('scripts')
-    <!-- JS Libraies -->
-    <script src="{{ asset('library/selectric/public/jquery.selectric.min.js') }}"></script>
-    <script src="{{ asset('library/jquery.pwstrength/jquery.pwstrength.min.js') }}"></script>
-
-    <!-- Page Specific JS File -->
-    <script src="{{ asset('js/page/auth-register.js') }}"></script>
-
     <script>
-        document.getElementById('togglePassword').addEventListener('click', function() {
-            var passwordField = document.getElementById('password');
-            var icon = this.querySelector('i');
+        const toggleBtn = document.getElementById('togglePassword');
+        const passwordField = document.getElementById('password');
+        const icon = toggleBtn.querySelector('i');
 
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
-            } else {
-                passwordField.type = 'password';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
-            }
+        toggleBtn.addEventListener('click', () => {
+            const isPassword = passwordField.type === 'password';
+            passwordField.type = isPassword ? 'text' : 'password';
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
         });
     </script>
 @endpush

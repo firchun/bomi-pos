@@ -163,12 +163,12 @@
                                 <a href="{{ route('shop.details', $shopProfile->slug) }}" class="btn btn-secondary m-1">
                                     Lihat Shop Profile
                                 </a>
+                                <button type="button" class="btn btn-success m-1" data-bs-toggle="modal"
+                                    data-bs-target="#qrModal">
+                                    Generate QR Code Menu
+                                </button>
                             @endif
 
-                            <button type="button" class="btn btn-success m-1" data-bs-toggle="modal"
-                                data-bs-target="#qrModal">
-                                Generate QR Code Menu
-                            </button>
 
                             <!-- Modal untuk Generate QR Code -->
                             <div class="modal fade custom-modal-backdrop" id="qrModal" tabindex="-1"
@@ -181,7 +181,7 @@
                                                 aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <p>Nama Toko: <strong>{{ $shopProfile->name }}</strong> - Menu</p>
+                                            <p>Nama Toko: <strong>{{ $shopProfile->name ?? '' }}</strong> - Menu</p>
                                             <label for="qrCount">Masukkan jumlah QR Code:</label>
                                             <input type="number" id="qrCount" class="form-control mb-3"
                                                 placeholder="Jumlah QR Code" min="1">

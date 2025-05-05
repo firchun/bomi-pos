@@ -337,10 +337,14 @@
                     list.innerHTML = '';
 
                     data.reviews.forEach(review => {
+                        const maxLength = 100;
+                        const message = review.message.length > maxLength
+                            ? review.message.substring(0, maxLength) + '...'
+                            : review.message;
                         list.innerHTML += `
                             <a href="/ratings" class="ticket-item">
                                 <div class="ticket-title">
-                                    <h4>${review.message}</h4>
+                                    <h4>${message}</h4>
                                 </div>
                                 <div class="ticket-info">
                                     <div>Anonymous</div>

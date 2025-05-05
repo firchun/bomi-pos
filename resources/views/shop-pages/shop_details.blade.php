@@ -1,4 +1,4 @@
-@extends('layouts.home')
+@extends('layouts.home2')
 
 @section('title', $shop->name)
 @section('meta-title', $shop->name)
@@ -15,7 +15,7 @@
 @endpush
 
 @section('content')
-    <section class="section">
+    {{-- <section class="section">
         <div class="container">
             <div class="row justify-content-center align-items-center">
                 <div class="col-lg-6 text-center">
@@ -132,7 +132,384 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
+    <div class="container mx-auto px-4">
+        <!-- broadcom -->
+        <section
+            class="mt-[110px] rounded-2xl bg-white/50 text-purple-700 dark:text-white dark:bg-zinc-800/70 transitions-colors duration-300 p-5 w-full">
+            Home / Outlet / {{ $shop->name }}
+        </section>
+        <!-- images -->
+        <section class="mt-10 flex justify-center"
+        x-data="{ 
+          activeIndex: 0, 
+          images: ['sample.png', 'sample.png', 'sample.png'],
+          baseUrl: '{{ asset('home2/assets/img') }}' 
+        }">
+ <div class="relative w-[988px] h-96">
+   <!-- Background Left -->
+   <template x-for="(img, i) in images" :key="i">
+     <img x-show="activeIndex !== i" 
+          :src="`${baseUrl}/${img}`"
+          class="w-[494px] h-80 absolute left-0 top-[29px] rounded-2xl filter blur-sm opacity-50 transition-all duration-500"
+          alt="Gambar Belakang Kiri" />
+   </template>
+
+   <!-- Background Right -->
+   <template x-for="(img, i) in images" :key="i">
+     <img x-show="activeIndex !== i" 
+          :src="`${baseUrl}/${img}`"
+          class="w-[494px] h-80 absolute right-0 top-[29px] rounded-2xl filter blur-sm opacity-50 transition-all duration-500"
+          alt="Gambar Belakang Kanan" />
+   </template>
+
+   <!-- Gambar Utama -->
+   <img :src="`${baseUrl}/${images[activeIndex]}`"
+        class="w-[588px] h-96 absolute left-1/2 top-0 -translate-x-1/2 rounded-2xl z-10 shadow-lg transition-all duration-500"
+        alt="Gambar Utama Tengah" />
+
+   <!-- Navigasi -->
+   <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-4 z-20">
+     <template x-for="(img, index) in images" :key="index">
+       <button @click="activeIndex = index"
+               :class="{ 'bg-purple-700': activeIndex === index, 'bg-gray-300': activeIndex !== index }"
+               class="w-3 h-3 rounded-full transition-all duration-300"></button>
+     </template>
+   </div>
+ </div>
+</section>
+        <!-- detail shop -->
+        <section class="mt-[50px]">
+            <div class="w-full  flex flex-col md:flex-row gap-4">
+                <!-- MAP -->
+                <div
+                    class="relative w-full md:w-1/2 h-100 rounded-2xl overflow-hidden shadow-md bg-white/30 border-2 border-white backdrop-blur-xl dark:border-neutral-800 transition-colors duration-300">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63305.99282765082!2d140.38573601755773!3d-8.519153991693504!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2c4412b6fb293a1d%3A0x3eeb6cc898dc5b68!2sMerauke%2C%20Papua!5e0!3m2!1sen!2sid!4v1683982358256!5m2!1sen!2sid"
+                        width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                    <!-- Tombol Route -->
+
+                </div>
+
+                <!-- INFO TOKO -->
+                <div
+                    class="w-full md:w-1/2 bg-white/30 border-2 border-white backdrop-blur-xl rounded-2xl p-6 shadow-md flex flex-col justify-between dark:bg-zinc-900/50 dark:border-black transition-colors duration-300">
+                    <div>
+                        <h3
+                            class="text-3xl font-extrabold text-fuchsia-700 font-['Lexend'] dark:text-white transition-colors duration-300">
+                            ANGKRINGAN FIRMAN</h3>
+                        <p
+                            class="text-neutral-600 text-xl font-medium font-['Lexend'] mt-2 dark:text-neutral-300 transition-colors duration-300">
+                            Menjual jajanan angkringan seperti sate-satean, nasi kucing, dll.
+                        </p>
+                        <p
+                            class="text-neutral-600 text-xl font-medium font-['Lexend'] mt-2 dark:text-neutral-300 transition-colors duration-300">
+                            Open Hours: 05:00 PM - 10:00 PM
+                        </p>
+                        <p
+                            class="text-neutral-600 text-xl font-medium font-['Lexend'] mt-2 dark:text-neutral-300 transition-colors duration-300">
+                            Address: Jl Gak Merauke
+                        </p>
+                    </div>
+
+                    <!-- Share Buttons -->
+                    <div class="flex gap-4 mt-6">
+                        <a href="https://wa.me/?text=Kunjungi%20Angkringan%20Firman" target="_blank"
+                            class="bg-green-700 hover:bg-green-800 text-white px-6 py-3 rounded-xl text-xl font-medium font-['Lexend']">
+                            Share to Whatsapp
+                        </a>
+                        <button
+                            class="bg-purple-700 hover:bg-purple-800 text-white px-6 py-3 rounded-xl text-xl font-medium font-['Lexend']">
+                            Share
+                        </button>
+                        <a href="https://www.google.com/maps" target="_blank"
+                            class="bg-purple-700 hover:bg-purple-800 text-white px-6 py-3 rounded-xl text-xl font-medium font-['Lexend']">
+                            Route Maps
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!--tab category -->
+        <section class="mt-[30px] flex items-center justify-between">
+            <div class="bg-white  dark:bg-gray-800 p-4 rounded-3xl w-fit mx-auto">
+                <div class="flex space-x-6 text-purple-700 dark:text-purple-300 font-semibold text-lg">
+                    <!-- Tab Aktif -->
+                    <button class="bg-purple-300 text-purple-800 px-4 py-2 rounded-2xl dark:bg-purple-700 dark:text-white">
+                        All Category
+                    </button>
+
+                    <!-- Tab Lainnya -->
+                    <button class="hover:text-purple-900 dark:hover:text-white">Foods</button>
+                    <button class="hover:text-purple-900 dark:hover:text-white">Drinks</button>
+                    <button class="hover:text-purple-900 dark:hover:text-white">Snacks</button>
+                    <button class="hover:text-purple-900 dark:hover:text-white">Others</button>
+                </div>
+            </div>
+        </section>
+        <!-- Search Section (Trigger) -->
+        <section
+            class="mt-[30px] flex space-x-4 items-center justify-between bg-white/30 dark:bg-zinc-800/70 rounded-2xl p-5 cursor-pointer"
+            onclick="toggleSearchModal()">
+            <input type="text"
+                class="p-3 border border-purple-700 rounded-2xl w-full bg-white/50 text-purple-700 dark:text-white dark:bg-zinc-800 transition-colors duration-300 cursor-pointer"
+                placeholder="Search Product" readonly />
+        </section>
+
+        <!-- Modal Overlay -->
+        <div id="searchModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center">
+            <!-- Modal Box -->
+            <div class="bg-white dark:bg-zinc-900 rounded-2xl w-full max-w-2xl p-6 mx-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-lg font-semibold text-zinc-800 dark:text-white">Search Product</h2>
+                    <button onclick="toggleSearchModal()" class="text-zinc-500 hover:text-zinc-800 dark:hover:text-white">
+                        ✕
+                    </button>
+                </div>
+                <input type="search"
+                    class="w-full p-3 border border-purple-700 rounded-2xl text-purple-700 bg-white dark:bg-zinc-800 dark:text-white transition-colors duration-300"
+                    placeholder="Type to search..." autofocus />
+                <!-- Optional: Results -->
+                <!-- Optional: Results -->
+                <div class="mt-6 space-y-3">
+                    <!-- Result item -->
+                    <div
+                        class="flex items-center justify-between p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl transition hover:bg-purple-100 dark:hover:bg-purple-900 cursor-pointer">
+                        <div>
+                            <div class="text-zinc-800 dark:text-white font-medium">Nasi Goreng Spesial</div>
+                            <div class="text-sm text-zinc-500 dark:text-zinc-400">Outlet: Angkringan Firman</div>
+                        </div>
+                        <div class="text-purple-700 font-semibold text-sm">Rp 18.000</div>
+                    </div>
+
+                    <!-- Result item -->
+                    <div
+                        class="flex items-center justify-between p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl transition hover:bg-purple-100 dark:hover:bg-purple-900 cursor-pointer">
+                        <div>
+                            <div class="text-zinc-800 dark:text-white font-medium">Es Teh Manis</div>
+                            <div class="text-sm text-zinc-500 dark:text-zinc-400">Outlet: Angkringan Firman</div>
+                        </div>
+                        <div class="text-purple-700 font-semibold text-sm">Rp 5.000</div>
+                    </div>
+
+                    <!-- Result item -->
+                    <div
+                        class="flex items-center justify-between p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl transition hover:bg-purple-100 dark:hover:bg-purple-900 cursor-pointer">
+                        <div>
+                            <div class="text-zinc-800 dark:text-white font-medium">Mie Rebus Telur</div>
+                            <div class="text-sm text-zinc-500 dark:text-zinc-400">Outlet: Angkringan Firman</div>
+                        </div>
+                        <div class="text-purple-700 font-semibold text-sm">Rp 12.000</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- list outlet -->
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-[50px] px-4 container mx-auto">
+
+
+            <div
+                class="max-w-xs rounded-2xl overflow-hidden shadow-md bg-white dark:bg-zinc-800 transition-colors duration-300">
+                <!-- Gambar -->
+                <img src="{{ asset('home2') }}/assets/img/sample.png" alt="Nasi Kucing"
+                    class="w-full h-48 object-cover rounded-t-2xl" />
+
+                <!-- Konten -->
+                <div class="p-4 relative">
+                    <!-- Badge kategori -->
+                    <span
+                        class="absolute top-4 right-4 bg-purple-100 text-purple-700 dark:bg-purple-800/30 dark:text-purple-300 text-sm font-medium px-3 py-1 rounded-full">
+                        Foods
+                    </span>
+
+                    <!-- Harga -->
+                    <p class="text-2xl font-bold text-purple-700 dark:text-purple-400 mb-1">Rp 5.000</p>
+
+                    <!-- Judul -->
+                    <p class="text-lg font-semibold text-purple-700 dark:text-white mb-1">Nasi Kucing</p>
+
+                    <!-- Deskripsi -->
+                    <p class="text-gray-600 dark:text-zinc-300 text-sm">
+                        Ini Nasi kucing dengan isian teri dan tempe dengan racikan khas jawa timur
+                    </p>
+                </div>
+            </div>
+            <div
+                class="max-w-xs rounded-2xl overflow-hidden shadow-md bg-white dark:bg-zinc-800 transition-colors duration-300">
+                <!-- Gambar -->
+                <img src="{{ asset('home2') }}/assets/img/sample.png" alt="Nasi Kucing"
+                    class="w-full h-48 object-cover rounded-t-2xl" />
+
+                <!-- Konten -->
+                <div class="p-4 relative">
+                    <!-- Badge kategori -->
+                    <span
+                        class="absolute top-4 right-4 bg-purple-100 text-purple-700 dark:bg-purple-800/30 dark:text-purple-300 text-sm font-medium px-3 py-1 rounded-full">
+                        Foods
+                    </span>
+
+                    <!-- Harga -->
+                    <p class="text-2xl font-bold text-purple-700 dark:text-purple-400 mb-1">Rp 5.000</p>
+
+                    <!-- Judul -->
+                    <p class="text-lg font-semibold text-purple-700 dark:text-white mb-1">Nasi Kucing</p>
+
+                    <!-- Deskripsi -->
+                    <p class="text-gray-600 dark:text-zinc-300 text-sm">
+                        Ini Nasi kucing dengan isian teri dan tempe dengan racikan khas jawa timur
+                    </p>
+                </div>
+            </div>
+            <div
+                class="max-w-xs rounded-2xl overflow-hidden shadow-md bg-white dark:bg-zinc-800 transition-colors duration-300">
+                <!-- Gambar -->
+                <img src="{{ asset('home2') }}/assets/img/sample.png" alt="Nasi Kucing"
+                    class="w-full h-48 object-cover rounded-t-2xl" />
+
+                <!-- Konten -->
+                <div class="p-4 relative">
+                    <!-- Badge kategori -->
+                    <span
+                        class="absolute top-4 right-4 bg-purple-100 text-purple-700 dark:bg-purple-800/30 dark:text-purple-300 text-sm font-medium px-3 py-1 rounded-full">
+                        Foods
+                    </span>
+
+                    <!-- Harga -->
+                    <p class="text-2xl font-bold text-purple-700 dark:text-purple-400 mb-1">Rp 5.000</p>
+
+                    <!-- Judul -->
+                    <p class="text-lg font-semibold text-purple-700 dark:text-white mb-1">Nasi Kucing</p>
+
+                    <!-- Deskripsi -->
+                    <p class="text-gray-600 dark:text-zinc-300 text-sm">
+                        Ini Nasi kucing dengan isian teri dan tempe dengan racikan khas jawa timur
+                    </p>
+                </div>
+            </div>
+            <div
+                class="max-w-xs rounded-2xl overflow-hidden shadow-md bg-white dark:bg-zinc-800 transition-colors duration-300">
+                <!-- Gambar -->
+                <img src="{{ asset('home2') }}/assets/img/sample.png" alt="Nasi Kucing"
+                    class="w-full h-48 object-cover rounded-t-2xl" />
+
+                <!-- Konten -->
+                <div class="p-4 relative">
+                    <!-- Badge kategori -->
+                    <span
+                        class="absolute top-4 right-4 bg-purple-100 text-purple-700 dark:bg-purple-800/30 dark:text-purple-300 text-sm font-medium px-3 py-1 rounded-full">
+                        Drinks
+                    </span>
+
+                    <!-- Harga -->
+                    <p class="text-2xl font-bold text-purple-700 dark:text-purple-400 mb-1">Rp 5.000</p>
+
+                    <!-- Judul -->
+                    <p class="text-lg font-semibold text-purple-700 dark:text-white mb-1">Es Teh</p>
+
+                    <!-- Deskripsi -->
+                    <p class="text-gray-600 dark:text-zinc-300 text-sm">
+                        Ini Nasi kucing dengan isian teri dan tempe dengan racikan khas jawa timur
+                    </p>
+                </div>
+            </div>
+            <div
+                class="max-w-xs rounded-2xl overflow-hidden shadow-md bg-white dark:bg-zinc-800 transition-colors duration-300">
+                <!-- Gambar -->
+                <img src="{{ asset('home2') }}/assets/img/sample.png" alt="Nasi Kucing"
+                    class="w-full h-48 object-cover rounded-t-2xl" />
+
+                <!-- Konten -->
+                <div class="p-4 relative">
+                    <!-- Badge kategori -->
+                    <span
+                        class="absolute top-4 right-4 bg-purple-100 text-purple-700 dark:bg-purple-800/30 dark:text-purple-300 text-sm font-medium px-3 py-1 rounded-full">
+                        Drinks
+                    </span>
+
+                    <!-- Harga -->
+                    <p class="text-2xl font-bold text-purple-700 dark:text-purple-400 mb-1">Rp 5.000</p>
+
+                    <!-- Judul -->
+                    <p class="text-lg font-semibold text-purple-700 dark:text-white mb-1">Es Teh</p>
+
+                    <!-- Deskripsi -->
+                    <p class="text-gray-600 dark:text-zinc-300 text-sm">
+                        Ini Nasi kucing dengan isian teri dan tempe dengan racikan khas jawa timur
+                    </p>
+                </div>
+            </div>
+            <div
+                class="max-w-xs rounded-2xl overflow-hidden shadow-md bg-white dark:bg-zinc-800 transition-colors duration-300">
+                <!-- Gambar -->
+                <img src="{{ asset('home2') }}/assets/img/sample.png" alt="Nasi Kucing"
+                    class="w-full h-48 object-cover rounded-t-2xl" />
+
+                <!-- Konten -->
+                <div class="p-4 relative">
+                    <!-- Badge kategori -->
+                    <span
+                        class="absolute top-4 right-4 bg-purple-100 text-purple-700 dark:bg-purple-800/30 dark:text-purple-300 text-sm font-medium px-3 py-1 rounded-full">
+                        Drinks
+                    </span>
+
+                    <!-- Harga -->
+                    <p class="text-2xl font-bold text-purple-700 dark:text-purple-400 mb-1">Rp 5.000</p>
+
+                    <!-- Judul -->
+                    <p class="text-lg font-semibold text-purple-700 dark:text-white mb-1">Es Teh</p>
+
+                    <!-- Deskripsi -->
+                    <p class="text-gray-600 dark:text-zinc-300 text-sm">
+                        Ini Nasi kucing dengan isian teri dan tempe dengan racikan khas jawa timur
+                    </p>
+                </div>
+            </div>
+
+        </section>
+        <!-- pagination -->
+        <div class="flex justify-center my-10">
+            <nav
+                class="inline-flex items-center rounded-xl shadow-sm bg-white dark:bg-zinc-800 px-2 py-1 space-x-1 transition-colors duration-300">
+                <!-- Previous Button -->
+                <a href="#"
+                    class="px-3 py-2 text-sm font-medium text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded-md transition">
+                    Previous
+                </a>
+
+                <!-- Page Numbers -->
+                <a href="#"
+                    class="px-3 py-2 text-sm font-medium text-white bg-purple-600 rounded-md hover:bg-purple-700 transition">
+                    1
+                </a>
+                <a href="#"
+                    class="px-3 py-2 text-sm font-medium text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded-md transition">
+                    2
+                </a>
+                <a href="#"
+                    class="px-3 py-2 text-sm font-medium text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded-md transition">
+                    3
+                </a>
+                <a href="#"
+                    class="px-3 py-2 text-sm font-medium text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded-md transition">
+                    ...
+                </a>
+                <a href="#"
+                    class="px-3 py-2 text-sm font-medium text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded-md transition">
+                    100
+                </a>
+                <!-- Next Button -->
+                <a href="#"
+                    class="px-3 py-2 text-sm font-medium text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded-md transition">
+                    Next
+                </a>
+            </nav>
+        </div>
+
+
+    </div>
 @endsection
 
 @push('js')

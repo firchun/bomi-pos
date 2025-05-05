@@ -13,13 +13,21 @@ use App\Models\ShopProfile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules;
 
 class HomeController extends Controller
 {
     public function index()
     {
+
         if (!Auth::check()) {
             return redirect('login');
+        }
+        $shop_profiles = ShopProfile::where('user_id', Auth::id())->first();
+        if (!$shop_profiles) {
+            return redirect('shop-profiles');
         }
         $product = Product::query();
         if (Auth::user()->role == 'user') {
@@ -139,10 +147,16 @@ class HomeController extends Controller
     }
     public function login()
     {
+        if (Auth::check()) {
+            return redirect('/dashboard');
+        }
         return view('pages.auth.login');
     }
     public function register()
     {
+        if (Auth::check()) {
+            return redirect('/dashboard');
+        }
         return view('pages.auth.register');
     }
     public function getDashboardData(Request $request)
@@ -222,4 +236,56 @@ class HomeController extends Controller
             'reviews' => $reviews
         ]);
     }
+    
+    public function createForgot()
+    {
+        if (Auth::check()) {
+            return redirect('/dashboard');
+        }
+        
+        return view('pages.auth.forgot-password');
+    }
+
+    public function storeForgot(Request $request)
+    {
+        $request->validate(['email' => 'required|email']);
+    
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+    
+        return $status === Password::RESET_LINK_SENT
+                    ? back()->with('status', __($status))
+                    : back()->withErrors(['email' => __($status)]);
+    }
+
+    public function createReset(Request $request)
+    {
+       
+        return view('pages.auth.reset-password', ['request' => $request]);
+    }
+
+    public function storeReset(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ]);
+
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user) use ($request) {
+                $user->forceFill([
+                    'password' => Hash::make($request->password),
+                ])->save();
+            }
+        );
+
+        return $status === Password::PASSWORD_RESET
+                    ? redirect()->route('login')->with('status', __($status))
+                    : back()->withErrors(['email' => [__($status)]]);
+    }
+
 }
+

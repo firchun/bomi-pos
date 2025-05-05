@@ -1,118 +1,6 @@
 @extends('layouts.home2')
 
 @section('content')
-    {{-- <section class="banner position-relative overflow-hidden">
-        <div class="container">
-            <div class="row align-items-center justify-content-center">
-                <div class="col-lg-6 mb-5 mb-lg-0">
-                    <div class="block text-center text-lg-start pe-0 pe-xl-5">
-                        <h2 class="text-capitalize mb-4">Permudah pekerjaan kasir dengan Bomi Pos, semua transaksi beres
-                            dalam hitungan detik!</h2>
-                        <p class="mb-4">Kami telah mengumpulkan fitur terbaik untuk mendukung operasional kasir
-                            Anda. Pilih solusi paling terbaik untuk bisnis Anda dengan cepat dan mudah!.
-                        </p>
-                        <a type="button" class="btn btn-primary" href="{{ route('register') }}">Daftar Sekarang <span style="font-size: 14px;"
-                                class="ms-2 fas fa-arrow-right"></span></a>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="ps-lg-5 text-center">
-                        <img loading="lazy" decoding="async" src="{{ asset('home/images/home-header.png') }}"
-                            alt="banner image" class="w-100">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="section">
-        <div class="container">
-            <div class="text-center mb-5">
-                <div class="section-title pt-4">
-                    <p class="text-purple text-uppercase fw-bold mb-3">Our Services</p>
-                    <h1>Our online and offline services</h1>
-                    <p>
-                        {{ $profile->our_services ?? 'Not Have Our_services' }}
-                    </p>
-                </div>
-            </div>
-
-            <div class="row">
-                @if (!empty($profile) && $profile->our_services_items)
-                    @foreach (json_decode($profile->our_services_items) as $index => $item)
-                        <div class="col-lg-4 col-md-6 service-item">
-                            <div class="block">
-                                <span
-                                    class="colored-box text-center h3 mb-4">{{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</span>
-                                <h3 class="mb-3 service-title">{{ $item->title }}</h3>
-                                <p class="mb-0 service-description">{{ $item->description }}</p>
-                            </div>
-                        </div>
-                    @endforeach
-                @else
-                    <p class="text-center">No services available at the moment.</p>
-                @endif
-            </div>
-        </div>
-    </section>
-
-    <section class="about-section section bg-tertiary position-relative overflow-hidden">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-5">
-                    <div class="section-title">
-                        <p class="text-purple text-uppercase fw-bold mb-3">About Ourselves</p>
-                        <h1>{{ $profile->about_ourselves['title'] ?? 'Not have About_ourselves' }}</h1>
-                        <p class="lead mb-0 mt-4">
-                            {{ $profile->about_ourselves['description'] ?? 'Not have About_ourselves.' }}
-                        </p>
-                    </div>
-                </div>
-                <div class="col-lg-7 text-center text-lg-end">
-                    <img loading="lazy" decoding="async" src="{{ asset('home/images/aboutUs.png') }}" alt="About Ourselves"
-                        class="img-fluid" width="500px">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="section testimonials overflow-hidden bg-tertiary">
-        <div class="container">
-            <!-- Difference of Us Title and Description -->
-            <div class="row justify-content-center">
-                <div class="col-lg-6">
-                    <div class="section-title text-center">
-                        <p class="text-purple text-uppercase fw-bold mb-3">Difference Of Us</p>
-                        <h1 class="mb-4">Difference Of Us</h1>
-                        <p class="lead mb-0">
-                            {{ $profile->difference_of_us ?? 'Discover what makes us unique and different from others.' }}
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <!-- Difference of Us Items -->
-            <div class="row position-relative">
-                @if (!empty($profile->difference_of_us_items))
-                    @foreach ($profile->difference_of_us_items as $index => $item)
-                        <div class="col-lg-4 col-md-6 pt-1">
-                            <div class="shadow rounded bg-white p-4 mt-4">
-                                <div class="d-block d-sm-flex align-items-center mb-3">
-                                    <div class="mt-3 mt-sm-0 ms-0">
-                                        <h4 class="h5 mb-1">{{ $item['title'] ?? 'No Title' }}</h4>
-                                    </div>
-                                </div>
-                                <div class="content">
-                                    {{ $item['description'] ?? 'No description available for this item.' }}
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                @else
-                    <p class="text-center">No differences are currently listed. Please check back later.</p>
-                @endif
-            </div>
-        </div>
-    </section> --}}
     <section id="hero"
         class=" container mx-auto px-4  mt-[110px] relative w-full h-auto overflow-hidden rounded-[20px] 
      bg-gradient-to-br from-fuchsia-100 to-purple-200 
@@ -135,7 +23,7 @@
 
             <!-- Buttons -->
             <div class="flex flex-col sm:flex-row gap-4">
-                <a href="#"
+                <a href="href="{{route('register')}}""
                     class="w-full sm:w-56 h-14 bg-purple-700 rounded-[20px] flex items-center justify-center text-white text-lg sm:text-xl font-semibold font-['Lexend'] transition-all duration-300 hover:scale-105">
                     Get Started Free
                 </a>
@@ -151,8 +39,8 @@
         </div>
 
         <!-- Image -->
-        <img src="{{ asset('home2') }}/assets/img/hero-image.png" alt="Bomi POS illustration"
-            class="absolute right-0 bottom-0 h-full hidden lg:block  object-contain opacity-80 pointer-events-none" />
+        <img src="{{ asset('home2') }}/assets/img/hero-image2.png" alt="Bomi POS illustration"
+        class="absolute right-10 bottom-10 h-3/4 hidden lg:block rounded-lg  object-contain opacity-80 pointer-events-none" />
 
         <!-- Spotlight gelap -->
         <div id="spotlight"
@@ -215,14 +103,11 @@
                     <!-- Left Card -->
                     <div class="w-60 h-96 rounded-3xl bg-gradient-to-br from-purple-600 to-sky-500 p-6">
                         <h3 class="text-white text-lg font-extrabold font-['Lexend'] mb-2 leading-snug">
-                            Craft Professional-<br />
-                            Grade Content <br />
-                            with AI
+                          Craft Professional-Grade Retail Management
+                          with Bomi POS
                         </h3>
                         <p class="text-white text-[10px] font-normal font-['Lexend'] leading-relaxed">
-                            Discover the cutting-edge AI <br />
-                            tools that bring your <br />
-                            ideas to life with exceptional accuracy.
+                          Discover the smart features of Bomi POS — an AI-enhanced solution that simplifies your sales, inventory, and reporting, so you can focus on growing your business.
                         </p>
                     </div>
 
@@ -231,25 +116,20 @@
                         <!-- Top Right Card -->
                         <div class="w-96 h-40 rounded-3xl bg-gradient-to-bl from-cyan-400 to-green-500 p-6">
                             <h3 class="text-white text-lg font-extrabold font-['Lexend'] mb-2 leading-snug">
-                                Boost your Productivity 10X <br />
-                                with our AI agent tools.
+                              Boost Your Business 10X with Bomi POS
                             </h3>
                             <p class="text-white text-[10px] font-normal font-['Lexend'] leading-relaxed">
-                                Discover the cutting-edge AI <br />
-                                tools that bring your <br />
-                                ideas to life with exceptional accuracy.
+                              Discover smart POS tools designed to simplify sales, manage stock, and generate accurate reports — built to help your business grow.
                             </p>
                         </div>
 
                         <!-- Bottom Right Card -->
                         <div class="w-96 h-40 rounded-3xl bg-gradient-to-br from-orange-500 to-fuchsia-600 p-6 text-right">
                             <h3 class="text-white text-lg font-extrabold font-['Lexend'] mb-2 leading-snug">
-                                Overcome Writer's <br />Block Today
+                              Overcome Operational Chaos Today
                             </h3>
                             <p class="text-white text-[10px] font-normal font-['Lexend'] leading-relaxed">
-                                Discover the cutting-edge AI <br />
-                                tools that bring your <br />
-                                ideas to life with exceptional accuracy.
+                              Discover powerful POS tools from Bomi POS that streamline sales, inventory, and reporting — all with precision and ease.
                             </p>
                         </div>
                     </div>
@@ -279,18 +159,16 @@
                 <div class="h-auto bg-white rounded-2xl mb-4 p-4 dark:bg-neutral-900 transition-colors duration-300">
                     <div
                         class="text-black text-base font-semibold font-['Lexend'] dark:text-white transition-colors duration-300">
-                        Ralph Edwards
+                       Customers
                     </div>
                     <p class="text-stone-500 text-xs font-normal font-['Lexend']">
-                        Angkringan Firman
+                       Pemilik Kafe
                     </p>
                 </div>
                 <div class="h-auto bg-white rounded-2xl p-4 dark:bg-neutral-900 transition-colors duration-300">
                     <p
                         class="text-black text-base font-normal font-['Lexend'] dark:text-white transition-colors duration-300">
-                        As a Senior Software Developer, I found TailAdmin perfect for writing code that can be easily
-                        used in my
-                        projects, some of which are already in production.
+                        Bomi POS sangat membantu usaha kafe saya. Transaksi jadi cepat dan laporan langsung rapi
                     </p>
                 </div>
             </div>
@@ -300,18 +178,16 @@
                 <div class="h-auto bg-white rounded-2xl mb-4 p-4 dark:bg-neutral-900 transition-colors duration-300">
                     <div
                         class="text-black text-base font-semibold font-['Lexend'] dark:text-white transition-colors duration-300">
-                        Ralph Edwards
+                       Customers
                     </div>
                     <p class="text-stone-500 text-xs font-normal font-['Lexend']">
-                        Angkringan Firman
+                       Pemilik Kafe
                     </p>
                 </div>
                 <div class="h-auto bg-white rounded-2xl p-4 dark:bg-neutral-900 transition-colors duration-300">
                     <p
                         class="text-black text-base font-normal font-['Lexend'] dark:text-white transition-colors duration-300">
-                        As a Senior Software Developer, I found TailAdmin perfect for writing code that can be easily
-                        used in my
-                        projects, some of which are already in production.
+                        Dulu stok sering berantakan. Sekarang semua tercatat otomatis. Terima kasih Bomi POS!
                     </p>
                 </div>
             </div>
@@ -321,18 +197,16 @@
                 <div class="h-auto bg-white rounded-2xl mb-4 p-4 dark:bg-neutral-900 transition-colors duration-300">
                     <div
                         class="text-black text-base font-semibold font-['Lexend'] dark:text-white transition-colors duration-300">
-                        Ralph Edwards
+                       Customer
                     </div>
                     <p class="text-stone-500 text-xs font-normal font-['Lexend']">
-                        Angkringan Firman
+                        Pemilik Kafe
                     </p>
                 </div>
                 <div class="h-auto bg-white rounded-2xl p-4 dark:bg-neutral-900 transition-colors duration-300">
                     <p
                         class="text-black text-base font-normal font-['Lexend'] dark:text-white transition-colors duration-300">
-                        As a Senior Software Developer, I found TailAdmin perfect for writing code that can be easily
-                        used in my
-                        projects, some of which are already in production.
+                        Training-nya singkat tapi jelas. Setelah itu, langsung bisa dipakai tanpa ribet.
                     </p>
                 </div>
             </div>

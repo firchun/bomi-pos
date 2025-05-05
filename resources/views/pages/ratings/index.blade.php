@@ -103,16 +103,16 @@
                     const container = $('#ratings-container');
                     container.empty();
 
-                    if (response.data.length === 0) {
+                    if (response.length === 0) {
                         container.append('<p class="text-muted">No comments found.</p>');
                     }
 
                     // Summary Variables
                     let totalRating = 0;
-                    let totalReviews = response.total;
+                    let totalReviews = response.length;
                     let starCounts = [0, 0, 0, 0, 0]; // Index 0 = ★1, Index 4 = ★5
 
-                    response.data.forEach(rating => {
+                    response.forEach(rating => {
                         totalRating += rating.rating;
                         starCounts[rating.rating - 1] += 1;
 

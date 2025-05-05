@@ -15,7 +15,7 @@ class RatingController extends Controller
         // Validasi input
         $request->validate([
             'rating' => 'required|integer|min:1|max:5',
-            'comment' => 'nullable|string|max:1000',
+            'comment' => 'nullable|string',
         ]);
 
         // Cari toko berdasarkan slug
@@ -55,7 +55,7 @@ class RatingController extends Controller
                 $query->where('comment', 'like', '%' . $keyword . '%');
             })
             ->orderBy('created_at', 'desc')
-            ->paginate(5);
+            ->get();
 
         return response()->json($comments);
     }

@@ -40,7 +40,7 @@ class CreateNewUser implements CreatesNewUsers
             'password' => Hash::make($input['password']),
         ]);
         // Log the account creation
-        SecurityLogService::logAccountCreation($user);
+        // SecurityLogService::logAccountCreation($user);
 
         return $user;
     }

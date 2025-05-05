@@ -24,6 +24,9 @@ use App\Http\Controllers\IngredientCategoryController;
 use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SubscriptionController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -35,11 +38,17 @@ use App\Http\Controllers\SubscriptionController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
+// homepage
 Route::get('/', [HomePageController::class, 'index'])->name('homepage');
+Route::get('shop-page', [HomePageController::class, 'outlet'])->name('shop-page');
+Route::get('/shop/{slug}', [HomePageController::class, 'outlet_details'])->name('shop.details');
+Route::get('bomi-products', [HomePageController::class, 'bomiProduct'])->name('bomi-products.home');
+// end homepage
 
-Route::get('shop-page', [ShopPageController::class, 'shop_page'])->name('shop-page');
-Route::get('/shop/{slug}', [ShopPageController::class, 'shop_details'])->name('shop.details');
+// Route::get('shop-page', [ShopPageController::class, 'shop_page'])->name('shop-page');
+// Route::get('/shop/{slug}', [ShopPageController::class, 'shop_details'])->name('shop.details');
+// Route::get('bomi-products', [AdminProductController::class, 'home'])->name('bomi-products.home');
+// Route::get('bomi-products/fetch', [AdminProductController::class, 'fetchProducts'])->name('api.adminproducts');
 
 Route::get('/product/{slug}', [ShopPageController::class, 'fetchProducts'])->name('api.products');
 Route::get('/comment/{shop_id}', [RatingController::class, 'fetchComments'])->name('api.comments');
@@ -49,15 +58,36 @@ Route::post('/shop/{slug}/rate', [RatingController::class, 'storeRating'])->name
 Route::get('/search', [SearchController::class, 'search'])->name('search');
 Route::get('/ajax/search', [SearchController::class, 'ajaxSearch'])->name('ajax.search');
 Route::get('/ajax/product/details', [SearchController::class, 'getProductDetails'])->name('ajax.product.details');
-
-Route::get('bomi-products', [AdminProductController::class, 'home'])->name('bomi-products.home');
-Route::get('bomi-products/fetch', [AdminProductController::class, 'fetchProducts'])->name('api.adminproducts');
-
+// autenticated
 Route::get('/login', [HomeController::class, 'login'])->name('login');
 Route::get('/register', [HomeController::class, 'register'])->name('register');
+// password
+Route::get('/forgot-password', [HomeController::class, 'createForgot'])->name('password.request');
+Route::post('/forgot-password', [HomeController::class, 'storeForgot'])->name('password.email');
+Route::get('/reset-password/{token}', [HomeController::class, 'createReset'])->name('password.reset');
+Route::post('/reset-password', [HomeController::class, 'storeReset'])->name('password.update');
+// email
+// Tampilkan halaman verifikasi email
+Route::get('/email/verify', function () {
+    if (Auth::user()?->hasVerifiedEmail()) {
+        return redirect()->intended('/dashboard');
+    }
+    return view('pages.auth.verify-email');
+})->middleware(['auth'])->name('verification.notice');
+
+// Verifikasi email saat klik link
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+    return redirect('/dashboard'); // ganti sesuai halaman setelah verifikasi
+})->middleware(['auth', 'signed'])->name('verification.verify');
+// Kirim ulang email verifikasi
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+    return back()->with('status', 'verification-link-sent');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 // languange
 Route::post('/change-language', [App\Http\Controllers\LanguageController::class, 'change'])->name('change.language');
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth','verified'])->group(function () {
 
     Route::get('dashboard', [HomeController::class, 'index'])->name('home');
     Route::get('/dashboard-data', [HomeController::class, 'getDashboardData'])->name('dashboard.data');
