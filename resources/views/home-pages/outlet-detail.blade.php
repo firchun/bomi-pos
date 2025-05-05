@@ -167,21 +167,30 @@
         </div>
         <!--tab category -->
         <section class="mt-10 flex justify-center">
-            <div class="bg-white dark:bg-gray-800 p-4 rounded-3xl w-fit">
-                <div class="flex space-x-4 text-purple-700 dark:text-purple-300 font-semibold text-lg" id="tabs">
-                    <button onclick="switchTab('all')"
-                        class="tab-btn px-4 py-2 rounded-2xl bg-purple-300 text-purple-800 dark:bg-purple-700 dark:text-white "
-                        id="tab-btn-all">Semua</button>
-                    @foreach ($categories as $cat)
-                        <button onclick="switchTab('category-{{ $cat->id }}')"
-                            class="tab-btn px-4 py-2 rounded-2xl hover:bg-purple-200 dark:hover:bg-purple-600"
-                            id="tab-btn-category-{{ $cat->id }}">
-                            {{ $cat->name }}
-                        </button>
-                    @endforeach
-                </div>
-            </div>
-        </section>
+          <div class="bg-white dark:bg-gray-800 p-4 rounded-3xl w-fit max-w-full">
+              <!-- Dropdown untuk sm -->
+              <select onchange="switchTab(this.value)" class="block sm:hidden w-full px-4 py-2 rounded-xl border border-purple-300 dark:border-purple-600 dark:bg-gray-800 dark:text-white">
+                  <option value="all">Semua</option>
+                  @foreach ($categories as $cat)
+                      <option value="category-{{ $cat->id }}">{{ $cat->name }}</option>
+                  @endforeach
+              </select>
+      
+              <!-- Tab horizontal untuk sm ke atas -->
+              <div class="hidden sm:flex space-x-4 text-purple-700 dark:text-purple-300 font-semibold text-lg mt-4 sm:mt-0" id="tabs">
+                  <button onclick="switchTab('all')"
+                      class="tab-btn px-4 py-4 rounded-2xl bg-purple-300 text-purple-800 dark:bg-purple-700 dark:text-white"
+                      id="tab-btn-all">Semua</button>
+                  @foreach ($categories as $cat)
+                      <button onclick="switchTab('category-{{ $cat->id }}')"
+                          class="tab-btn px-4 py-4 rounded-2xl hover:bg-purple-200 dark:hover:bg-purple-600"
+                          id="tab-btn-category-{{ $cat->id }}">
+                          {{ $cat->name }}
+                      </button>
+                  @endforeach
+              </div>
+          </div>
+      </section>
 
         <!-- list outlet -->
         <section class="container mx-auto mt-8">

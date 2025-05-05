@@ -104,7 +104,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl w-full" >
                     <!-- Free Account -->
                     <div
-                        class="bg-gradient-to-br from-fuchsia-400 to-purple-400 dark:from-fuchsia-700/30 dark:to-purple-800/30 rounded-3xl p-6 h-full text-white  flex flex-col justify-between w-3/4">
+                        class="bg-gradient-to-br from-fuchsia-400 to-purple-400 dark:from-fuchsia-700/30 dark:to-purple-800/30 rounded-3xl p-6 h-full text-white  flex flex-col justify-between w-full sm:w-3/4 ">
                         <!-- Konten Atas -->
                         <div>
                             <h3 class="text-xl font-bold text-purple-700 dark:text-purple-300">Free Account</h3>
@@ -131,7 +131,7 @@
                     </div>
                     <!-- Pro Account -->
                     <div
-                        class="bg-gradient-to-br from-fuchsia-400 to-purple-400 dark:from-fuchsia-700/30 dark:to-purple-800/30 rounded-3xl p-6 h-full text-white  flex flex-col justify-between w-3/4 scale-110 border-4 border-purple-700 shadow-xl shadow-purple-700  dark:shadow-purple-900">
+                        class="bg-gradient-to-br from-fuchsia-400 to-purple-400 dark:from-fuchsia-700/30 dark:to-purple-800/30 rounded-3xl p-6 h-full text-white  flex flex-col justify-between  w-full sm:w-3/4 scale-110 border-4 border-purple-700 shadow-xl shadow-purple-700  dark:shadow-purple-900">
                         <!-- Konten Atas -->
                         <div>
                             <h3 class="text-xl font-bold text-purple-700 dark:text-purple-300">Pro Account</h3>
@@ -161,7 +161,7 @@
               <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl w-full" >
                 <!-- packet 1 -->
                 <div
-                    class="bg-gradient-to-br from-fuchsia-400 to-purple-400 dark:from-fuchsia-700/30 dark:to-purple-800/30 rounded-3xl p-6 h-full text-white  flex flex-col justify-between w-3/4  ">
+                    class="bg-gradient-to-br from-fuchsia-400 to-purple-400 dark:from-fuchsia-700/30 dark:to-purple-800/30 rounded-3xl p-6 h-full text-white  flex flex-col justify-between  w-full sm:w-3/4  ">
                     <!-- Konten Atas -->
                     <div>
                         <h3 class="text-xl font-bold text-purple-700 dark:text-purple-300">Packet 1</h3>
@@ -186,7 +186,7 @@
                 </div>
                 <!-- packet 2 -->
                 <div
-                    class="bg-gradient-to-br from-fuchsia-400 to-purple-400 dark:from-fuchsia-700/30 dark:to-purple-800/30 rounded-3xl p-6 h-full text-white  flex flex-col justify-between w-3/4 scale-110 border-4 border-purple-700 shadow-xl shadow-purple-700  dark:shadow-purple-900">
+                    class="bg-gradient-to-br from-fuchsia-400 to-purple-400 dark:from-fuchsia-700/30 dark:to-purple-800/30 rounded-3xl p-6 h-full text-white  flex flex-col justify-between  w-full sm:w-3/4 scale-110 border-4 border-purple-700 shadow-xl shadow-purple-700  dark:shadow-purple-900">
                     <!-- Konten Atas -->
                     <div>
                         <h3 class="text-xl font-bold text-purple-700 dark:text-purple-300">Packet 2</h3>
