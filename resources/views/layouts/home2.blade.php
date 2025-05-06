@@ -77,8 +77,10 @@
         <header
             class="fixed top-0 left-0 w-full z-50 bg-white/2 backdrop-blur-lg p-6 dark:bg-black/10 transition-colors duration-300">
             <div class="container mx-auto flex justify-between items-center px-4">
+              <a href="{{url('/')}}">
+                  <!-- Logo -->
                 <img src="{{ asset('home2') }}/assets/svg/logo.svg" alt="logo" class="h-10">
-
+              </a>
                 <!-- Navigation (Hidden on small screens) -->
                 <nav class="space-x-10 hidden md:flex ">
                     <a href="{{ url('/') }}"

@@ -98,10 +98,10 @@
         <!-- Responsive Container with Scale -->
         <div class="w-full flex justify-center">
             <div
-                class="transform origin-top scale-[0.75] sm:scale-[0.85] md:scale-[0.95] lg:scale-100 transition-transform duration-300">
-                <div class="flex gap-6">
+                class="transform origin-top scale-65  sm:scale-[0.80] md:scale-[0.95] lg:scale-100 transition-transform duration-300">
+                <div class="flex gap-6 flex-col sm:flex-row justify-center">
                     <!-- Left Card -->
-                    <div class="w-60 h-96 rounded-3xl bg-gradient-to-br from-purple-600 to-sky-500 p-6">
+                    <div class="w-96 h-auto sm:w-60 sm:h-96 rounded-3xl bg-gradient-to-br from-purple-600 to-sky-500 p-6">
                         <h3 class="text-white text-lg font-extrabold font-['Lexend'] mb-2 leading-snug">
                           Craft Professional-Grade Retail Management
                           with Bomi POS
@@ -152,7 +152,7 @@
         </div>
 
         <!-- Testimonials Section (Grid Layout) -->
-        <div class="grid grid-cols-2 gap-4  justify-items-center lg:grid-cols-3 lg:gap-6 ">
+        <div class="grid grid-cols-1 gap-4  justify-items-center md:grid-cols-2 lg:grid-cols-3 lg:gap-6 ">
             <!-- Testimonial 1 -->
             <div
                 class="w-full h-auto bg-neutral-100 rounded-[30px] p-6 flex flex-col opacity-40 hover:opacity-100 transition-opacity duration-300 shadow-lg dark:bg-neutral-700 transition-colors duration-300">
