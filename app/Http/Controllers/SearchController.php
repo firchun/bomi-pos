@@ -8,6 +8,18 @@ use App\Models\ShopProfile;
 
 class SearchController extends Controller
 {
+    public function index(Request $request)
+    {
+        $query = $request->input('query');
+
+        $products = Product::search($query)->get()->load('outlet');
+        $outlets = ShopProfile::search($query)->get();
+
+        return response()->json([
+            'products' => $products,
+            'outlets' => $outlets,
+        ]);
+    }
     public function search(Request $request)
     {
         // Validasi input pencarian

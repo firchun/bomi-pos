@@ -2,7 +2,7 @@
 
 @section('content')
     <section id="hero"
-        class=" container mx-auto px-4  mt-[110px] relative w-full h-auto overflow-hidden rounded-[20px] 
+        class=" container mx-auto  mt-[110px] relative w-full h-auto overflow-hidden rounded-[20px] 
      bg-gradient-to-br from-fuchsia-100 to-purple-200 
      dark:from-zinc-900/50 dark:to-zinc-600/50  dark:backdrop-blur-sm
      px-6 py-12 md:py-20 lg:py-28 transition-colors duration-300">
@@ -95,7 +95,7 @@
             The key benefits of using <br />our application
         </h2>
 
-        <!-- Responsive Container with Scale -->
+      <!-- Responsive Container with Scale -->
         <div class="w-full flex justify-center">
             <div
                 class="transform origin-top scale-65  sm:scale-[0.80] md:scale-[0.95] lg:scale-100 transition-transform duration-300">

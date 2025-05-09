@@ -48,14 +48,14 @@
                         <a class="nav-link" href="{{ route('products.index') }}"><i class="fas fa-folder-open"></i><span
                                 class="nav-text">{{ __('general.products') }}</span></a>
                     </li>
-                    <li class="menu-header">Ingredient</li>
-                    <li class='nav-item {{ request()->is('ingredient-category*') ? 'active' : '' }}'>
+                    <li class="menu-header">{{__('general.ingredients')}}</li>
+                    {{-- <li class='nav-item {{ request()->is('ingredient-category*') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ route('ingredient-category') }}"><i class="fas fa-box"></i><span
                                 class="nav-text">Category</span></a>
-                    </li>
+                    </li> --}}
                     <li class='nav-item {{ request()->is('ingredient') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ route('ingredient') }}"><i class="fas fa-box"></i><span
-                                class="nav-text">Ingredient</span></a>
+                                class="nav-text">{{__('general.ingredients')}}</span></a>
                     </li>
 
                     <li class="menu-header">Order</li>

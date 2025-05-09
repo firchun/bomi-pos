@@ -24,7 +24,7 @@ class IngredientCategoryController extends Controller
             'category' => $request->category,
         ]);
 
-        return redirect()->route('ingredient-category')->with('success', 'Category success add.');
+        return redirect()->back()->with('success', 'Category successfully added.');
     }
     public function destroy($id)
     {

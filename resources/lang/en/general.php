@@ -23,4 +23,8 @@ return [
   'action' => 'Action',
   'choose language' => 'Choose Language',
   'hi' => 'Hi',
+  'ingredients' => 'Ingredients',
+  'ingredient' => 'Ingredient',
+  'all' => 'All',
+  'back' => 'Back',
 ];

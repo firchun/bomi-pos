@@ -77,23 +77,45 @@
         <header
             class="fixed top-0 left-0 w-full z-50 bg-white/2 backdrop-blur-lg p-6 dark:bg-black/10 transition-colors duration-300">
             <div class="container mx-auto flex justify-between items-center px-4">
-              <a href="{{url('/')}}">
-                  <!-- Logo -->
-                <img src="{{ asset('home2') }}/assets/svg/logo.svg" alt="logo" class="h-10">
-              </a>
+                <a href="{{ url('/') }}">
+                    <!-- Logo -->
+                    <img src="{{ asset('home2') }}/assets/svg/logo.svg" alt="logo" class="h-10">
+                </a>
                 <!-- Navigation (Hidden on small screens) -->
                 <nav class="space-x-10 hidden md:flex ">
+                    {{-- <a href="{{ url('/') }}"
+                    class="text-sm font-semibold text-purple-700 dark:text-white transition-colors duration-300 @if (request()->is('/')) border border-purple-700/30 rounded-full px-4  bg-gradient-to-r from-purple-400 to-transparent @endif">
+                    Home
+                 </a> --}}
                     <a href="{{ url('/') }}"
-                        class="text-sm font-semibold text-purple-700 dark:text-white transition-colors duration-300  ">Home</a>
+                        class="text-sm font-semibold text-purple-700 dark:text-white transition-all duration-300
+                        @if (Request::is('/')) border border-purple-700 rounded-full px-4
+                               shadow-sm shadow-purple-700 shadow-inner
+                               @else hover:border hover:border-purple-700 hover:rounded-full hover:px-4  hover:shadow-sm hover:shadow-purple-700 hover:shadow-inner @endif
+                                 ">
+                        Home
+                    </a>
+
                     <a href="{{ route('shop-page') }}"
-                        class="text-sm font-semibold text-purple-700 dark:text-white transition-colors duration-300">Outlet</a>
+                        class="text-sm font-semibold text-purple-700 dark:text-white transition-all duration-300  
+                        @if (Request::is('shop-page')) border border-purple-700 rounded-full px-4
+                               shadow-sm shadow-purple-700 shadow-inner
+                               @else hover:border hover:border-purple-700 hover:rounded-full hover:px-4  hover:shadow-sm hover:shadow-purple-700 hover:shadow-inner @endif">Outlet</a>
                     <a href="{{ url('bomi-products') }}"
-                        class="text-sm font-semibold text-purple-700 dark:text-white transition-colors duration-300">Bomi
+                        class="text-sm font-semibold text-purple-700 dark:text-white transition-all duration-300  
+                        @if (Request::is('bomi-products')) border border-purple-700 rounded-full px-4
+                               shadow-sm shadow-purple-700 shadow-inner
+                               @else hover:border hover:border-purple-700 hover:rounded-full hover:px-4  hover:shadow-sm hover:shadow-purple-700 hover:shadow-inner @endif">Bomi
                         Product</a>
+                        
                 </nav>
 
                 <!-- Login Button -->
                 <div class="flex items-center space-x-5">
+                    <button type="button"  onclick="toggleSearchNavModal()"
+                        class="text-lg font-semibold text-purple-700 dark:text-white transition-colors duration-300 ">
+                        <i  class="bi bi-search"></i>
+                    </button>
                     <a href="#" id="toggleDark"
                         class="text-lg font-semibold text-purple-700 dark:text-white transition-colors duration-300 ">
                         <i id="darkIcon" class="bi bi-brightness-high"></i>
@@ -108,19 +130,19 @@
                             Get Started <i class="bi bi-arrow-right-short"></i>
                         </a>
                     @else
-                        <a href="{{url('/dashboard')}}"
+                        <a href="{{ url('/dashboard') }}"
                             class="px-4 py-2 bg-purple-700 text-white rounded-xl hidden md:block 
       hover:shadow-sm transform transition-transform  hover:scale-115 dark:bg-white dark:text-purple-700 transition-colors duration-300">
                             Dashboard <i class="bi bi-arrow-right-short"></i>
                         </a>
                         <form method="POST" action="{{ route('logout') }}">
-                          @csrf
-                          <button type="submit"
-                              class="text-sm font-semibold text-red-500 hidden md:block dark:text-red-600 transition-colors duration-300">
-                              Sign Out
-                          </button>
-                      </form>
-                       @endguest
+                            @csrf
+                            <button type="submit"
+                                class="text-sm font-semibold text-red-500 hidden md:block dark:text-red-600 transition-colors duration-300">
+                                Sign Out
+                            </button>
+                        </form>
+                    @endguest
                 </div>
 
                 <!-- Hamburger Menu for small screens -->
@@ -158,12 +180,12 @@
           hover:shadow-sm transform transition-transform  hover:scale-115  dark:text-zinc-800 transition-colors duration-300">
                             Dashboard <i class="bi bi-arrow-right-short"></i>
                             <form method="POST" action="{{ route('logout') }}">
-                              @csrf
-                              <button type="submit"
-                                  class="text-sm font-semibold text-red-700   dark:text-red-400 transition-colors duration-300">
-                                  Sign Out
-                              </button>
-                          </form>
+                                @csrf
+                                <button type="submit"
+                                    class="text-sm font-semibold text-red-700   dark:text-red-400 transition-colors duration-300">
+                                    Sign Out
+                                </button>
+                            </form>
                         @endguest
 
                     </a>
@@ -171,7 +193,7 @@
         </header>
     </div>
     @yield('content')
-
+    @include('home-pages._searchNav')
 
     <footer class="bg-[#1B0054] text-white px-8 py-12 dark:bg-black/50 transition-colors duration-300">
         <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-5 gap-8 text-sm ">
@@ -222,7 +244,8 @@
                 <ul class="space-y-1 ">
                     <li><a href="{{ route('login') }}" class="text-gray-400 hover:text-white">Sign In</a></li>
                     <li><a href="{{ route('register') }}" class="text-gray-400 hover:text-white">Sign Up</a></li>
-                    <li><a href="{{route('password.request')}}" class="text-gray-400 hover:text-white">Reset Password</a></li>
+                    <li><a href="{{ route('password.request') }}" class="text-gray-400 hover:text-white">Reset
+                            Password</a></li>
                 </ul>
             </div>
 
@@ -245,7 +268,7 @@
 
         <!-- Bottom copyright -->
         <div class="mt-12 text-center text-xs text-[#D1CDE6]">
-            © {{date('Y')}} Bomi POS . All Rights Reserved.
+            © {{ date('Y') }} Bomi POS . All Rights Reserved.
         </div>
     </footer>
     @stack('js')
@@ -295,6 +318,11 @@
             const modal = document.getElementById("searchModal");
             modal.classList.toggle("hidden");
             modal.classList.toggle("flex");
+        }
+        function toggleSearchNavModal() {
+            const modalNav = document.getElementById("searchNavModal");
+            modalNav.classList.toggle("hidden");
+            modalNav.classList.toggle("flex");
         }
         // Loading Screen
         window.addEventListener("DOMContentLoaded", () => {

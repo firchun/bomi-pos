@@ -69,7 +69,7 @@
          <div class="modal-dialog modal-dialog-centered" role="document">
              <div class="modal-content">
                  <div class="modal-body text-center">
-                     <img id="modal-image" src="" alt="Preview" class="img-fluid rounded">
+                     <img id="modal-image" src="" alt="Preview" class="img-fluid rounded" onerror="this.onerror=null; this.src='{{ asset('home2/assets/img/sample.png') }}';">
                  </div>
              </div>
          </div>

@@ -51,11 +51,13 @@ Route::get('bomi-products', [HomePageController::class, 'bomiProduct'])->name('b
 // Route::get('bomi-products/fetch', [AdminProductController::class, 'fetchProducts'])->name('api.adminproducts');
 
 Route::get('/product/{slug}', [ShopPageController::class, 'fetchProducts'])->name('api.products');
+Route::get('/product-cat/{slug}', [ShopPageController::class, 'fetchCategoryProducts'])->name('api.product-cat');
 Route::get('/comment/{shop_id}', [RatingController::class, 'fetchComments'])->name('api.comments');
 
 Route::post('/shop/{slug}/rate', [RatingController::class, 'storeRating'])->name('shop.rate');
 
-Route::get('/search', [SearchController::class, 'search'])->name('search');
+// Route::get('/search', [SearchController::class, 'search'])->name('search');
+Route::get('/search', [SearchController::class, 'index']);
 Route::get('/ajax/search', [SearchController::class, 'ajaxSearch'])->name('ajax.search');
 Route::get('/ajax/product/details', [SearchController::class, 'getProductDetails'])->name('ajax.product.details');
 // autenticated

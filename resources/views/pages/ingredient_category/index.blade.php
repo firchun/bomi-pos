@@ -22,18 +22,22 @@
                     <div class="col-12">
                         @include('layouts.alert')
                     </div>
+                    <div class="col-12 mb-3">
+                        <a href="{{ route('ingredient') }}" class="btn btn-secondary"><i
+                                class="fa fa-arrow-left"></i> {{__('general.back')}}</a>
+                    </div>
                     <div class="col-lg-4">
                         {{-- Form Tambah Kategori --}}
                         <div class="card">
                             <div class="card-header">
-                                <h4>Add Category</h4>
+                                <h4>{{__('general.add')}} {{__('general.category')}}</h4>
                             </div>
                             <div class="card-body">
                                 <form action="{{ route('ingredient-category.store') }}" method="POST"
                                     enctype="multipart/form-data">
                                     @csrf
                                     <div class="form-group">
-                                        <label for="name">Name Category</label>
+                                        <label for="name">Name {{__('general.category')}}</label>
                                         <input type="text" name="category"
                                             class="form-control @error('category') is-invalid @enderror"
                                             value="{{ old('category') }}" placeholder="name category" required>
@@ -41,7 +45,6 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
-
                                     <button type="submit" class="btn btn-primary">Save</button>
                                 </form>
                             </div>
@@ -51,18 +54,19 @@
                         {{-- Tabel Daftar Kategori --}}
                         <div class="card">
                             <div class="card-header d-flex justify-content-between">
-                                <h4>List Categories</h4>
+                                <h4>List {{__('general.category')}}</h4>
                                 <button type="button" class="btn btn-primary" data-toggle="modal"
                                     data-target="#categoryHelpModal"><i class="fa fa-question"></i></button>
                             </div>
                             <div class="card-body">
                                 @if ($categories->count())
                                     <div class="table-responsive">
-                                        <table class="table table-striped">
+                                        <table class="table table-striped table-sm table-bordered">
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
-                                                    <th>Category</th>
+                                                    <th>{{__('general.category')}}</th>
+                                                    <th>{{__('general.ingredient')}}</th>
                                                     <th>{{ __('general.action') }}</th>
                                                 </tr>
                                             </thead>
@@ -71,7 +75,7 @@
                                                     <tr>
                                                         <td>{{ $key + 1 }}</td>
                                                         <td>{{ $category->category }}</td>
-
+                                                        <td class="text-center"><span class="badge badge-success">{{App\Models\Ingredient::where('id_category',$category->id)->count()}}</span></td>
                                                         <td>
                                                             <div class="d-flex form-group">
                                                                 {{-- show --}}

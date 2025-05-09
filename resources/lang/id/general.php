@@ -23,4 +23,8 @@ return [
   'action' => 'Aksi',
   'choose language' => 'Pilih Bahasa',
   'hi' => 'Hai',
+  'ingredients' => 'Bahan Baku',
+  'ingredient' => 'Bahan Baku',
+  'all' => 'Semua',
+  'back' => 'Kembali',
 ];

@@ -67,7 +67,7 @@ class Payment extends Component
             } else {
                 unset($this->orderItems[$productId]);
             }
-            $this->calculateTotal();
+            $this->calculateTotals();
         }
     }
 
