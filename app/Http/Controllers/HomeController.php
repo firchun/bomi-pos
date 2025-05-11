@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Models\OrderItem;
 use App\Models\Rating;
 use App\Models\ShopProfile;
+use App\Models\Visitor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -57,6 +58,9 @@ class HomeController extends Controller
             'user' => User::where('role', 'user')->count(),
             'average_rating' => round(Rating::where('shop_profile_id', $shop->id)->avg('rating'), 2),
             'product' => $product->count(),
+            'shop' =>$shop ?? null,
+            'visitor_today' => Visitor::where('shop_id', $shop->id)->whereDate('created_at', Carbon::today())->count(),
+            'visitor_week' => Visitor::where('shop_id', $shop->id) ->where('created_at', '>=', Carbon::now()->startOfWeek())->count(),
             'popularCategories' => $popularCategories,
         ];
         return view('pages.dashboard', $data);

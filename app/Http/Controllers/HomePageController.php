@@ -7,7 +7,9 @@ use App\Models\AdminProfile;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ShopProfile;
+use App\Models\Visitor;
 use Illuminate\Http\Request;
+use GeoIP;
 
 class HomePageController extends Controller
 {
@@ -35,6 +37,21 @@ class HomePageController extends Controller
     public function outlet_details(Request $request, $slug)
     {
         $shop = ShopProfile::with('location')->where('slug', $slug)->firstOrFail();
+
+        //insert visitor
+        $ip = $request->ip();
+        if ($ip == '127.0.0.1') {
+            $location = null;
+        } else {
+            $location = geoip()->getLocation($ip);
+        }
+        Visitor::create([
+            'shop_id' => $shop->id,
+            'ip_address' => $ip ?? null,
+            'iso_code' => $location ? $location->countryCode : null,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
 
         $user = $shop->user;
         $averageRating = $shop->ratings->isNotEmpty() ? $shop->ratings->avg('rating') : 0;
@@ -64,4 +81,3 @@ class HomePageController extends Controller
         return view('home-pages.bomi-product', compact('adminproducts'));
     }
 }
-

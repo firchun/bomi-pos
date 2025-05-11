@@ -27,4 +27,5 @@ return [
   'ingredient' => 'Bahan Baku',
   'all' => 'Semua',
   'back' => 'Kembali',
+  'report orders' => 'Laporan Pesanan',
 ];

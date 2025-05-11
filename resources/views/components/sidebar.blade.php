@@ -65,7 +65,7 @@
                     </li>
                     <li class='nav-item {{ request()->is('daily-report*') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ route('daily.report') }}"><i class="fas fa-chart-line"></i><span
-                                class="nav-text">{{ __('general.daily order') }}</span></a>
+                                class="nav-text">{{ __('general.report orders') }}</span></a>
                     </li>
                     {{-- <li class='nav-item {{ request()->is('categories*') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ route('categories.index') }}"><i class="fas fa-sitemap"></i><span
