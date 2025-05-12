@@ -27,4 +27,5 @@ return [
   'ingredient' => 'Ingredient',
   'all' => 'All',
   'back' => 'Back',
+  'report orders' => 'Report Orders',
 ];

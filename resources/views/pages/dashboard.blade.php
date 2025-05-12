@@ -196,6 +196,26 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="card card-statistic-1">
+                                    <div class="card-icon bg-info">
+                                        <i class="far fa-earth-asia"></i>
+                                    </div>
+                                    <div class="card-wrap">
+                                        <div class="card-header">
+                                            <h4>Visitor (today/week)</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <a href="{{ route('shop.details', $shop->slug) }}" target="__blank"
+                                                class="font-weight-bold" style="color: black;">
+                                                {{ $visitor_today . ' / ' . $visitor_week }}
+                                                <i class="fa fa-share-square fa-sm text-primary" style="font-size: 14px;"
+                                                    aria-label="view shop"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         @endif
                         <div class="col-lg-6 col-md-6 col-sm-6 col-12">
                             <div class="card card-statistic-1">
@@ -300,10 +320,8 @@
                     </div>
 
                 </div>
-
             </div>
         </section>
-
     </div>
 @endsection
 
@@ -338,9 +356,9 @@
 
                     data.reviews.forEach(review => {
                         const maxLength = 100;
-                        const message = review.message.length > maxLength
-                            ? review.message.substring(0, maxLength) + '...'
-                            : review.message;
+                        const message = review.message.length > maxLength ?
+                            review.message.substring(0, maxLength) + '...' :
+                            review.message;
                         list.innerHTML += `
                             <a href="/ratings" class="ticket-item">
                                 <div class="ticket-title">

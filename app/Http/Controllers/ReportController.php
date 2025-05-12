@@ -15,93 +15,43 @@ class ReportController extends Controller
 {
     public function dailyReport(Request $request)
     {
-        // Ambil toko dari user yang sedang login
-        $user = Auth::user();
-        $date = $request->input('date');
-        $search = $request->input('search')['value'] ?? '';
-        $orderColumn = $request->input('order')[0]['column'] ?? 2; // Urut berdasarkan tanggal transaksi
-        $orderDir = $request->input('order')[0]['dir'] ?? 'desc';
-        $columns = ['id', 'no_invoice', 'transaction_time', 'total_item', 'total'];
-
-        $ordersQuery = Order::query()
-            ->when($date, function ($query, $date) {
-                $query->whereDate('transaction_time', $date);
-            })
-            ->when($search, function ($query, $search) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('no_invoice', 'like', '%' . $search . '%')
-                        ->orWhere('transaction_time', 'like', '%' . $search . '%');
-                });
-            });
-
-        // Sorting berdasarkan tanggal terbaru
-        $ordersQuery->orderBy($columns[$orderColumn], $orderDir);
-
-        // Total records
-        $recordsTotal = Order::count();
-        $recordsFiltered = $ordersQuery->count();
-
-        // Pagination
-        $start = $request->input('start', 0);
-        $length = $request->input('length', 10);
-        $orders = $ordersQuery->skip($start)->take($length)->get();
-
-        // Total revenue
-        $totalRevenue = $ordersQuery->sum('total');
-
-        $reportData = [];
-        foreach ($orders as $order) {
-            $reportData[] = [
-                'id' => $order->id,
-                'no_invoice' => $order->no_invoice ?? '-',
-                'tanggal_transaksi' => Carbon::parse($order->transaction_time)->format('d/m/Y H:i'),
-                'jumlah_beli' => $order->total_item,
-                'total_keseluruhan' => $order->total,
-                'detail_button' => '<a href="' . route('report.show', $order->id) . '" class="btn btn-sm btn-primary">View</a>'
-            ];
-        }
-
-        if ($request->ajax()) {
-            return response()->json([
-                'draw' => intval($request->input('draw')),
-                'recordsTotal' => $recordsTotal,
-                'recordsFiltered' => $recordsFiltered,
-                'data' => $reportData,
-                'totalRevenue' => $totalRevenue,
-            ]);
-        }
-
-        return view('pages.report.index', compact('date'));
+        
+        return view('pages.report.index');
     }
-    public function dailyReportDatatable(Request $request)
-    {
-        $user = Auth::user();
-        $date = $request->input('date');
 
-        $ordersQuery = Order::query()
-            ->when($date, function ($query, $date) {
-                $query->whereDate('transaction_time', $date);
-            });
+   public function dailyReportDatatable(Request $request)
+{
+    
+    $fromDate = $request->input('form-date');
+    $toDate = $request->input('to-date');
+    $paymentMethod = $request->input('payment_method');
 
-        return DataTables::of($ordersQuery)
-            ->filter(function ($query) use ($request) {
-                $search = $request->input('search.value');
-                if ($search) {
-                    $query->where(function ($q) use ($search) {
-                        $q->where('no_invoice', 'like', "%$search%")
-                            ->orWhere('transaction_time', 'like', "%$search%");
-                    });
-                }
-            })
-            ->editColumn('transaction_time', function ($order) {
-                return Carbon::parse($order->transaction_time)->format('d/m/Y H:i');
-            })
-            ->addColumn('detail_button', function ($order) {
-                return '<a href="' . route('report.show', $order->id) . '" class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></a>';
-            })
-            ->rawColumns(['detail_button'])
-            ->make(true);
+    $ordersQuery = Order::query()->orderBy('created_at', 'desc');
+    if ($request->has('from-date') && $request->has('to-date')) {
+        $fromDate = $request->input('from-date');
+        $toDate = $request->input('to-date');
+        if ($fromDate != '' && $toDate != '') {
+            $fromDate = Carbon::parse($fromDate)->startOfDay()->toDateTimeString();
+            $toDate = Carbon::parse($toDate)->endOfDay()->toDateTimeString();
+
+                $ordersQuery->whereBetween('created_at', [$fromDate, $toDate]);
+        
+        }
     }
+    if($paymentMethod) {
+        $ordersQuery->where('payment_method', 'like', '%' . $paymentMethod . '%');
+    }
+
+    return DataTables::of($ordersQuery)
+        ->addColumn('transaction_time', function ($order) {
+            return \Carbon\Carbon::parse($order->transaction_time)->format('d F Y') . '<br> <small class="text-muted">' . \Carbon\Carbon::parse($order->transaction_time)->format('H:i') . ' WIT</small>  ';
+        })
+        ->addColumn('detail_button', function ($order) {
+            return '<a href="' . route('report.show', $order->id) . '" class="btn btn-sm btn-primary">View</a>';
+        })
+        ->rawColumns(['detail_button','transaction_time']) // agar tombol HTML tidak di-escape
+        ->make(true);
+}
 
     // ReportController.php
     public function show($id)

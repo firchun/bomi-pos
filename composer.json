@@ -16,6 +16,7 @@
         "laravel/scout": "^10.14",
         "laravel/tinker": "^2.9",
         "livewire/livewire": "^3.5",
+        "torann/geoip": "^3.0",
         "yajra/laravel-datatables-oracle": "^11.1"
     },
     "require-dev": {
