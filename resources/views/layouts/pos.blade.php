@@ -37,6 +37,8 @@
     <script src="{{ asset('pos/js/script.js') }}"></script>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
     <script src="{{ asset('pos/js/bootstrap.bundle.min.js') }}"></script>
     @stack('scripts')
     @livewireScripts
