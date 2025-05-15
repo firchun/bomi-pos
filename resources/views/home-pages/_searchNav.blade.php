@@ -21,19 +21,27 @@
     </div>
 </div>
 @push('js')
-    <script>
-        function handleSearchNav(query) {
-            if (!query.trim()) return;
+<script>
+    function handleSearchNav(query) {
+        const resultsContainer = document.querySelector('.search-results-navbar');
+        if (!query.trim()) return;
 
-            fetch(`/search?query=${encodeURIComponent(query)}`)
-                .then(res => res.json())
-                .then(data => {
-                    const resultsContainer = document.querySelector('.search-results-navbar');
-                    resultsContainer.innerHTML = '';
+        // Tampilkan loading
+        resultsContainer.innerHTML = `
+            <div class="p-3 text-center text-sm text-zinc-500 dark:text-zinc-400">Searching...</div>
+        `;
 
-                    data.products.forEach(product => {
-                        resultsContainer.innerHTML += `
-                       <a href="/shop/${product.outlet.slug}" class="block">
+        fetch(`/search?query=${encodeURIComponent(query)}`)
+            .then(res => res.json())
+            .then(data => {
+                resultsContainer.innerHTML = '';
+
+                let hasResults = false;
+
+                data.products.forEach(product => {
+                    hasResults = true;
+                    resultsContainer.innerHTML += `
+                        <a href="/shop/${product.outlet.slug}" class="block">
                             <div class="flex items-center justify-between p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl transition hover:bg-purple-100 dark:hover:bg-purple-900 cursor-pointer">
                                 <div>
                                     <div class="text-zinc-800 dark:text-white font-medium">${product.name}</div>
@@ -43,22 +51,35 @@
                             </div>
                         </a>
                     `;
-                    });
-
-                    data.outlets.forEach(outlet => {
-                      resultsContainer.innerHTML += `
-                          <a href="/shop/${outlet.slug}" class="block">
-                              <div class="flex items-center justify-between p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl transition hover:bg-purple-100 dark:hover:bg-purple-900 cursor-pointer">
-                                  <div>
-                                      <div class="text-zinc-800 dark:text-white font-medium">${outlet.name}</div>
-                                      <div class="text-sm text-zinc-500 dark:text-zinc-400">Outlet</div>
-                                  </div>
-                                  <div class="text-purple-700 font-semibold text-sm">📍 ${outlet.location || '-'}</div>
-                              </div>
-                          </a>
-                      `;
-                  });
                 });
-        }
-    </script>
+
+                data.outlets.forEach(outlet => {
+                    hasResults = true;
+                    resultsContainer.innerHTML += `
+                        <a href="/shop/${outlet.slug}" class="block">
+                            <div class="flex items-center justify-between p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl transition hover:bg-purple-100 dark:hover:bg-purple-900 cursor-pointer">
+                                <div>
+                                    <div class="text-zinc-800 dark:text-white font-medium">${outlet.name}</div>
+                                    <div class="text-sm text-zinc-500 dark:text-zinc-400">Outlet</div>
+                                </div>
+                                <div class="text-purple-700 font-semibold text-sm"><i class="bi bi-pin-map-fill mr-3"></i> ${outlet.address || '-'}</div>
+                            </div>
+                        </a>
+                    `;
+                });
+
+                if (!hasResults) {
+                    resultsContainer.innerHTML = `
+                        <div class="p-3 text-center text-sm text-zinc-500 dark:text-zinc-400">No results found</div>
+                    `;
+                }
+            })
+            .catch(err => {
+                resultsContainer.innerHTML = `
+                    <div class="p-3 text-center text-sm text-red-500">Terjadi kesalahan saat pencarian</div>
+                `;
+                console.error(err);
+            });
+    }
+</script>
 @endpush

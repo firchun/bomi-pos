@@ -28,44 +28,70 @@
     </div>
 </div>
 @push('js')
-    <script>
-        function handleSearch(query) {
-            if (!query.trim()) return;
+<script>
+    function handleSearch(query) {
+        const resultsContainer1 = document.querySelector('.search-results');
+        if (!query.trim()) return;
 
-            fetch(`/search?query=${encodeURIComponent(query)}`)
-                .then(res => res.json())
-                .then(data => {
-                    const resultsContainer = document.querySelector('.search-results');
-                    resultsContainer.innerHTML = '';
+        // Tampilkan loading
+        resultsContainer1.innerHTML = `
+            <div class="p-3 text-center text-sm text-zinc-500 dark:text-zinc-400">Searching...</div>
+        `;
 
+        fetch(`/search?query=${encodeURIComponent(query)}`)
+            .then(res => res.json())
+            .then(data => {
+                resultsContainer1.innerHTML = '';
+                let hasResults = false;
+
+                if (data.products && data.products.length > 0) {
                     data.products.forEach(product => {
-                        resultsContainer.innerHTML += `
-                       <a href="/shop/${product.outlet.slug}" class="block">
-                            <div class="flex items-center justify-between p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl transition hover:bg-purple-100 dark:hover:bg-purple-900 cursor-pointer">
-                                <div>
-                                    <div class="text-zinc-800 dark:text-white font-medium">${product.name}</div>
-                                    <div class="text-sm text-zinc-500 dark:text-zinc-400">Outlet: ${product.outlet.name || '-'}</div>
+                        hasResults = true;
+                        resultsContainer1.innerHTML += `
+                            <a href="/shop/${product.outlet.slug}" class="block">
+                                <div class="flex items-center justify-between p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl transition hover:bg-purple-100 dark:hover:bg-purple-900 cursor-pointer">
+                                    <div>
+                                        <div class="text-zinc-800 dark:text-white font-medium">${product.name}</div>
+                                        <div class="text-sm text-zinc-500 dark:text-zinc-400">Outlet: ${product.outlet.name || '-'}</div>
+                                    </div>
+                                    <div class="text-purple-700 font-semibold text-sm">Rp ${Number(product.price).toLocaleString()}</div>
                                 </div>
-                                <div class="text-purple-700 font-semibold text-sm">Rp ${Number(product.price).toLocaleString()}</div>
-                            </div>
-                        </a>
-                    `;
+                            </a>
+                        `;
                     });
+                }
 
+                if (data.outlets && data.outlets.length > 0) {
                     data.outlets.forEach(outlet => {
-                      resultsContainer.innerHTML += `
-                          <a href="/shop/${outlet.slug}" class="block">
-                              <div class="flex items-center justify-between p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl transition hover:bg-purple-100 dark:hover:bg-purple-900 cursor-pointer">
-                                  <div>
-                                      <div class="text-zinc-800 dark:text-white font-medium">${outlet.name}</div>
-                                      <div class="text-sm text-zinc-500 dark:text-zinc-400">Outlet</div>
-                                  </div>
-                                  <div class="text-purple-700 font-semibold text-sm">📍 ${outlet.location || '-'}</div>
-                              </div>
-                          </a>
-                      `;
-                  });
-                });
-        }
-    </script>
+                        hasResults = true;
+                        resultsContainer1.innerHTML += `
+                            <a href="/shop/${outlet.slug}" class="block">
+                                <div class="flex items-center justify-between p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl transition hover:bg-purple-100 dark:hover:bg-purple-900 cursor-pointer">
+                                    <div>
+                                        <div class="text-zinc-800 dark:text-white font-medium">${outlet.name}</div>
+                                        <div class="text-sm text-zinc-500 dark:text-zinc-400">Outlet</div>
+                                    </div>
+                                    <div class="text-purple-700 font-semibold text-sm">
+                                        <i class="bi bi-pin-map-fill mr-3"></i> ${outlet.address || '-'}
+                                    </div>
+                                </div>
+                            </a>
+                        `;
+                    });
+                }
+
+                if (!hasResults) {
+                    resultsContainer1.innerHTML = `
+                        <div class="p-3 text-center text-sm text-zinc-500 dark:text-zinc-400">No results found</div>
+                    `;
+                }
+            })
+            .catch(err => {
+                resultsContainer1.innerHTML = `
+                    <div class="p-3 text-center text-sm text-red-500">An error occurred during the search</div>
+                `;
+                console.error('Search error:', err);
+            });
+    }
+</script>
 @endpush

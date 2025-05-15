@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AdminProduct;
 use App\Models\AdminProfile;
+use App\Models\Ads;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ShopProfile;
@@ -36,15 +37,17 @@ class HomePageController extends Controller
     }
     public function outlet_details(Request $request, $slug)
     {
+        
         $shop = ShopProfile::with('location')->where('slug', $slug)->firstOrFail();
 
         //insert visitor
-        $ip = $request->ip();
-        if ($ip == '127.0.0.1') {
-            $location = null;
-        } else {
-            $location = geoip()->getLocation($ip);
-        }
+        // $ip = $request->ip();
+        // if ($ip == '127.0.0.1') {
+        //     $location = null;
+        // } else {
+        //     $location = geoip()->getLocation($ip);
+        // }
+        $location = null;
         Visitor::create([
             'shop_id' => $shop->id,
             'ip_address' => $ip ?? null,
@@ -67,7 +70,12 @@ class HomePageController extends Controller
                 ->where('status', true);
         })->get();
 
-        return view('home-pages.outlet-detail', compact('shop', 'averageRating', 'products', 'categories', 'ratings'));
+        // ads
+        $ads = Ads::where('shop_id', $shop->id)->inRandomOrder()->first();
+        if ($ads) {
+            $ads->increment('views'); 
+        }
+        return view('home-pages.outlet-detail', compact('ads','shop', 'averageRating', 'products', 'categories', 'ratings'));
     }
     public function bomiProduct(Request $request)
     {

@@ -74,54 +74,52 @@
                     <div class="breadcrumb-item">Report</div>
                 </div>
             </div>
+            <div class="my-2">
+                <a href="{{ route('daily.report') }}" class="btn btn-secondary ">
+                    <i class="fas fa-arrow-left"></i> {{ __('general.back') }}
+                </a>
+                <a href="{{ route('report.printTransaction', $order->id) }}" class="btn btn-primary ml-2" target="_blank">
+                    <i class="fas fa-print"></i>  {{ __('general.print') }}
+                </a> 
+            </div>
 
             <div class="section-body">
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-header">
-                                <a href="{{ route('daily.report') }}" class="btn btn-secondary btn-sm float-right">
-                                    <i class="fas fa-arrow-left"></i> Kembali
-                                </a>
-                                <a href="{{ route('report.printTransaction', $order->id) }}" class="btn btn-primary btn-sm ml-2" target="_blank">
-                                    <i class="fas fa-print"></i> Print
-                                </a>                                
-                            </div>
+                           
                             <div class="card-body">
                                 <!-- Bagian Info Toko -->
-                                <div class="row mb-4">
+                                <div class="row mb-4 text-dark">
                                     <div class="col-md-6">
-                                        <h4>Informasi Toko</h4>
-                                        <table class="table table-borderless">
+                                        <h4>Shop Information</h4>
+                                        <table class="table table-borderless table-sm">
                                             <tr>
                                                 <th>Shop Name</th>
-                                                <td>{{ $shop->name ?? '-' }}</td>
+                                                <td>: {{ $shop->name ?? '-' }}</td>
                                             </tr>
                                             <tr>
                                                 <th>Address</th>
-                                                <td>{{ $shop->address ?? '-' }}</td>
+                                                <td>: {{ $shop->address ?? '-' }}</td>
                                             </tr>
-                                            <tr>
-                                                <th>Operating Hours</th>
-                                                <td>{{ $shop->open_time ?? '-' }} - {{ $shop->close_time ?? '-' }}</td>
-                                            </tr>
+                                           
                                         </table>
                                     </div>
                                     <div class="col-md-6">
                                         <h4>Transaction Information</h4>
-                                        <table class="table table-borderless">
+                                        <table class="table table-borderless table-sm">
                                             <tr>
                                                 <th>No. Invoice</th>
-                                                <td>{{ $order->no_invoice }}</td>
+                                                <td>: {{ $order->no_invoice }}</td>
                                             </tr>
                                             <tr>
                                                 <th>Transaction Date</th>
-                                                <td>{{ \Carbon\Carbon::parse($order->transaction_time)->format('d/m/Y H:i') }}
+                                                <td>: {{ \Carbon\Carbon::parse($order->transaction_time)->format('d/m/Y H:i') }}
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th>Cashier</th>
-                                                <td>{{ $order->nama_kasir }}</td>
+                                                <td>: {{ $order->nama_kasir }}</td>
                                             </tr>
                                         </table>
                                     </div>
@@ -129,7 +127,7 @@
 
                                 <!-- Tabel Produk -->
                                 <div class="table-responsive">
-                                    <table class="table table-bordered table-hover" id="report-table">
+                                    <table class="table table-bordered table-hove table-sm" id="report-table">
                                         <thead class="thead-dark">
                                             <tr>
                                                 <th>No</th>
@@ -142,7 +140,7 @@
                                         <tbody>
                                             @foreach ($orderItems as $item)
                                                 <tr>
-                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td class="text-center">{{ $loop->iteration }}</td>
                                                     <td>{{ $item->product->name ?? 'Produk Dihapus' }}</td>
                                                     <td class="text-center">{{ $item->quantity }}</td>
                                                     <td class="text-right">Rp{{ number_format($item->price, 0, ',', '.') }}

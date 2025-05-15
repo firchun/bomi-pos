@@ -12,20 +12,36 @@
          <section class="section">
              <div class="section-header">
                  <h1>Product</h1>
-                 <div class="section-header-button">
-                     <a href="{{ route('products.create') }}" class="btn btn-primary"><i class="fa fa-plus"></i> Add New
-                         Product</a>
-                 </div>
+
                  <div class="section-header-breadcrumb">
                      <div class="breadcrumb-item active"><a href="{{ route('home') }}">Dashboard</a></div>
                      <div class="breadcrumb-item"><a href="{{ route('products.index') }}">Products</a></div>
                      <div class="breadcrumb-item">All Products</div>
                  </div>
              </div>
+             <a href="{{ route('products.create') }}" class="btn btn-primary"><i class="fa fa-plus"></i>
+                 @if (app()->getLocale() == 'en')
+                     Add New Product
+                 @else
+                     Tambah produk baru
+                 @endif
+             </a>
+             <div class="my-2 p-2 border rounded bg-light text-dark">
+                 @if (app()->getLocale() == 'en')
+                     You can add a product by clicking the ‘Add New Product’ button, and don’t forget to assign the
+                     ingredients by clicking the ‘Ingredients’ button. You can also edit the product if there are any
+                     changes or delete it if it’s no longer needed.
+                 @else
+                     Anda dapat menambahkan produk dengan mengklik tombol 'Tambah Produk Baru', dan jangan lupa untuk
+                     menetapkan bahan-bahannya dengan mengklik tombol 'Bahan'. Anda juga dapat mengedit produk jika ada
+                     perubahan atau menghapusnya jika sudah tidak diperlukan.
+                 @endif
+             </div>
              <div class="section-body">
                  <div class="row">
                      <div class="col-12">
                          @include('layouts.alert')
+
                      </div>
                  </div>
 
@@ -49,7 +65,6 @@
                                      </form>
                                  </div>
 
-                                 <div class="clearfix mb-3"></div>
 
                                  <!-- Table wrapper -->
                                  <div id="product-table-wrapper">
@@ -69,7 +84,8 @@
          <div class="modal-dialog modal-dialog-centered" role="document">
              <div class="modal-content">
                  <div class="modal-body text-center">
-                     <img id="modal-image" src="" alt="Preview" class="img-fluid rounded" onerror="this.onerror=null; this.src='{{ asset('home2/assets/img/sample.png') }}';">
+                     <img id="modal-image" src="" alt="Preview" class="img-fluid rounded"
+                         onerror="this.onerror=null; this.src='{{ asset('home2/assets/img/sample.png') }}';">
                  </div>
              </div>
          </div>
@@ -126,5 +142,3 @@
      <!-- Page Specific JS File -->
      <script src="{{ asset('js/page/features-posts.js') }}"></script>
  @endpush
-
- )

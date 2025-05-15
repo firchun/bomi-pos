@@ -17,6 +17,7 @@ use App\Http\Controllers\ShopPageController;
 use App\Http\Controllers\ShopProfileController;
 use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\AdminProfileController;
+use App\Http\Controllers\AdsController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\IncomeExpenseCategoryController;
 use App\Http\Controllers\IncomeExpenseController;
@@ -110,11 +111,15 @@ Route::middleware(['auth','verified'])->group(function () {
         Route::post('/subscription/update-pro/{userId}', [SubscriptionController::class, 'updatePro'])->name('subscription.updatePro');
         // calendar
         Route::get('/calendar', [CalendarController::class, 'index'])->name('calendar');
+        // advertisement
+        Route::resource('advertisement', AdsController::class);
         // product
         Route::resource('products', ProductController::class);
+        Route::get('products/ingredient/{id}', [ProductController::class,'ingredient'])->name('products.ingredient');
+        Route::post('/ingredient-dish/store', [IngredientController::class, 'storeDish'])->name('ingredient-dish.store');
         Route::resource('categories', CategoryController::class);
         // ingredient
-        Route::get('/ingredient', [IngredientController::class, 'index'])->name('ingredient');
+        Route::resource('ingredient', IngredientController::class);
         // ingredient category
         Route::get('/ingredient-category', [IngredientCategoryController::class, 'index'])->name('ingredient-category');
         Route::post('/ingredient-category/store', [IngredientCategoryController::class, 'store'])->name('ingredient-category.store');
@@ -140,8 +145,12 @@ Route::middleware(['auth','verified'])->group(function () {
         Route::get('/home-pos', Pos::class)->name('user.pos');
         Route::get('/payment', Payment::class)->name('user.payment');
 
+        Route::get('/ingredient-report', [ReportController::class, 'ingredientReport'])->name('ingredient.report');
         Route::get('/daily-report', [ReportController::class, 'dailyReport'])->name('daily.report');
+        Route::get('/product-report', [ReportController::class, 'productReport'])->name('product.report');
+        Route::get('/ingredient-report-datatable', [ReportController::class, 'ingredientReportDatatable'])->name('ingredient-report-datatable');
         Route::get('/daily-report-datatable', [ReportController::class, 'dailyReportDatatable'])->name('daily-report-datatable');
+        Route::get('/product-report-datatable', [ReportController::class, 'productReportDatatable'])->name('product-report-datatable');
         Route::get('/reports/{order}', [ReportController::class, 'show'])->name('report.show');
         Route::get('/report/{id}/printTransaction', [ReportController::class, 'printTransaction'])->name('report.printTransaction');
 

@@ -19,6 +19,7 @@ return [
   'delete' => 'Hapus',
   'add' => 'Tambah',
   'edit' => 'Sunting',
+  'print' => 'Cetak',
   'save' => 'Simpan',
   'action' => 'Aksi',
   'choose language' => 'Pilih Bahasa',
@@ -27,5 +28,8 @@ return [
   'ingredient' => 'Bahan Baku',
   'all' => 'Semua',
   'back' => 'Kembali',
-  'report orders' => 'Laporan Pesanan',
+  'orders report' => 'Laporan Pesanan',
+  'product report' => 'Laporan Produk',
+  'ingredient report' => 'Laporan Bahan Baku',
+  'Advertisement' => 'Iklan',
 ];

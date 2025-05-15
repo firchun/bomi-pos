@@ -51,12 +51,7 @@
                 border-collapse: collapse;
             }
 
-            th,
-            td {
-                border: 1px solid #000 !important;
-                padding: 5px;
-            }
-
+          
             /* Warna latar belakang dan teks saat print */
             #report-table thead th {
                 background-color: #9900CC !important;
@@ -103,7 +98,7 @@
         <div class="row mb-4">
             <div class="col-md-6">
                 <h4>Informasi Toko</h4>
-                <table class="table table-borderless">
+                <table class="table table-borderless table-sm" style="border: none !important;">
                     <tr>
                         <th>Shop Name</th>
                         <td>{{ $shop->name ?? '-' }}</td>
@@ -120,7 +115,7 @@
             </div>
             <div class="col-md-6">
                 <h4>Transaction Information</h4>
-                <table class="table table-borderless">
+                <table class="table  table-sm  table-borderless" style="border: none !important;">
                     <tr>
                         <th>No. Invoice</th>
                         <td>{{ $order->no_invoice }}</td>
@@ -139,7 +134,7 @@
 
         <!-- Tabel Produk -->
         <div class="table-responsive">
-            <table class="table table-bordered table-hover" id="report-table">
+            <table class="table table-bordered table-sm table-hover" id="report-table">
                 <thead class="thead-dark">
                     <tr>
                         <th>No</th>

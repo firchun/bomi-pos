@@ -232,6 +232,21 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="card card-statistic-1">
+                                <div class="card-icon bg-warning">
+                                    <i class="far fa-rectangle-ad"></i>
+                                </div>
+                                <div class="card-wrap">
+                                    <div class="card-header">
+                                        <h4>Adsvertisement</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        {{ $ads->count() . ' /'.$ads->sum('views').' View' }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="card mt-2">
                         <div class="card-header">

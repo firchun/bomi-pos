@@ -112,31 +112,38 @@
         @include('home-pages._search')
 
         <!--tab category -->
-        <section class="mt-10 flex justify-center">
-          <div class="bg-white dark:bg-gray-800 p-2 rounded-3xl w-fit max-w-full">
-              <!-- Dropdown untuk sm -->
-              <select onchange="switchTab(this.value)" class="block sm:hidden w-full px-4 py-2 rounded-xl border border-purple-300 dark:border-purple-600 dark:bg-gray-800 dark:text-white">
-                  <option value="all">All</option>
-                  @foreach ($categories as $cat)
-                      <option value="category-{{ $cat->id }}">{{ $cat->name }}</option>
-                  @endforeach
-              </select>
-      
-              <!-- Tab horizontal untuk sm ke atas -->
-              <div class="hidden sm:flex space-x-3 text-purple-700 dark:text-purple-300  text-md mt-4 sm:mt-0" id="tabs">
-                  <button onclick="switchTab('all')"
-                      class="tab-btn px-4 py-2 rounded-2xl bg-purple-300 text-purple-800 dark:bg-purple-700 dark:text-white"
-                      id="tab-btn-all">All</button>
-                  @foreach ($categories as $cat)
-                      <button onclick="switchTab('category-{{ $cat->id }}')"
-                          class="tab-btn px-4 py-2 rounded-2xl hover:bg-purple-200 dark:hover:bg-purple-600"
-                          id="tab-btn-category-{{ $cat->id }}">
-                          {{ $cat->name }}
-                      </button>
-                  @endforeach
-              </div>
-          </div>
-      </section>
+        <section class="mt-10 flex justify-center space-x-3">
+            <div class="bg-white dark:bg-gray-800 p-2 rounded-3xl w-fit max-w-full">
+                <!-- Dropdown untuk sm -->
+                <select onchange="switchTab(this.value)"
+                    class="block sm:hidden w-full px-4 py-2 rounded-xl border border-purple-300 dark:border-purple-600 dark:bg-gray-800 dark:text-white">
+                    <option value="all">All</option>
+                    @foreach ($categories as $cat)
+                        <option value="category-{{ $cat->id }}">{{ $cat->name }}</option>
+                    @endforeach
+                </select>
+
+                <!-- Tab horizontal untuk sm ke atas -->
+                <div class="hidden sm:flex space-x-3 text-purple-700 dark:text-purple-300  text-md mt-4 sm:mt-0"
+                    id="tabs">
+                    <button onclick="switchTab('all')"
+                        class="tab-btn px-4 py-2 rounded-2xl bg-purple-300 text-purple-800 dark:bg-purple-700 dark:text-white"
+                        id="tab-btn-all">All</button>
+                    @foreach ($categories as $cat)
+                        <button onclick="switchTab('category-{{ $cat->id }}')"
+                            class="tab-btn px-4 py-2 rounded-2xl hover:bg-purple-200 dark:hover:bg-purple-600"
+                            id="tab-btn-category-{{ $cat->id }}">
+                            {{ $cat->name }}
+                        </button>
+                    @endforeach
+                </div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 p-2 rounded-3xl w-fit max-w-full">
+                <button class="px-4 py-2 rounded-2xl bg-purple-300 text-purple-800 dark:bg-purple-700 dark:text-white">
+                    Best Seller
+                </button>
+            </div>
+        </section>
 
         <!-- list outlet -->
         <section class="container mx-auto mt-8">
@@ -217,6 +224,41 @@
         </section>
 
     </div>
+    {{-- ads --}}
+    @if($ads)
+    <div x-data="{ open: true }" x-show="open"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 backdrop-blur overflow-auto">
+    
+    <div class="w-full max-w-5xl mx-auto rounded-lg shadow-xl p-4  overflow-auto">
+
+        <!-- Tombol Tutup -->
+        <div class="flex justify-center mb-4">
+            <button @click="open = false" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition">
+                Close Ads
+            </button>
+        </div>
+
+        <!-- Konten -->
+        <div class="flex flex-col md:flex-row items-center md:items-start gap-6 justify-center">
+            
+            <!-- Gambar -->
+            <div class="flex justify-center w-full md:w-auto">
+                <img src="{{ asset($ads->image) }}" alt="{{ $ads->title }}"
+                    class="w-[90vw] max-w-[500px] h-[90vw] max-h-[500px] md:w-[500px] md:h-[500px] object-cover rounded-xl">
+            </div>
+
+            <!-- Deskripsi -->
+            <div class="text-zinc-800 dark:text-white rounded-lg p-4 shadow-md bg-white dark:bg-zinc-700 w-[400px]">
+                <h2 class="text-xl font-semibold mb-2">{{ $ads->title }}</h2>
+                <hr class="mb-2 border-zinc-300 dark:border-zinc-600">
+                <p class="text-sm text-zinc-700 dark:text-zinc-300">
+                    {!! $ads->description !!}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+    @endif
 @endsection
 
 @push('js')
@@ -426,8 +468,8 @@
 
             // Previous Button
             // if (currentPage > 1) {
-           // Previous Button
-              nav.append(`
+            // Previous Button
+            nav.append(`
                 <a href="#" onclick="event.preventDefault(); ${currentPage > 1 ? `loadProducts(${shopId}, ${currentPage - 1}, ${categoryId})` : ''}"
                   class="px-3 py-2 text-sm font-medium rounded-md transition ${
                     currentPage > 1
@@ -453,12 +495,12 @@
                 // Previous Button
                 // if (currentPage > 1) {
                 //     nav.append(`
-                //       <a href="#" onclick="event.preventDefault(); loadProducts(${shopId}, ${currentPage - 1}, ${categoryId})"
-                //         class="px-3 py-2 text-sm font-medium text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded-md transition">
-                //           Previous
-                //       </a>
-                //   `);
-                    // }
+            //       <a href="#" onclick="event.preventDefault(); loadProducts(${shopId}, ${currentPage - 1}, ${categoryId})"
+            //         class="px-3 py-2 text-sm font-medium text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded-md transition">
+            //           Previous
+            //       </a>
+            //   `);
+                // }
                 // Previous Button
                 nav.append(`
               <a href="#" onclick="event.preventDefault(); ${currentPage > 1 ? `loadProducts(${shopId}, ${currentPage - 1}, ${categoryId})` : ''}"
@@ -567,8 +609,8 @@
 
             // Next Button
             // if (currentPage < lastPage) {
-              // Next Button
-                nav.append(`
+            // Next Button
+            nav.append(`
                   <a href="#" onclick="event.preventDefault(); ${currentPage < lastPage ? `loadProducts(${shopId}, ${currentPage + 1}, ${categoryId})` : ''}"
                     class="px-3 py-2 text-sm font-medium rounded-md transition ${
                       currentPage < lastPage

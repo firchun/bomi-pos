@@ -54,4 +54,8 @@ class Product extends Model
             ->withPivot('quantity', 'price') // sesuaikan jika ada
             ->withTimestamps();
     }
+    public function order_items()
+{
+    return $this->hasMany(OrderItem::class, 'product_id');
+}
 }

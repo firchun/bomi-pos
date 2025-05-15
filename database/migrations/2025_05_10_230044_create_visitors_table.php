@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('shop_id')->constrained('shop_profiles')->onDelete('cascade');
             $table->ipAddress('ip_address')->nullable();
-            $table->string('iso_code')->nullable();
+            $table->string('iso_code')->nullapble();
             $table->timestamps();
         });
     }

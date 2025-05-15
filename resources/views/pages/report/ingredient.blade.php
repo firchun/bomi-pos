@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', ' Orders Report ')
+@section('title', 'Ingredient Report')
 
 @push('style')
     <link rel="stylesheet" href="{{ asset('library/selectric/public/selectric.css') }}">
@@ -23,34 +23,25 @@
 
             <div class="section-body">
                 <div class="row mb-3 align-items-end justify-content-center mx-2 p-2 bg-white rounded shadow-sm">
-                    <div class="col-md-5 mb-2">
+                    <div class="col-md-4 mb-2">
                         <label for="from-date">Date Range</label>
                         <div class="input-group">
-                            <button class="btn btn-sm btn-outline-success" id="today-btn">Today</button>
-                            <button class="btn btn-sm btn-outline-success" id="week-btn">Week</button>
+                          <button class="btn btn-sm btn-outline-success" id="today-btn">Today</button>
+                          <button class="btn btn-sm btn-outline-success" id="week-btn">Week</button>
                             <input type="date" class="form-control datepicker" name="from-date" id="from-date"
                                 value="{{ date('Y-m-d', strtotime('-7 day')) }}" placeholder="From Date">
                             <input type="date" class="form-control datepicker" name="to-date" id="to-date"
                                 value="{{ date('Y-m-d') }}" placeholder="To Date">
                         </div>
                     </div>
-                    <div class="col-md-3 mb-2">
-                        <label for="from-time">Time Range</label>
-                        <div class="input-group">
-                            <button class="btn btn-sm btn-outline-success" id="day-btn" type="button">Day</button>
-                            <button class="btn btn-sm btn-outline-success" id="night-btn" type="button">Night</button>
-                            <input type="time" class="form-control" name="from-time" id="from-time" value="00:00" placeholder="From Time">
-                            <input type="time" class="form-control" name="to-time" id="to-time" value="23:59" placeholder="To Time">
-                        </div>
-                    </div>
 
-                    <div class="col-md-2 mb-2">
-                        <label for="payment_method">Payment Method</label>
-                        <select name="payment_method" id="payment_method" class="form-control select2">
-                            <option value="">All Method</option>
-                            <option value="Cash">Cash</option>
-                            <option value="Transfer">Transfer</option>
-                            <option value="QRIS">QRIS</option>
+                    <div class="col-md-4 mb-2">
+                        <label for="payment_method">Category</label>
+                        <select name="category" id="category" class="form-control select2">
+                            <option value="">All Category</option>
+                            @foreach ($category as $cat)
+                                <option value="{{ $cat->id }}">{{ $cat->category }}</option>
+                            @endforeach
                         </select>
                     </div>
 
@@ -69,24 +60,18 @@
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
-                                                <th>No Invoice</th>
-                                                <th>Date</th>
-                                                <th>QTY</th>
-                                                <th>Total</th>
-                                                <th>Method</th>
-                                                <th>Action</th>
+                                                <th>Name</th>
+                                                <th>Category</th>
+                                                <th>Qty</th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
                                         <tfoot>
                                             <tr>
-                                                <th>ID</th>
-                                                <th>No Invoice</th>
-                                                <th>Date</th>
-                                                <th>QTY</th>
-                                                <th>Total</th>
-                                                <th>Method</th>
-                                                <th>Action</th>
+                                              <th>ID</th>
+                                              <th>Name</th>
+                                              <th>Category</th>
+                                              <th>Qty</th>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -119,63 +104,49 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script>
-        // time
-        document.getElementById('day-btn').addEventListener('click', function () {
-        document.getElementById('from-time').value = '06:00';
-        document.getElementById('to-time').value = '18:00';
-    });
+      document.addEventListener('DOMContentLoaded', function() {
+          const todayBtn = document.getElementById('today-btn');
+          const weekBtn = document.getElementById('week-btn');
+          const fromDate = document.getElementById('from-date');
+          const toDate = document.getElementById('to-date');
 
-    document.getElementById('night-btn').addEventListener('click', function () {
-        document.getElementById('from-time').value = '18:00';
-        document.getElementById('to-time').value = '06:00';
-    });
-        // date
-        document.addEventListener('DOMContentLoaded', function() {
+          // Fungsi format tanggal ke yyyy-mm-dd
+          function formatDate(date) {
+              return date.toISOString().split('T')[0];
+          }
 
-            const todayBtn = document.getElementById('today-btn');
-            const weekBtn = document.getElementById('week-btn');
-            const fromDate = document.getElementById('from-date');
-            const toDate = document.getElementById('to-date');
+          // Saat tombol "Today" diklik
+          todayBtn.addEventListener('click', function(e) {
+              e.preventDefault();
+              const today = new Date();
+              fromDate.value = formatDate(today);
+              toDate.value = formatDate(today);
+          });
 
-            // Fungsi format tanggal ke yyyy-mm-dd
-            function formatDate(date) {
-                return date.toISOString().split('T')[0];
-            }
-
-            // Saat tombol "Today" diklik
-            todayBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                const today = new Date();
-                fromDate.value = formatDate(today);
-                toDate.value = formatDate(today);
-            });
-
-            // Saat tombol "Week" diklik
-            weekBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                const today = new Date();
-                const sevenDaysAgo = new Date();
-                sevenDaysAgo.setDate(today.getDate() - 6); // total 7 hari termasuk hari ini
-                fromDate.value = formatDate(sevenDaysAgo);
-                toDate.value = formatDate(today);
-            });
-        });
-    </script>
+          // Saat tombol "Week" diklik
+          weekBtn.addEventListener('click', function(e) {
+              e.preventDefault();
+              const today = new Date();
+              const sevenDaysAgo = new Date();
+              sevenDaysAgo.setDate(today.getDate() - 6); // total 7 hari termasuk hari ini
+              fromDate.value = formatDate(sevenDaysAgo);
+              toDate.value = formatDate(today);
+          });
+      });
+  </script>
     <script>
         $(document).ready(function() {
             $('#report-table').DataTable({
                 processing: true,
                 serverSide: false,
                 ajax: {
-                    url: "{{ route('daily-report-datatable') }}",
+                    url: "{{ route('ingredient-report-datatable') }}",
                     type: 'GET',
                     cache: false,
                     data: function(d) {
                         d['from-date'] = $('#from-date').val();
                         d['to-date'] = $('#to-date').val();
-                        d['from-time'] = $('#from-time').val();
-                        d['to-time'] = $('#to-time').val();
-                        d['payment_method'] = $('#payment_method').val();
+                        d['category'] = $('#category').val();
                     }
                 },
                 order: [
@@ -187,48 +158,36 @@
                         className: 'text-left'
                     },
                     {
-                        data: 'no_invoice',
-                        name: 'no_invoice',
+                        data: 'name',
+                        name: 'name',
                         className: 'text-left',
                         render: function(data, type, row) {
                             return `
                                 ${data}<br>
-                                <small class="text-muted">An. ${row.customer_name ?? '-'}</small>
+                                <small class="text-muted">Unit : ${row.unit ?? '-'}</small>
                             `;
                         }
                     },
                     {
-                        data: 'transaction_time',
-                        name: 'transaction_time',
-                        className: 'text-left'
-                    },
-                    {
-                        data: 'total_item',
-                        name: 'total_item',
-                        className: 'text-left'
-                    },
-                    {
-                        data: 'total',
-                        name: 'total',
+                        data: 'category.category',
+                        name: 'category.category',
                         className: 'text-left',
-                        render: function(data) {
-                            return 'Rp ' + new Intl.NumberFormat('id-ID').format(data);
+                        render: function(data, type, row) {
+                            return `
+                                <span class="badge badge-success">${data}</span>
+                            `;
                         }
                     },
+                   
                     {
-                        data: 'payment_method',
-                        name: 'payment_method',
+                        data: 'qty',
+                        name: 'qty',
                         className: 'text-left',
-                        render: function(data) {
-                            return '<span class="badge badge-success"> ' + data + '</span>';
+                        render: function(data, type, row) {
+                            return `${data} ${row.unit ?? '-'}`;
                         }
                     },
-                    {
-                        data: 'detail_button',
-                        className: 'text-center',
-                        orderable: false,
-                        searchable: false
-                    }
+                   
                 ],
                 // dom: 'Blfrtip',
                 dom: '<"d-flex justify-content-between align-items-center mb-3"Bf>rt<"d-flex justify-content-between align-items-center mt-3"lip>',
@@ -247,7 +206,7 @@
                         title: 'BOMI POS - @yield('title') - {{ now()->format('d-m-Y') }}',
                         pageSize: 'A4',
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5]
+                            columns: [0, 1, 2, 3]
                         },
                         customize: function(doc) {
                             doc.defaultStyle.fontSize = 10;
@@ -265,13 +224,17 @@
                         title: 'BOMI POS - @yield('title') - {{ now()->format('d-m-Y') }}',
                         className: 'btn btn-success',
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5],
+                            columns: [0, 1, 2, 3],
                             modifier: {
                                 page: 'all'
                             }
                         }
                     }
                 ]
+            });
+
+            $('.refresh').click(function() {
+                $('#report-table').DataTable().ajax.reload();
             });
             $('#filter-button').click(function() {
                 $('#report-table').DataTable().ajax.reload();

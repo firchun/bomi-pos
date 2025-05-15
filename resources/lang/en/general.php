@@ -19,6 +19,7 @@ return [
   'delete' => 'Delete',
   'add' => 'Add',
   'edit' => 'Edit',
+  'print' => 'Print',
   'save' => 'Save',
   'action' => 'Action',
   'choose language' => 'Choose Language',
@@ -27,5 +28,8 @@ return [
   'ingredient' => 'Ingredient',
   'all' => 'All',
   'back' => 'Back',
-  'report orders' => 'Report Orders',
+  'orders report' => 'Orders Report',
+  'product report' => 'Product Report',
+  'ingredient report' => 'Ingredient Report',
+  'Advertisement' => 'Advertisement',
 ];

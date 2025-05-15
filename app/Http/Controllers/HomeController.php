@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ads;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Order;
@@ -58,9 +59,12 @@ class HomeController extends Controller
             'user' => User::where('role', 'user')->count(),
             'average_rating' => round(Rating::where('shop_profile_id', $shop->id)->avg('rating'), 2),
             'product' => $product->count(),
+            'ads' => Ads::where('shop_id', $shop->id)->get(),
             'shop' =>$shop ?? null,
             'visitor_today' => Visitor::where('shop_id', $shop->id)->whereDate('created_at', Carbon::today())->count(),
-            'visitor_week' => Visitor::where('shop_id', $shop->id) ->where('created_at', '>=', Carbon::now()->startOfWeek())->count(),
+            'visitor_week' => Visitor::where('shop_id', $shop->id)
+                ->where('created_at', '>=', Carbon::now()->subDays(6)->startOfDay())
+                ->count(),
             'popularCategories' => $popularCategories,
         ];
         return view('pages.dashboard', $data);

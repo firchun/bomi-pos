@@ -38,6 +38,11 @@
                 </li>
                 {{-- menu kasir --}}
                 @if (Auth::user()->role == 'user')
+                    <li class='nav-item {{ request()->routeIs('advertisement*') ? 'active' : '' }}'>
+                        <a class="nav-link" href="{{ route('advertisement.index') }}">
+                            <i class="fa fa-rectangle-ad"></i><span class="nav-text">{{__('general.Advertisement')}}</span>
+                        </a>
+                    </li>
                     {{-- <li class='nav-item'>
                         <a class="nav-link" href="{{ route('user.pos') }}"><i
                                 class="fas fa-folder-open"></i><span class="nav-text badge bg-danger rounded-pill ms-2 px-3 py-1 text-white">POS SOON</span></a>
@@ -54,7 +59,7 @@
                                 class="nav-text">Category</span></a>
                     </li> --}}
                     <li class='nav-item {{ request()->is('ingredient') ? 'active' : '' }}'>
-                        <a class="nav-link" href="{{ route('ingredient') }}"><i class="fas fa-box"></i><span
+                        <a class="nav-link" href="{{ route('ingredient.index') }}"><i class="fas fa-box"></i><span
                                 class="nav-text">{{__('general.ingredients')}}</span></a>
                     </li>
 
@@ -65,7 +70,15 @@
                     </li>
                     <li class='nav-item {{ request()->is('daily-report*') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ route('daily.report') }}"><i class="fas fa-chart-line"></i><span
-                                class="nav-text">{{ __('general.report orders') }}</span></a>
+                                class="nav-text">{{ __('general.orders report') }}</span></a>
+                    </li>
+                    <li class='nav-item {{ request()->is('product-report*') ? 'active' : '' }}'>
+                        <a class="nav-link" href="{{ route('product.report') }}"><i class="fas fa-chart-line"></i><span
+                                class="nav-text">{{ __('general.product report') }}</span></a>
+                    </li>
+                    <li class='nav-item {{ request()->is('ingredient-report*') ? 'active' : '' }}'>
+                        <a class="nav-link" href="{{ route('ingredient.report') }}"><i class="fas fa-chart-line"></i><span
+                                class="nav-text">{{ __('general.ingredient report') }}</span></a>
                     </li>
                     {{-- <li class='nav-item {{ request()->is('categories*') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ route('categories.index') }}"><i class="fas fa-sitemap"></i><span
