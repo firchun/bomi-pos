@@ -2,12 +2,13 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
-use App\Models\Order;
-use App\Models\OrderItem;
-use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Models\Order;
+use App\Models\Product;
+use Livewire\Component;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class Payment extends Component
 {
@@ -19,9 +20,13 @@ class Payment extends Component
     public $payment_method, $total_item, $nama_kasir;
     public $transaction_time;
     public $customer_name, $table_number = null;
+    public $showProductModal = false;
+    public $productSearch = '';
+    public $products = [];
+    public $selectedProducts = [];
 
     // New Variables for Payment Success Popup
-    public $change, $amountPaid, $totalBill;
+    public $change, $amountPaid, $totalBill, $showSuccessModal = false;
 
     public function mount()
     {
@@ -33,29 +38,91 @@ class Payment extends Component
 
     public function calculateTotals()
     {
-        // Calculate total amount from order items
-        $this->totalAmount = collect($this->orderItems)
+        // Hitung sub_total dari orderItems
+        $this->sub_total = collect($this->orderItems)
             ->sum(function ($item) {
                 return $item['price'] * $item['qty'];
             });
 
-        $this->discount = 0;
-        $this->discount_amount = 0;
-        $this->tax = 0;
-        $this->service_charge = 0;
+        // Jika Anda ingin mempertahankan totalAmount juga
+        $this->totalAmount = $this->sub_total;
 
+        // Hitung discount_amount berdasarkan persentase discount
+        $this->discount_amount = $this->sub_total * ($this->discount / 100);
+
+        // Hitung total akhir
         $this->total = $this->sub_total
             - $this->discount_amount
             + $this->tax
             + $this->service_charge;
     }
 
+    public function incrementProductQty($productId)
+    {
+        if (!isset($this->selectedProducts[$productId])) {
+            $this->selectedProducts[$productId] = 0;
+        }
+        $this->selectedProducts[$productId]++;
+    }
+
+    public function decrementProductQty($productId)
+    {
+        if (isset($this->selectedProducts[$productId])) {
+            if ($this->selectedProducts[$productId] > 1) {
+                $this->selectedProducts[$productId]--;
+            } else {
+                unset($this->selectedProducts[$productId]);
+            }
+        }
+    }
+
+    public function addSelectedProduct($productId)
+    {
+        $this->incrementProductQty($productId);
+    }
+
+    public function saveSelectedProducts()
+    {
+        foreach ($this->selectedProducts as $productId => $qty) {
+            if ($qty > 0) {
+                $product = Product::find($productId);
+                
+                if (isset($this->orderItems[$productId])) {
+                    $this->orderItems[$productId]['qty'] += $qty;
+                } else {
+                    $this->orderItems[$productId] = [
+                        'id' => $product->id,
+                        'name' => $product->name,
+                        'price' => $product->price,
+                        'image' => $product->image,
+                        'qty' => $qty
+                    ];
+                }
+            }
+        }
+        
+        $this->calculateTotals();
+        $this->closeProductModal();
+    }
+
+    public function openProductModal()
+    {
+        $this->products = Product::all(); // Ganti dengan query sesuai kebutuhan
+        $this->showProductModal = true;
+    }
+
+    public function closeProductModal()
+    {
+        $this->showProductModal = false;
+        $this->productSearch = '';
+        $this->selectedProducts = [];
+    }
+
     public function incrementQty($productId)
     {
         if (isset($this->orderItems[$productId])) {
             $this->orderItems[$productId]['qty']++;
-            $this->cartItems = $this->orderItems;
-            $this->calculateTotal();
+            $this->calculateTotals();
         }
     }
 
@@ -134,12 +201,15 @@ class Payment extends Component
         $this->change = $this->payment_amount - $this->totalAmount;
 
         // Tampilkan popup
-        $this->js(<<<'JS'
-            const modal = new bootstrap.Modal(document.getElementById('successModal'));
-            modal.show();
-        JS);
+        $this->showSuccessModal = true;
 
         $this->reset(['payment_amount', 'customer_name']);
+    }
+
+    public function newOrder()
+    {
+        $this->showSuccessModal = false;
+        $this->dispatch('new-order-created');
     }
 
     public function roundUpAmount()
