@@ -20,11 +20,13 @@ class ProductController extends Controller
             ->get();
 
         $products->load('category');
-        
-        $products->each(function ($product) {
+
+        $products = $products->map(function ($product) {
+            $productArray = $product->toArray();
             if ($product->discount != 0) {
-                $product->price = $product->final_price;
+                $productArray['price'] = $product->final_price;
             }
+            return $productArray;
         });
         return response()->json([
             'success' => true,
