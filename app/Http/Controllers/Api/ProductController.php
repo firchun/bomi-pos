@@ -24,7 +24,7 @@ class ProductController extends Controller
         $products = $products->map(function ($product) {
             $productArray = $product->toArray();
             if ($product->discount != 0) {
-                $productArray['price'] = $product->price_final;
+                $productArray['price'] = number_format($product->price_final, 2, '.', '');
             }
             return $productArray;
         });
