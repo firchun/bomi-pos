@@ -37,7 +37,7 @@
                         <ul class="nav nav-pills mb-0">
                             @foreach ($category as $cat)
                                 <li class="nav-item mx-1">
-                                    <div class="nav-link active">
+                                    <div class="nav-link active"><i class="fa fa-folder"></i>
                                         {{ $cat->category }} <span
                                             class="badge bg-white text-dark">{{ App\Models\Ingredient::where('id_category', $cat->id)->count() }}</span>
                                     </div>
@@ -52,9 +52,7 @@
                 <div class="row mt-2">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-header">
-                                <h4>All Ingredients</h4>
-                            </div>
+
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-striped table-hover">
@@ -63,7 +61,7 @@
                                                 <th>Id</th>
                                                 <th>Name</th>
                                                 <th>Unit</th>
-                                                <th>Created At</th>
+                                                <th>Category</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -72,13 +70,31 @@
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $data->name }}</td>
-                                                    <td>{{ $data->unit }}</td>
-                                                    <td>{{ $data->created_at->format('d F Y') }}</td>
+                                                    <td><b>{{$data->qty .' '. $data->sub_unit .' /'.$data->unit}}</b></td>
+                                                    <td class="text-primary">
+                                                        <div class="p-2"><i class="fa-regular fa-folder"></i>
+                                                            {{ $data->category->category }}</div>
+                                                    </td>
                                                     <td>
-                                                        <a href="" class="btn-sm btn btn-warning"><i
-                                                                class="fa fa-edit"></i> Edit</a>
-                                                        <a href="" class="btn-sm btn btn-danger"><i
-                                                                class="fa fa-trash"></i> Delete</a>
+                                                        <button type="button" class="btn btn-sm btn-warning"
+                                                            data-toggle="modal"
+                                                            data-target="#editModal-{{ $data->id }}">
+                                                            <i class="fa fa-edit"></i> Edit
+                                                        </button>
+                                                        <a href="{{ route('ingredient.destroy', $data->id) }}"
+                                                            onclick="event.preventDefault(); 
+                                                                            if(confirm('Are you sure you want to delete this data?')) {
+                                                                                document.getElementById('delete-ingredient-{{ $data->id }}').submit();
+                                                                            }"
+                                                            class="btn btn-sm btn-danger">
+                                                            <i class="fas fa-trash m-1"></i> {{ __('general.delete') }}
+                                                        </a>
+                                                        <form id="delete-ingredient-{{ $data->id }}"
+                                                            action="{{ route('ingredient.destroy', $data->id) }}"
+                                                            method="POST" class="d-none">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                        </form>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -96,6 +112,110 @@
             </div>
         </section>
     </div>
+    {{-- modal edit --}}
+    @foreach ($ingredient as $data)
+        <div class="modal fade" id="editModal-{{ $data->id }}" tabindex="-1" role="dialog"
+            aria-labelledby="editModalLabel{{ $data->id }}" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <form action="{{ route('ingredient.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addCategoryModalLabel">Edit Ingredient</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+                            <input type="hidden" name="id" value="{{ $data->id }}">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" name="name"
+                                    class="form-control @error('name') is-invalid @enderror" value="{{ $data->name }}"
+                                    placeholder="name" required>
+                                @error('name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Unit</label>
+                                <input type="text" name="unit"
+                                    class="form-control @error('unit') is-invalid @enderror" value="{{ $data->unit }}"
+                                    placeholder="unit : Pack/Dos/Cartoon" required>
+                                @error('unit')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                <div class="p-2 bg-light border rounded mt-2">
+                                    @if (app()->getLocale() == 'en')
+                                        Example: <strong>kg</strong>, <strong>liter</strong>, <strong>pcs</strong> — this is the main unit used for purchasing ingredients.
+                                    @else
+                                        Contoh: <strong>kg</strong>, <strong>liter</strong>, <strong>pcs</strong> — ini adalah satuan utama untuk pembelian bahan.
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="name">Qty Sub Unit</label>
+                                        <input type="number" name="qty"
+                                            class="form-control @error('qty') is-invalid @enderror" value="{{ $data->qty }}"
+                                             required>
+                                        @error('qty')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                        <div class="p-2 bg-light border rounded mt-2">
+                                            @if (app()->getLocale() == 'en')
+                                                Example: <strong>12</strong> — means 1 <em>unit</em> contains 12 <em>sub-units</em>.
+                                            @else
+                                                Contoh: <strong>12</strong> — berarti 1 <em>unit</em> berisi 12 <em>sub unit</em>.
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+
+                                    <div class="form-group">
+                                        <label for="name">Sub Unit</label>
+                                        <input type="text" name="sub_unit"
+                                            class="form-control @error('sub_unit') is-invalid @enderror" value="{{ $data->sub_unit }}"
+                                            placeholder="sub unit : pcs/cup" required>
+                                        @error('sub_unit')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                        <div class="p-2 bg-light border rounded mt-2">
+                                            @if (app()->getLocale() == 'en')
+                                                Example: <strong>pcs</strong>, <strong>cup</strong> — the smallest unit used in the kitchen.
+                                            @else
+                                                Contoh: <strong>pcs</strong>, <strong>cup</strong> — satuan terkecil yang digunakan di dapur.
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Select Category</label>
+                                <select class="form-control" name="id_category">
+                                    @foreach ($category as $cat)
+                                        <option value="{{ $cat->id }}"
+                                            @if ($cat->id == $data->id_category) selected @endif>{{ $cat->category }}</option>
+                                    @endforeach
+                                </select>
+                                @error('category')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    @endforeach
     {{-- modal category --}}
     <div class="modal fade" id="addCategoryModal" tabindex="-1" role="dialog" aria-labelledby="addCategoryModalLabel"
         aria-hidden="true">
@@ -114,8 +234,8 @@
                         <div class="form-group">
                             <label for="name">Name Category</label>
                             <input type="text" name="category"
-                                class="form-control @error('category') is-invalid @enderror" value="{{ old('category') }}"
-                                placeholder="name category" required>
+                                class="form-control @error('category') is-invalid @enderror"
+                                value="{{ old('category') }}" placeholder="name category" required>
                             @error('category')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -131,8 +251,8 @@
         </div>
     </div>
     {{-- modal ingredient --}}
-    <div class="modal fade" id="addIngredientModal" tabindex="-1" role="dialog" aria-labelledby="addCategoryModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="addIngredientModal" tabindex="-1" role="dialog"
+        aria-labelledby="addCategoryModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <form action="{{ route('ingredient.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
@@ -156,10 +276,56 @@
                         <div class="form-group">
                             <label for="name">Unit</label>
                             <input type="text" name="unit" class="form-control @error('unit') is-invalid @enderror"
-                                value="{{ old('unit') }}" placeholder="unit : kg/pcs/cup" required>
+                                value="{{ old('unit') }}" placeholder="unit : Pack/Dos/Cartoon"" required>
                             @error('unit')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                            <div class="p-2 bg-light border rounded mt-2">
+                                @if (app()->getLocale() == 'en')
+                                    Example: <strong>kg</strong>, <strong>liter</strong>, <strong>pcs</strong> — this is the main unit used for purchasing ingredients.
+                                @else
+                                    Contoh: <strong>kg</strong>, <strong>liter</strong>, <strong>pcs</strong> — ini adalah satuan utama untuk pembelian bahan.
+                                @endif
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="name">Qty Sub Unit</label>
+                                    <input type="number" name="qty"
+                                        class="form-control @error('qty') is-invalid @enderror"
+                                        value="0" required>
+                                    @error('qty')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                    <div class="p-2 bg-light border rounded mt-2">
+                                        @if (app()->getLocale() == 'en')
+                                            Example: <strong>12</strong> — means 1 <em>unit</em> contains 12 <em>sub-units</em>.
+                                        @else
+                                            Contoh: <strong>12</strong> — berarti 1 <em>unit</em> berisi 12 <em>sub unit</em>.
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+
+                                <div class="form-group">
+                                    <label for="name">Sub Unit</label>
+                                    <input type="text" name="sub_unit"
+                                        class="form-control @error('sub_unit') is-invalid @enderror"
+                                        placeholder="sub unit : pcs/cup" required>
+                                    @error('sub_unit')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                    <div class="p-2 bg-light border rounded mt-2">
+                                        @if (app()->getLocale() == 'en')
+                                            Example: <strong>pcs</strong>, <strong>cup</strong> — the smallest unit used in the kitchen.
+                                        @else
+                                            Contoh: <strong>pcs</strong>, <strong>cup</strong> — satuan terkecil yang digunakan di dapur.
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="name">Select Category</label>

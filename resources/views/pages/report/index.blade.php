@@ -20,7 +20,17 @@
                     <div class="breadcrumb-item">@yield('title')</div>
                 </div>
             </div>
-
+            <div class="my-2 p-2 border rounded bg-light text-dark">
+                @if (app()->getLocale() == 'en')
+                    manage your sales report on your cashier easily here, you can see daily, weekly, monthly, and yearly
+                    sales reports. You can also download reports in PDF or Excel format for further record keeping and
+                    analysis.
+                @else
+                   Kelola laporan penjualan pada kasir anda dengan mudah di sini, anda dapat melihat laporan penjualan
+                    harian, mingguan, bulanan, dan tahunan. Anda juga dapat mengunduh laporan dalam format PDF atau Excel
+                    untuk keperluan pencatatan dan analisis lebih lanjut.
+                @endif
+            </div>
             <div class="section-body">
                 <div class="row mb-3 align-items-end justify-content-center mx-2 p-2 bg-white rounded shadow-sm">
                     <div class="col-md-5 mb-2">
@@ -34,17 +44,8 @@
                                 value="{{ date('Y-m-d') }}" placeholder="To Date">
                         </div>
                     </div>
-                    <div class="col-md-3 mb-2">
-                        <label for="from-time">Time Range</label>
-                        <div class="input-group">
-                            <button class="btn btn-sm btn-outline-success" id="day-btn" type="button">Day</button>
-                            <button class="btn btn-sm btn-outline-success" id="night-btn" type="button">Night</button>
-                            <input type="time" class="form-control" name="from-time" id="from-time" value="00:00" placeholder="From Time">
-                            <input type="time" class="form-control" name="to-time" id="to-time" value="23:59" placeholder="To Time">
-                        </div>
-                    </div>
 
-                    <div class="col-md-2 mb-2">
+                    <div class="col-md-4 mb-2">
                         <label for="payment_method">Payment Method</label>
                         <select name="payment_method" id="payment_method" class="form-control select2">
                             <option value="">All Method</option>
@@ -119,19 +120,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script>
-        // time
-        document.getElementById('day-btn').addEventListener('click', function () {
-        document.getElementById('from-time').value = '06:00';
-        document.getElementById('to-time').value = '18:00';
-    });
-
-    document.getElementById('night-btn').addEventListener('click', function () {
-        document.getElementById('from-time').value = '18:00';
-        document.getElementById('to-time').value = '06:00';
-    });
-        // date
         document.addEventListener('DOMContentLoaded', function() {
-
             const todayBtn = document.getElementById('today-btn');
             const weekBtn = document.getElementById('week-btn');
             const fromDate = document.getElementById('from-date');
@@ -173,8 +162,6 @@
                     data: function(d) {
                         d['from-date'] = $('#from-date').val();
                         d['to-date'] = $('#to-date').val();
-                        d['from-time'] = $('#from-time').val();
-                        d['to-time'] = $('#to-time').val();
                         d['payment_method'] = $('#payment_method').val();
                     }
                 },
@@ -220,7 +207,7 @@
                         name: 'payment_method',
                         className: 'text-left',
                         render: function(data) {
-                            return '<span class="badge badge-success"> ' + data + '</span>';
+                            return '<span class="text-primary"><i class="fa fa-money-bill-1-wave"></i> ' + data + '</span>';
                         }
                     },
                     {

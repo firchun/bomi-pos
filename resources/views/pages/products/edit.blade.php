@@ -40,8 +40,8 @@
                                         <label>Name</label>
                                         <input type="text"
                                             class="form-control @error('name')
-                                is-invalid
-                            @enderror"
+                                            is-invalid
+                                        @enderror"
                                             name="name" value="{{ $product->name }}">
                                         @error('name')
                                             <div class="invalid-feedback">
@@ -89,11 +89,7 @@
                                         @enderror
                                     </div>
 
-
-
                                 </div>
-
-
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -111,8 +107,8 @@
                                         <label class="form-label">Category</label>
                                         <select
                                             class="form-control selectric @error('category_id')
-        is-invalid
-    @enderror"
+                                                            is-invalid
+                                                        @enderror"
                                             name="category_id">
                                             <option value="">Choose Category</option>
                                             @foreach ($categories as $category)
@@ -156,6 +152,27 @@
                         </div>
                     </div>
                 </form>
+                <div class="mt-2">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <a href="{{ route('products.destroy', $product->id) }}"
+                                    onclick="event.preventDefault(); 
+                                            if(confirm('Are you sure you want to delete this product?')) {
+                                                document.getElementById('delete-product-{{ $product->id }}').submit();
+                                            }"
+                                    class="btn  btn-danger">
+                                    <i class="fas fa-trash m-1"></i> Delete this Product from your shop
+                                </a>
+                                <form id="delete-product-{{ $product->id }}"
+                                    action="{{ route('products.destroy', $product->id) }}" method="POST" class="d-none">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
     </div>

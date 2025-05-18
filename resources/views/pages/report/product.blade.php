@@ -20,7 +20,13 @@
                     <div class="breadcrumb-item">@yield('title')</div>
                 </div>
             </div>
-
+            <div class="my-2 p-2 border rounded bg-light text-dark">
+              @if (app()->getLocale() == 'en')
+                  Manage your product report easily, you can download the report in PDF or Excel format and filter the report by date and product category.
+              @else
+                  Kelola laporan produk anda dengan mudah, anda dapat mengunduh laporan dalam format PDF atau Excel serta filter laporan berdasarkan tanggal dan kategori produk.
+              @endif
+          </div>
             <div class="section-body">
                 <div class="row mb-3 align-items-end justify-content-center mx-2 p-2 bg-white rounded shadow-sm">
                     <div class="col-md-4 mb-2">
@@ -170,7 +176,7 @@
                         name: 'category',
                         className: 'text-left',
                         render: function(data) {
-                            return '<span class="badge badge-success"> ' + data + '</span>';
+                            return '<span class="text-primary"><i class="fa-regular fa-folder"></i> ' + data + '</span>';
                         }
                     },
                     {

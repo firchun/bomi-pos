@@ -34,7 +34,7 @@ class ReportController extends Controller
             'category' => IngredientCategory::where('id_user', Auth::id())->get(),
             'ingredient' => Ingredient::where('id_user', Auth::id())->with(['category'])->paginate(10),
         ];
-        return view('pages.report.ingredient',$data);
+        return view('pages.report.ingredient', $data);
     }
 
     public function ingredientReportDatatable(Request $request)
@@ -42,39 +42,39 @@ class ReportController extends Controller
         $fromDate = $request->input('from-date');
         $toDate = $request->input('to-date');
         $category = $request->input('category');
-    
+
         // Query produk
         $ingredientQuery = Ingredient::where('id_user', Auth::id())
             ->with('category')
             ->orderBy('created_at', 'desc');
-    
+
         if ($category) {
             $ingredientQuery->where('id_category', $category);
         }
-    
+
         return DataTables::of($ingredientQuery)
-        ->addColumn('qty', function ($ingredient) use ($fromDate, $toDate) {
-            $total = 0;
-            $fromDateParsed = $fromDate ? \Carbon\Carbon::parse($fromDate)->startOfDay() : null;
-            $toDateParsed = $toDate ? \Carbon\Carbon::parse($toDate)->endOfDay() : null;
-    
-            // Ambil semua relasi produk yang memakai ingredient ini
-            $ingredientUsages = IngredientDish::where('id_ingredient', $ingredient->id)->get();
-        
-            foreach ($ingredientUsages as $usage) {
-                // Cari jumlah produk terjual untuk produk terkait
-                $orderQty = OrderItem::where('product_id', $usage->id_product)
-                ->whereBetween('created_at', [$fromDateParsed, $toDateParsed])
-                ->sum('quantity');
-        
-                // Kalikan dengan kebutuhan ingredient-nya
-                $total += $usage->qty * $orderQty;
-            }
-        
-            return number_format($total, 2);
-        })
-          
-            ->rawColumns(['qty'])
+            ->addColumn('qty_order', function ($ingredient) use ($fromDate, $toDate) {
+                $total = 0;
+                $fromDateParsed = $fromDate ? Carbon::parse($fromDate)->startOfDay() : null;
+                $toDateParsed = $toDate ? Carbon::parse($toDate)->endOfDay() : null;
+
+                // Ambil semua relasi produk yang memakai ingredient ini
+                $ingredientUsages = IngredientDish::where('id_ingredient', $ingredient->id)->get();
+
+                foreach ($ingredientUsages as $usage) {
+                    // Cari jumlah produk terjual untuk produk terkait
+                    $orderQty = OrderItem::where('product_id', $usage->id_product)
+                        ->whereBetween('created_at', [$fromDateParsed, $toDateParsed])
+                        ->sum('quantity');
+
+                    // Kalikan dengan kebutuhan ingredient-nya
+                    $total += $usage->qty * $orderQty;
+                }
+
+                return number_format($total);
+            })
+
+            ->rawColumns(['qty_order'])
             ->make(true);
     }
     public function productReportDatatable(Request $request)
@@ -82,11 +82,11 @@ class ReportController extends Controller
         $fromDate = $request->input('from-date');
         $toDate = $request->input('to-date');
         $category = $request->input('category');
-    
+
         // Parse tanggal jika tersedia
         $fromDateParsed = $fromDate ? Carbon::parse($fromDate)->startOfDay() : null;
         $toDateParsed = $toDate ? Carbon::parse($toDate)->endOfDay() : null;
-    
+
         // Query produk
         $productQuery = Product::where('user_id', Auth::id())
             ->with('category')
@@ -101,11 +101,11 @@ class ReportController extends Controller
                 }
             }], DB::raw('quantity * price'))
             ->orderBy('created_at', 'desc');
-    
+
         if ($category) {
             $productQuery->where('category_id', $category);
         }
-    
+
         return DataTables::of($productQuery)
             ->addColumn('total_order', function ($product) {
                 return $product->total_order ?? 0;
@@ -119,7 +119,7 @@ class ReportController extends Controller
                 $profit = $totalRevenue - $totalHpp;
                 return number_format($profit);
             })
-            ->rawColumns(['total_order', 'total_price','profit'])
+            ->rawColumns(['total_order', 'total_price', 'profit'])
             ->make(true);
     }
     public function dailyReportDatatable(Request $request)
@@ -145,14 +145,14 @@ class ReportController extends Controller
         if ($request->has('from-time') && $request->has('to-time')) {
             $fromTimeRaw = $request->input('from-time'); // e.g. "06:00"
             $toTimeRaw = $request->input('to-time');     // e.g. "18:00"
-        
+
             if (!empty($fromTimeRaw) && !empty($toTimeRaw)) {
                 // Parsing sebagai waktu menggunakan Carbon
                 $fromTime = Carbon::createFromFormat('H:i', $fromTimeRaw)->format('H:i:s');
                 $toTime = Carbon::createFromFormat('H:i', $toTimeRaw)->format('H:i:s');
-        
+
                 $ordersQuery->whereTime('created_at', '>=', $fromTime)
-                            ->whereTime('created_at', '<=', $toTime);
+                    ->whereTime('created_at', '<=', $toTime);
             }
         }
         if ($paymentMethod) {

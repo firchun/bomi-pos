@@ -23,7 +23,7 @@
                         @include('layouts.alert')
                     </div>
                     <div class="col-12 mb-3">
-                        <a href="{{ route('ingredient') }}" class="btn btn-secondary"><i
+                        <a href="{{ route('ingredient.index') }}" class="btn btn-secondary"><i
                                 class="fa fa-arrow-left"></i> {{__('general.back')}}</a>
                     </div>
                     <div class="col-lg-4">

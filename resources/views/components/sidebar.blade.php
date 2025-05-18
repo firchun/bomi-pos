@@ -7,7 +7,7 @@
             <a href="{{ route('homepage') }}">BP</a>
         </div>
         <div class="sidebar">
-            @if (!auth()->user()->is_subscribed || now()->gt(auth()->user()->subscription_expires_at))
+            {{-- @if (!auth()->user()->is_subscribed || now()->gt(auth()->user()->subscription_expires_at))
                 <div class="mt-4 mb-2 p-3 hide-sidebar-mini">
                     <button class="btn btn-primary btn-lg btn-block btn-icon-split" data-toggle="modal"
                         data-target="#upgradeModal">
@@ -21,7 +21,7 @@
                         <i class="fas fa-rocket"></i> Pro Account
                     </button>
                 </div>
-            @endif
+            @endif --}}
             @if (Auth::user()->role == 'user')
                 <div class=" mb-2 p-3 hide-sidebar-mini">
                     <a class="btn btn-warning btn-lg btn-block btn-icon-split" href="{{ route('user.pos') }}">
@@ -40,34 +40,35 @@
                 @if (Auth::user()->role == 'user')
                     <li class='nav-item {{ request()->routeIs('advertisement*') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ route('advertisement.index') }}">
-                            <i class="fa fa-rectangle-ad"></i><span class="nav-text">{{__('general.Advertisement')}}</span>
+                            <i class="fas fa-rectangle-ad"></i><span class="nav-text">{{__('general.Advertisement')}}</span>
                         </a>
                     </li>
-                    {{-- <li class='nav-item'>
-                        <a class="nav-link" href="{{ route('user.pos') }}"><i
-                                class="fas fa-folder-open"></i><span class="nav-text badge bg-danger rounded-pill ms-2 px-3 py-1 text-white">POS SOON</span></a>
-                    </li> --}}
-
-                    <li class="menu-header">Inventory</li>
+                    <li class='nav-item {{ request()->is('ratings*') ? 'active' : '' }}'>
+                        <a class="nav-link" href="{{ route('ratings.index') }}">
+                            <i class="fas fa-star"></i><span
+                                class="nav-text">{{ __('general.comment & rating') }}</span></a>
+                    </li>
+                    <li class="menu-header">{{__('general.product')}}</li>
                     <li class='nav-item {{ request()->is('products*') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ route('products.index') }}"><i class="fas fa-folder-open"></i><span
                                 class="nav-text">{{ __('general.products') }}</span></a>
                     </li>
-                    <li class="menu-header">{{__('general.ingredients')}}</li>
-                    {{-- <li class='nav-item {{ request()->is('ingredient-category*') ? 'active' : '' }}'>
-                        <a class="nav-link" href="{{ route('ingredient-category') }}"><i class="fas fa-box"></i><span
-                                class="nav-text">Category</span></a>
-                    </li> --}}
                     <li class='nav-item {{ request()->is('ingredient') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ route('ingredient.index') }}"><i class="fas fa-box"></i><span
                                 class="nav-text">{{__('general.ingredients')}}</span></a>
                     </li>
-
-                    <li class="menu-header">Order</li>
                     <li class='nav-item {{ request()->is('calendar*') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ route('calendar') }}"><i class="fas fa-calendar"></i><span
                                 class="nav-text">Calendar</span></a>
                     </li>
+                   
+                    {{-- <li class='nav-item {{ request()->is('categories*') ? 'active' : '' }}'>
+                        <a class="nav-link" href="{{ route('categories.index') }}"><i class="fas fa-sitemap"></i><span
+                                class="nav-text">Categories</span></a>
+                    </li> --}}
+
+                   
+                    <li class="menu-header">{{ __('general.report') }}</li>
                     <li class='nav-item {{ request()->is('daily-report*') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ route('daily.report') }}"><i class="fas fa-chart-line"></i><span
                                 class="nav-text">{{ __('general.orders report') }}</span></a>
@@ -80,25 +81,12 @@
                         <a class="nav-link" href="{{ route('ingredient.report') }}"><i class="fas fa-chart-line"></i><span
                                 class="nav-text">{{ __('general.ingredient report') }}</span></a>
                     </li>
-                    {{-- <li class='nav-item {{ request()->is('categories*') ? 'active' : '' }}'>
-                        <a class="nav-link" href="{{ route('categories.index') }}"><i class="fas fa-sitemap"></i><span
-                                class="nav-text">Categories</span></a>
-                    </li> --}}
-
-                    <li class="menu-header">Rating</li>
-                    <li class='nav-item {{ request()->is('ratings*') ? 'active' : '' }}'>
-                        <a class="nav-link" href="{{ route('ratings.index') }}">
-                            <i class="fas fa-star"></i><span
-                                class="nav-text">{{ __('general.comment & rating') }}</span></a>
-                    </li>
-                    <li class="menu-header">{{ __('general.report') }}</li>
-                    <li class="nav-item dropdown {{ Request::is('financial*') ? 'active' : '' }}">
+                    {{-- <li class="nav-item dropdown {{ Request::is('financial*') ? 'active' : '' }}">
                         <a href="#" class="nav-link has-dropdown">
                             <i class="fas fa-money-bill-1-wave"></i><span>
                                 {{ __('general.financial statement') }}</span>
                         </a>
                         <ul class="dropdown-menu">
-                            {{-- categories --}}
                             <li class="{{ Request::is('financial/category') ? 'active' : '' }}">
                                 <a href="{{ route('financial.category') }}" class="nav-link">
                                     {{ __('general.categories') }}
@@ -107,7 +95,6 @@
                                     @endif
                                 </a>
                             </li>
-                            {{-- Menu Income --}}
                             <li class="{{ Request::is('financial/income') ? 'active' : '' }}">
                                 <a href="{{ route('financial.income') }}" class="nav-link">
                                     {{ __('general.income') }}
@@ -116,7 +103,6 @@
                                     @endif
                                 </a>
                             </li>
-                            {{-- pengeluaran --}}
                             <li class="{{ Request::is('financial/expenses') ? 'active' : '' }}">
                                 <a href="{{ route('financial.expenses') }}" class="nav-link">
                                     {{ __('general.expense') }}
@@ -125,32 +111,18 @@
                                     @endif
                                 </a>
                             </li>
-                            {{-- laba rugi  --}}
-                            {{-- <li><a href="">Profit & Loss</a></li> --}}
-                            {{-- kas harian --}}
-                            {{-- <li><a href="">Daily Cash</a></li> --}}
-                            {{-- neraca saldo --}}
-                            {{-- <li><a href="">Trial Balance</a></li> --}}
-                            {{-- piutang --}}
-                            {{-- <li><a href="">Receivables</a></li> --}}
-                            {{-- pencatatan modal dan prive --}}
-                            {{-- <li><a href="">Capital & Withdrawal</a></li> --}}
-                            {{-- jurnal --}}
-                            {{-- <li><a href="">Journal</a></li> --}}
-                            {{-- perpajakan --}}
-                            {{-- <li><a href="">Taxation</a></li> --}}
+                         
                         </ul>
-                    </li>
+                    </li> --}}
 
-                    <li class="menu-header">Shop Setting</li>
+                    <li class="menu-header">Shop</li>
                     <li class='nav-item {{ request()->is('shop-profiles*') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ route('shop-profiles.index') }}"><i class="fas fa-store"></i><span
                                 class="nav-text">Shop Profile</span></a>
                     </li>
-                    <li class="menu-header">Support</li>
                     <li class="nav-item {{ request()->routeIs('user.dashboard') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('user.dashboard') }}">
-                            <i class="fas fa-comments"></i><span class="nav-text">{{ __('general.messages') }}</span>
+                            <i class="fas fa-comments"></i><span class="nav-text">Support Chat</span>
                         </a>
                     </li>
                 @endif

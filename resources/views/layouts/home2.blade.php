@@ -2,33 +2,30 @@
 <html lang="id" class="light">
 
 <head>
-    <title>Bomi POS - aplikasi kasir terbaik</title>
+
+    <title>@yield('title', 'Bomi POS - Aplikasi Kasir Terbaik')</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="{{ asset('home2') }}/assets/svg/logo.svg" type="image/png" />
+
     <!-- SEO Meta Tags -->
-    <meta name="description"
-        content="Bomi Pos adalah aplikasi dan web kasir untuk usaha retail dan restoran. Kelola penjualan, stok, laporan, dan pembayaran dengan mudah dan cepat.">
-    <meta name="keywords"
-        content="aplikasi kasir, web kasir, kasir restoran, kasir retail, aplikasi POS, sistem kasir online, software kasir, Bomi Pos">
+    <meta name="description" content="@yield('meta-description', 'Bomi Pos adalah aplikasi dan web kasir untuk usaha retail dan restoran. Kelola penjualan, stok, laporan, dan pembayaran dengan mudah dan cepat.')">
+    <meta name="keywords" content="@yield('meta-keywords', 'aplikasi kasir, web kasir, kasir restoran, kasir retail, aplikasi POS, sistem kasir online, software kasir, Bomi Pos')">
     <meta name="author" content="Bomi Pos">
     <meta name="robots" content="index, follow" />
 
-    <!-- Open Graph untuk Sosial Media -->
-    <meta property="og:title" content="Bomi Pos - Aplikasi dan Web Kasir untuk Retail & Restoran" />
-    <meta property="og:description"
-        content="Gunakan Bomi Pos untuk mengelola penjualan, stok, keuangan, dan laporan usaha Anda secara efisien. Cocok untuk UMKM hingga bisnis skala besar." />
-    <meta property="og:image" content="{{ asset('home2') }}/assets/img/logo-bomipos.png" />
-    <meta property="og:url" content="https://bomipos.id" />
+    <!-- Open Graph / Facebook -->
+    <meta property="og:title" content="@yield('meta-og-title', 'Bomi Pos - Aplikasi dan Web Kasir untuk Retail & Restoran')" />
+    <meta property="og:description" content="@yield('meta-og-description', 'Gunakan Bomi Pos untuk mengelola penjualan, stok, keuangan, dan laporan usaha Anda secara efisien. Cocok untuk UMKM hingga bisnis skala besar.')" />
+    <meta property="og:image" content="@yield('meta-og-image', asset('home2/assets/img/logo-bomipos.png'))" />
+    <meta property="og:url" content="@yield('meta-og-url', url()->current())" />
     <meta property="og:type" content="website" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Bomi Pos - Solusi Kasir Modern untuk Bisnis Anda" />
-    <meta name="twitter:description"
-        content="Bomi Pos menyediakan sistem kasir online berbasis aplikasi dan web untuk mendukung operasional toko dan restoran Anda." />
-    <meta name="twitter:image" content="{{ asset('home2') }}/assets/img/logo-bomipos.png" />
-
+    <meta name="twitter:title" content="@yield('meta-twitter-title', 'Bomi Pos - Solusi Kasir Modern untuk Bisnis Anda')" />
+    <meta name="twitter:description" content="@yield('meta-twitter-description', 'Bomi Pos menyediakan sistem kasir online berbasis aplikasi dan web untuk mendukung operasional toko dan restoran Anda.')" />
+    <meta name="twitter:image" content="@yield('meta-twitter-image', asset('home2/assets/img/logo-bomipos.png'))" />
     <!-- Tailwind & Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet">
@@ -107,14 +104,14 @@
                                shadow-sm shadow-purple-700 shadow-inner
                                @else hover:border hover:border-purple-700 hover:rounded-full hover:px-4  hover:shadow-sm hover:shadow-purple-700 hover:shadow-inner @endif">Bomi
                         Product</a>
-                        
+
                 </nav>
 
                 <!-- Login Button -->
                 <div class="flex items-center space-x-5">
-                    <button type="button"  onclick="toggleSearchNavModal()"
+                    <button type="button" onclick="toggleSearchNavModal()"
                         class="text-lg font-semibold text-purple-700 dark:text-white transition-colors duration-300 ">
-                        <i  class="bi bi-search"></i>
+                        <i class="bi bi-search"></i>
                     </button>
                     <a href="#" id="toggleDark"
                         class="text-lg font-semibold text-purple-700 dark:text-white transition-colors duration-300 ">
@@ -319,6 +316,7 @@
             modal.classList.toggle("hidden");
             modal.classList.toggle("flex");
         }
+
         function toggleSearchNavModal() {
             const modalNav = document.getElementById("searchNavModal");
             modalNav.classList.toggle("hidden");

@@ -20,7 +20,17 @@
                     <div class="breadcrumb-item">@yield('title')</div>
                 </div>
             </div>
-
+            <div class="my-2 p-2 border rounded bg-light text-dark">
+              @if (app()->getLocale() == 'en')
+                  Manage your ingredient report from here, you can see the ingredient report that has been sold
+                  within a certain period of time. You can also download the report in PDF or Excel format.
+                  Before that, you need to add ingredients in the available menu and add them to the product
+              @else
+                Kelola laporan bahan baku anda dari sini, anda bisa melihat laporan bahan baku yang terjual
+                  dalam rentang waktu tertentu. Anda juga bisa mengunduh laporan dalam format PDF atau Excel.
+                  sebelum itu anda perlu menambah bahan baku pada menu yang tersedia serta menambahkannya pada produk
+              @endif
+          </div>
             <div class="section-body">
                 <div class="row mb-3 align-items-end justify-content-center mx-2 p-2 bg-white rounded shadow-sm">
                     <div class="col-md-4 mb-2">
@@ -164,7 +174,7 @@
                         render: function(data, type, row) {
                             return `
                                 ${data}<br>
-                                <small class="text-muted">Unit : ${row.unit ?? '-'}</small>
+                                <small class="text-muted">${row.qty ?? '-'} ${row.sub_unit ?? '-'} /${row.unit ?? '-'}</small>
                             `;
                         }
                     },
@@ -174,17 +184,17 @@
                         className: 'text-left',
                         render: function(data, type, row) {
                             return `
-                                <span class="badge badge-success">${data}</span>
+                                <span class="text-primary"><i class="fa-regular fa-folder"></i> ${data}</span>
                             `;
                         }
                     },
                    
                     {
-                        data: 'qty',
-                        name: 'qty',
+                        data: 'qty_order',
+                        name: 'qty_order',
                         className: 'text-left',
                         render: function(data, type, row) {
-                            return `${data} ${row.unit ?? '-'}`;
+                            return `${data??0} ${row.sub_unit ?? '-'}`;
                         }
                     },
                    

@@ -1,11 +1,11 @@
 @extends('layouts.home2')
 
-@section('title', $shop->name)
-@section('meta-title', $shop->name)
+@section('title', $shop->name . ' | Bomi POS')
+@section('meta-title', $shop->name . ' | Bomi POS')
 @section('meta-description', $shop->description)
 @section('meta-keywords', $shop->name)
 
-@section('meta-og-title', $shop->name)
+@section('meta-og-title', $shop->name . ' | Bomi POS')
 @section('meta-og-description', $shop->description)
 @section('meta-og-image', $shop->photo)
 @section('meta-og-url', url()->current())
@@ -225,45 +225,109 @@
 
     </div>
     {{-- ads --}}
-    @if($ads)
-    <div x-data="{ open: true }" x-show="open"
-    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 backdrop-blur overflow-auto">
-    
-    <div class="w-full max-w-5xl mx-auto rounded-lg shadow-xl p-4  overflow-auto">
+    @if ($ads)
+        <div x-data="{ open: true }" x-show="open"
+            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 backdrop-blur-sm overflow-auto">
 
-        <!-- Tombol Tutup -->
-        <div class="flex justify-center mb-4">
-            <button @click="open = false" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition">
-                Close Ads
-            </button>
-        </div>
+            <div class="w-full max-w-5xl mx-auto rounded-lg  p-4  overflow-auto">
 
-        <!-- Konten -->
-        <div class="flex flex-col md:flex-row items-center md:items-start gap-6 justify-center">
-            
-            <!-- Gambar -->
-            <div class="flex justify-center w-full md:w-auto">
-                <img src="{{ asset($ads->image) }}" alt="{{ $ads->title }}"
-                    class="w-[90vw] max-w-[500px] h-[90vw] max-h-[500px] md:w-[500px] md:h-[500px] object-cover rounded-xl">
+                <!-- Tombol Tutup -->
+                <div class="flex justify-center mb-4">
+                    <button @click="open = false"
+                        class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition">
+                        Close Ads
+                    </button>
+                </div>
+
+                <!-- Konten -->
+                <div class="flex flex-col md:flex-row items-center md:items-start gap-6 justify-center">
+
+                    <!-- Gambar -->
+                    <div class="flex justify-center w-full md:w-auto">
+                        <img src="{{ asset($ads->image) }}" alt="{{ $ads->title }}"
+                            class="w-[90vw] max-w-[500px] h-[90vw] max-h-[500px] md:w-[500px] md:h-[500px] object-cover rounded-xl">
+                    </div>
+
+                    <!-- Deskripsi -->
+                    <div
+                        class="text-zinc-800 dark:text-white rounded-lg p-4 shadow-md bg-white dark:bg-zinc-700 w-[400px]">
+                        <h2 class="text-xl font-semibold mb-2">{{ $ads->title }}</h2>
+                        <hr class="mb-2 border-zinc-300 dark:border-zinc-600">
+                        <p class="text-sm text-zinc-700 dark:text-zinc-300">
+                            {!! $ads->description !!}
+                        </p>
+                    </div>
+                </div>
             </div>
-
-            <!-- Deskripsi -->
-            <div class="text-zinc-800 dark:text-white rounded-lg p-4 shadow-md bg-white dark:bg-zinc-700 w-[400px]">
-                <h2 class="text-xl font-semibold mb-2">{{ $ads->title }}</h2>
-                <hr class="mb-2 border-zinc-300 dark:border-zinc-600">
-                <p class="text-sm text-zinc-700 dark:text-zinc-300">
-                    {!! $ads->description !!}
-                </p>
-            </div>
         </div>
-    </div>
-</div>
     @endif
+    <!-- Modal -->
+    <div id="productModal" class="fixed inset-0 z-50 backdrop-blur bg-zinc-900/20 dark:bg-purple-900/20 hidden flex items-center justify-center transition-all duration-300">
+  
+        <!-- Container modal dan logo (relative) -->
+        <div class="relative w-3/4 max-w-xl">
+          
+          <!-- Logo di tengah atas -->
+          <img src="{{ asset('home2') }}/assets/svg/logo.svg"
+               alt="logo"
+               class="h-25 w-25 absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-[120%] z-10" />
+      
+          <!-- Card modal -->
+          <div class="bg-white/90 dark:bg-zinc-900/90 rounded-3xl p-6  backdrop-blur-xl relative">
+            <div id="modalContent">
+              <!-- Content will be injected via JS -->
+            </div>
+          </div>
+      
+        </div>
+      
+      </div>
 @endsection
 
 @push('js')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        document.addEventListener('click', function(e) {
+            const card = e.target.closest('.product-card');
+            if (card) {
+                const product = JSON.parse(card.getAttribute('data-product'));
+                const modal = document.getElementById('productModal');
+                const modalContent = document.getElementById('modalContent');
+
+                modalContent.innerHTML = `
+                <img src="${product.image ? `/${product.image}` : '/images/default-product.png'}"
+                class="w-full h-56 object-cover rounded-lg mb-4" />
+
+                    <div class="p-4 relative">
+                                    <span class="absolute top-4 right-4 bg-purple-100 text-purple-700 dark:bg-purple-800/30 dark:text-purple-300 text-sm font-medium px-3 py-1 rounded-full">
+                                        {{$shop->name}}
+                                    </span>
+                                <p class="text-2xl font-bold text-purple-700 dark:text-purple-400 mb-1">
+                                    ${
+                                        product.discount != 0
+                                        ? `<del class="text-gray-500 mr-2">Rp ${parseFloat(product.price).toLocaleString()}</del><span class="text-sm text-red-600">${product.discount }% Off</span><br>
+                                                    Rp ${parseFloat(product.price_final).toLocaleString()}`
+                                        : `Rp ${parseFloat(product.price).toLocaleString()}`
+                                    }
+                                    </p>
+                                    <p class="text-lg font-semibold text-purple-700 dark:text-white mb-1">${product.name}</p>
+                                    <p class="text-gray-600 dark:text-zinc-300 text-sm">${product.description}</p>
+                `;
+                modal.classList.remove('hidden');
+            }
+
+            // Tutup modal jika klik tombol X
+            if (e.target.id === 'closeModal') {
+                document.getElementById('productModal').classList.add('hidden');
+            }
+
+            // Tutup modal jika klik di luar konten modal
+            if (e.target.id === 'productModal') {
+                e.target.classList.add('hidden');
+            }
+        });
+    </script>
     <script>
         const shopId = {{ $shop->id }};
 
@@ -420,23 +484,28 @@
                     if (products.length > 0) {
                         products.forEach(product => {
                             productsContainer.append(`
-                    <div class="rounded-2xl overflow-hidden  border border-transparent hover:border-purple-700 shadow-md hover:shadow-xl bg-white dark:bg-zinc-800 transition-colors duration-300">
-                        <img src="${product.image ? `/${product.image}` : '/images/default-product.png'}"
-                            alt="${product.name}"
-                            onerror="this.onerror=null;this.src='{{ asset('home2/assets/img/sample.png') }}';"
-                            class="w-full h-48 object-cover rounded-t-2xl" />
-                        <div class="p-4 relative">
-                            <span class="absolute top-4 right-4 bg-purple-100 text-purple-700 dark:bg-purple-800/30 dark:text-purple-300 text-sm font-medium px-3 py-1 rounded-full">
-                                ${product.category.name || 'Product'}
-                            </span>
-                            <p class="text-2xl font-bold text-purple-700 dark:text-purple-400 mb-1">
-                                Rp${parseFloat(product.price).toLocaleString()}
-                            </p>
-                            <p class="text-lg font-semibold text-purple-700 dark:text-white mb-1">${product.name}</p>
-                            <p class="text-gray-600 dark:text-zinc-300 text-sm">${product.description}</p>
-                        </div>
-                    </div>
-                    `);
+                            <div class="rounded-2xl overflow-hidden  border border-transparent hover:border-purple-700 shadow-md hover:shadow-xl bg-white dark:bg-zinc-800 transition-colors duration-300 product-card" data-product='${JSON.stringify(product)}'>
+                                <img src="${product.image ? `/${product.image}` : '/images/default-product.png'}"
+                                    alt="${product.name}"
+                                    onerror="this.onerror=null;this.src='{{ asset('home2/assets/img/sample.png') }}';"
+                                    class="w-full h-48 object-cover rounded-t-2xl" />
+                                <div class="p-4 relative">
+                                    <span class="absolute top-4 right-4 bg-purple-100 text-purple-700 dark:bg-purple-800/30 dark:text-purple-300 text-sm font-medium px-3 py-1 rounded-full">
+                                        ${product.category.name || 'Product'}
+                                    </span>
+                                <p class="text-2xl font-bold text-purple-700 dark:text-purple-400 mb-1">
+                                    ${
+                                        product.discount != 0
+                                        ? `<del class="text-gray-500 mr-2">Rp ${parseFloat(product.price).toLocaleString()}</del><span class="text-sm text-red-600">${product.discount }% Off</span><br>
+                                                    Rp ${parseFloat(product.price_final).toLocaleString()}`
+                                        : `Rp ${parseFloat(product.price).toLocaleString()}`
+                                    }
+                                    </p>
+                                    <p class="text-lg font-semibold text-purple-700 dark:text-white mb-1">${product.name}</p>
+                                    <p class="text-gray-600 dark:text-zinc-300 text-sm">${product.description}</p>
+                                </div>
+                            </div>
+                            `);
                         });
 
                         if (!categoryId) {

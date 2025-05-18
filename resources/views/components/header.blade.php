@@ -25,6 +25,12 @@
                 </div>
             </div>
         </li>
+        <a href="#" class="nav-link nav-link-lg beep" data-toggle="modal" data-target="#helpModal">
+            <i class="fas fa-question"></i>
+            <div class="d-sm-none d-lg-inline-block">
+                Help
+            </div>
+        </a>
 
 
         <li class="dropdown">
@@ -98,6 +104,58 @@
             <div class="modal-body">
                 <p id="notification-message"></p>
                 <small class="text-muted" id="notification-date"></small>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal help -->
+<div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-primary"><i class="fa fa-circle-info"></i> Help</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @if (app()->getLocale() == 'en')
+                    <h4>How to Use the Application</h4>
+                    <ol>
+                        <li>Complete your store data (store name, address, location, opening hours, and photo).</li>
+                        <li>Create products in the <strong>Products</strong> menu.</li>
+                        <li>Add raw materials in the <strong>Raw Materials</strong> menu.</li>
+                        <li>Assign raw materials to each product by clicking the <strong>“Raw Materials”</strong> button
+                            on the product.</li>
+                        <li>Download the <strong>BOMI POS</strong> on google playstore.</li>
+                        <li>Log in to the cashier app using the same account.</li>
+                        <li>Enjoy the <strong>Dashboard</strong> features, product management, and comprehensive
+                            reports.</li>
+                        <li>We’re happy you’re using our application.<br><strong>Warm regards from the BOMI POS
+                                team!</strong></li>
+                    </ol>
+                @else
+                    <h4>Langkah-Langkah Penggunaan Aplikasi</h4>
+                    <ol>
+                        <li>Lengkapi data toko Anda (nama toko, alamat, lokasi, jam buka, dan foto).</li>
+                        <li>Buat produk pada menu <strong>Produk</strong>.</li>
+                        <li>Tambahkan bahan baku pada menu <strong>Bahan Baku</strong>.</li>
+                        <li>Masukkan bahan baku ke dalam produk dengan klik tombol <strong>“Bahan Baku”</strong> pada
+                            masing-masing produk.</li>
+                        <li>Unduh aplikasi <strong>BOMI POS</strong> pada google playstore</li>
+                        <li>Login ke aplikasi kasir menggunakan akun yang sama.</li>
+                        <li>Nikmati fitur <strong>Dashboard</strong>, manajemen produk, dan laporan yang lengkap.</li>
+                        <li>Kami senang Anda menggunakan aplikasi kami.<br><strong>Salam hangat dari tim BOMI
+                                POS!</strong></li>
+                    </ol>
+                @endif
+                <div class="text-center">
+                    <a href="{{ route('user.dashboard') }}" class="btn btn-lg btn-primary"><i class="fa fa-message"></i> Support on live chat</a>
+                    <a href="https://wa.me/6282248493036?text=Halo%20tim%20BOMI%20POS%2C%20saya%20ingin%20bertanya%20tentang%20penggunaan%20aplikasi%20BOMI%20POS.%20Mohon%20bantuannya." class="btn btn-lg btn-success" target="_blank">
+                        <i class="fa-brands fa-whatsapp"></i> Support on Whatsapp
+                    </a>
+                </div>
             </div>
         </div>
     </div>

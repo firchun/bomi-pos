@@ -115,8 +115,11 @@ Route::middleware(['auth','verified'])->group(function () {
         Route::resource('advertisement', AdsController::class);
         // product
         Route::resource('products', ProductController::class);
+        Route::post('/products/update-discount', [ProductController::class, 'updateDiscount'])->name('products.updateDiscount');
         Route::get('products/ingredient/{id}', [ProductController::class,'ingredient'])->name('products.ingredient');
+        // ingredients
         Route::post('/ingredient-dish/store', [IngredientController::class, 'storeDish'])->name('ingredient-dish.store');
+        Route::delete('/ingredient-dish/destroy/{id}', [IngredientController::class, 'destroyDish'])->name('ingredient-dish.destroy');
         Route::resource('categories', CategoryController::class);
         // ingredient
         Route::resource('ingredient', IngredientController::class);
