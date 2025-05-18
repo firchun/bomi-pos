@@ -31,7 +31,7 @@ class AuthController extends Controller
 
         //check if the password is correct
         if (!Hash::check($request->password, $user->password)) {
-            SecurityLogService::logFailedLogin($request->email);
+            // SecurityLogService::logFailedLogin($request->email);
             return response()->json([
                 'status' => 'error',
                 'message' => 'Invalid credentials'
@@ -54,7 +54,7 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         // Log logout
-        SecurityLogService::logLogout($request->user());
+        // SecurityLogService::logLogout($request->user());
 
         $request->user()->currentAccessToken()->delete();
 
