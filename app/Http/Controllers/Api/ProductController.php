@@ -17,15 +17,15 @@ class ProductController extends Controller
 
         $products = \App\Models\Product::where('user_id', Auth::id())
             ->orderBy('id', 'desc')
-            ->get()
-            ->map(function ($product) {
-                if ($product->discount != 0) {
-                    $product->price = $product->final_price;
-                }
-                return $product;
-            });
+            ->get();
 
         $products->load('category');
+        
+        $products->each(function ($product) {
+            if ($product->discount != 0) {
+                $product->price = $product->final_price;
+            }
+        });
         return response()->json([
             'success' => true,
             'message' => 'List Data Product',
