@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @if (app()->getLocale() == 'en')
-@section('title', 'Edit Advertisement')
+    @section('title', 'Edit Advertisement')
 @else
-@section('title', 'Sunting Iklan')
+    @section('title', 'Sunting Iklan')
 @endif
 
 @push('style')
@@ -67,15 +67,15 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                          @if($ads->image)
-                          <img src="{{ asset($ads->image) }}" alt=""
-                                        style="width:100%; max-height:300px; object-fit:cover; cursor:pointer"
-                                        class="img-thumbnail" data-image="{{ asset($ads->image) }}"
-                                        onerror="this.onerror=null; this.src='{{ asset('home2/assets/img/sample.png') }}';">
-                                        @endif
+                            @if ($ads->image)
+                                <img src="{{ asset($ads->image) }}" alt=""
+                                    style="width:100%; max-height:300px; object-fit:cover; cursor:pointer"
+                                    class="img-thumbnail" data-image="{{ asset($ads->image) }}"
+                                    onerror="this.onerror=null; this.src='{{ asset('home2/assets/img/sample.png') }}';">
+                            @endif
                             <div class="card mt-2">
                                 <div class="card-body">
-                                    
+
                                     <div class="form-group">
                                         <label class="form-label">Photo / flyer</label>
                                         <input type="file" class="form-control @error('image') is-invalid @enderror"
@@ -97,7 +97,8 @@
                                     </div>
                                 </div>
                                 <div class="card-footer text-center">
-                                    <button type="submit" class="btn btn-lg btn-primary"><i class="fa fa-save"></i> Submit</button>
+                                    <button type="submit" class="btn btn-lg btn-primary"><i class="fa fa-save"></i>
+                                        Submit</button>
                                 </div>
                             </div>
                         </div>

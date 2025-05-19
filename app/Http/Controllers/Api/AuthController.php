@@ -22,7 +22,7 @@ class AuthController extends Controller
         //check if the user exists
         $user = User::where('email', $request->email)->first();
         if (!$user) {
-            SecurityLogService::logFailedLogin($request->email);
+            // SecurityLogService::logFailedLogin($request->email);
             return response()->json([
                 'status' => 'error',
                 'message' => 'User not found'
@@ -41,7 +41,7 @@ class AuthController extends Controller
         //generate token
         $token = $user->createToken('auth-token')->plainTextToken;
         // Log successful login
-        SecurityLogService::logLogin($user);
+        // SecurityLogService::logLogin($user);
 
         return response()->json([
             'status' => 'success',
