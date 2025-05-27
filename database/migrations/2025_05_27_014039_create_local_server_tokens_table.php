@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tables', function (Blueprint $table) {
+        Schema::create('local_server_tokens', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->string('slug')->nullable();
-            $table->string('name');
-            $table->string('description')->nullable();
+            $table->string('token')->unique();
+            $table->string('name_server');
+            $table->string('address_server');
+            $table->string('phone')->nullable();
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tables');
+        Schema::dropIfExists('local_server_tokens');
     }
 };

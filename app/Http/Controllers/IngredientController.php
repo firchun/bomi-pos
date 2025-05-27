@@ -73,21 +73,21 @@ class IngredientController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Ingredient successfully added.');
-    } 
+    }
     public function destroy($id)
     {
-      
+
         $ingredient = Ingredient::find($id);
-        
+
         $ingredient->delete();
 
         return redirect()->back()->with('success', 'ingredient deleted successfully');
     }
     public function destroyDish($id)
     {
-      
+
         $ingredient = IngredientDish::find($id);
-        
+
         $ingredient->delete();
 
         return redirect()->back()->with('success', 'ingredient deleted successfully');

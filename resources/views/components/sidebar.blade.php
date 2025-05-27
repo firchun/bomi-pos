@@ -40,7 +40,8 @@
                 @if (Auth::user()->role == 'user')
                     <li class='nav-item {{ request()->routeIs('advertisement*') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ route('advertisement.index') }}">
-                            <i class="fas fa-rectangle-ad"></i><span class="nav-text">{{__('general.Advertisement')}}</span>
+                            <i class="fas fa-rectangle-ad"></i><span
+                                class="nav-text">{{ __('general.Advertisement') }}</span>
                         </a>
                     </li>
                     <li class='nav-item {{ request()->is('ratings*') ? 'active' : '' }}'>
@@ -48,26 +49,27 @@
                             <i class="fas fa-star"></i><span
                                 class="nav-text">{{ __('general.comment & rating') }}</span></a>
                     </li>
-                    <li class="menu-header">{{__('general.product')}}</li>
+                    <li class="menu-header">{{ __('general.product') }}</li>
                     <li class='nav-item {{ request()->is('products*') ? 'active' : '' }}'>
-                        <a class="nav-link" href="{{ route('products.index') }}"><i class="fas fa-folder-open"></i><span
+                        <a class="nav-link" href="{{ route('products.index') }}"><i
+                                class="fas fa-folder-open"></i><span
                                 class="nav-text">{{ __('general.products') }}</span></a>
                     </li>
                     <li class='nav-item {{ request()->is('ingredient') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ route('ingredient.index') }}"><i class="fas fa-box"></i><span
-                                class="nav-text">{{__('general.ingredients')}}</span></a>
+                                class="nav-text">{{ __('general.ingredients') }}</span></a>
                     </li>
                     <li class='nav-item {{ request()->is('calendar*') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ route('calendar') }}"><i class="fas fa-calendar"></i><span
                                 class="nav-text">Calendar</span></a>
                     </li>
-                   
+
                     {{-- <li class='nav-item {{ request()->is('categories*') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ route('categories.index') }}"><i class="fas fa-sitemap"></i><span
                                 class="nav-text">Categories</span></a>
                     </li> --}}
 
-                   
+
                     <li class="menu-header">{{ __('general.report') }}</li>
                     <li class='nav-item {{ request()->is('daily-report*') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ route('daily.report') }}"><i class="fas fa-chart-line"></i><span
@@ -78,7 +80,8 @@
                                 class="nav-text">{{ __('general.product report') }}</span></a>
                     </li>
                     <li class='nav-item {{ request()->is('ingredient-report*') ? 'active' : '' }}'>
-                        <a class="nav-link" href="{{ route('ingredient.report') }}"><i class="fas fa-chart-line"></i><span
+                        <a class="nav-link" href="{{ route('ingredient.report') }}"><i
+                                class="fas fa-chart-line"></i><span
                                 class="nav-text">{{ __('general.ingredient report') }}</span></a>
                     </li>
                     {{-- <li class="nav-item dropdown {{ Request::is('financial*') ? 'active' : '' }}">
@@ -120,46 +123,49 @@
                         <a class="nav-link" href="{{ route('shop-profiles.index') }}"><i class="fas fa-store"></i><span
                                 class="nav-text">Shop Profile</span></a>
                     </li>
-                    <li class="nav-item {{ request()->routeIs('user.dashboard') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('user.dashboard') }}">
-                            <i class="fas fa-comments"></i><span class="nav-text">Support Chat</span>
-                        </a>
-                    </li>
+                    @if (!App::environment('local'))
+                        <li class="nav-item {{ request()->routeIs('user.dashboard') ? 'active' : '' }}">
+                            <a class="nav-link" href="{{ route('user.dashboard') }}">
+                                <i class="fas fa-comments"></i><span class="nav-text">Support Chat</span>
+                            </a>
+                        </li>
+                    @endif
                 @endif
                 {{-- menu admin --}}
                 @if (Auth::user()->role == 'admin')
                     <li class="menu-header">Account</li>
-                    <li class='nav-item {{ request()->is('users*') ? 'active' : '' }}'>
+                    <li class='nav-item {{ request()->is('users/admin') ? 'active' : '' }}'>
+                        <a class="nav-link" href="{{ route('users.admin') }}"><i class="fas fa-house-user"></i><span
+                                class="nav-text">Admin Bomi</span></a>
+                    </li>
+                    <li class='nav-item {{ request()->is('users') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ route('users.index') }}"><i class="fas fa-house-user"></i><span
                                 class="nav-text">Users</span></a>
                     </li>
-                    <li class="menu-header">Inventory</li>
+                    <li class='nav-item {{ request()->is('admin/subscription*') ? 'active' : '' }}'>
+                        <a class="nav-link" href="{{ route('subscription.index') }}"><i class="fas fa-house-user"></i>
+                            <span class="nav-text">Subscription</span>
+                        </a>
+                    </li>
+                    <li class="menu-header">Pages</li>
                     <li class='nav-item {{ request()->is('admin-products*') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ route('admin-products.index') }}">
-                            <i class="fas fa-box"></i><span class="nav-text">Admin Products</span>
+                            <i class="fas fa-box"></i><span class="nav-text">Bomi Products</span>
                         </a>
                     </li>
-                    <li class="menu-header">Chat</li>
-                    <li class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('admin.dashboard') }}">
-                            <i class="fas fa-comments"></i>
-                            <span class="nav-text">Messages</span>
-                            <span id="sidebar-unread-count" class="badge badge-pill badge-danger"
-                                style="display: none; position: absolute; top: 8px; right: 8px;">0</span>
-                        </a>
-                    </li>
-                    <li class="menu-header">Admin</li>
                     <li class='nav-item {{ request()->is('admin_profiles') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ route('admin_profiles.index') }}"><i
                                 class="fas fa-house-user"></i>
-                            <span class="nav-text">Admin Profile</span>
+                            <span class="nav-text">Page Settings</span>
                         </a>
                     </li>
-                    <li class="menu-header">Subscription</li>
-                    <li class='nav-item {{ request()->is('subscription*') ? 'active' : '' }}'>
-                        <a class="nav-link" href="{{ route('subscription.index') }}"><i
-                                class="fas fa-house-user"></i>
-                            <span class="nav-text">Update Subscription</span>
+                    <li class="menu-header">Support</li>
+                    <li class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('admin.dashboard') }}">
+                            <i class="fas fa-comments"></i>
+                            <span class="nav-text">Live Chat</span>
+                            <span id="sidebar-unread-count" class="badge badge-pill badge-danger"
+                                style="display: none; position: absolute; top: 8px; right: 8px;">0</span>
                         </a>
                     </li>
                 @endif

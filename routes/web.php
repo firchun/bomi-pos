@@ -25,6 +25,7 @@ use App\Http\Controllers\IngredientCategoryController;
 use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\SyncController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 
@@ -40,11 +41,31 @@ use Illuminate\Http\Request;
 |
 */
 // homepage
-Route::get('/', [HomePageController::class, 'index'])->name('homepage');
-Route::get('shop-page', [HomePageController::class, 'outlet'])->name('shop-page');
-Route::get('/shop/{slug}', [HomePageController::class, 'outlet_details'])->name('shop.details');
-Route::get('bomi-products', [HomePageController::class, 'bomiProduct'])->name('bomi-products.home');
+Route::get('/', [HomePageController::class, 'index'])
+    ->middleware('local.redirect')
+    ->name('homepage');
+Route::get('shop-page', [HomePageController::class, 'outlet'])
+    ->middleware('local.to.online')
+    ->name('shop-page');
+Route::get('/shop/{slug}', [HomePageController::class, 'outlet_details'])
+    ->middleware('local.to.online')
+    ->name('shop.details');
+Route::get('bomi-products', [HomePageController::class, 'bomiProduct'])
+    ->middleware('local.to.online')
+    ->name('bomi-products.home');
+
+
 // end homepage
+// check network
+Route::get('/check-network', function () {
+    return response()->json([
+        'online' => \App\Helpers\Network::isOnline(),
+    ]);
+});
+// singkronisasi data
+Route::post('/api/upload-users', [SyncController::class, 'uploadUsers']);
+Route::get('/api/download-users', [SyncController::class, 'downloadUsers']);
+Route::get('/sync-users', [SyncController::class, 'syncUsersWithCloud']); // Di sisi lokal
 
 // Route::get('shop-page', [ShopPageController::class, 'shop_page'])->name('shop-page');
 // Route::get('/shop/{slug}', [ShopPageController::class, 'shop_details'])->name('shop.details');
@@ -90,7 +111,7 @@ Route::post('/email/verification-notification', function (Request $request) {
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 // languange
 Route::post('/change-language', [App\Http\Controllers\LanguageController::class, 'change'])->name('change.language');
-Route::middleware(['auth','verified'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('dashboard', [HomeController::class, 'index'])->name('home');
     Route::get('/dashboard-data', [HomeController::class, 'getDashboardData'])->name('dashboard.data');
@@ -116,7 +137,7 @@ Route::middleware(['auth','verified'])->group(function () {
         // product
         Route::resource('products', ProductController::class);
         Route::post('/products/update-discount', [ProductController::class, 'updateDiscount'])->name('products.updateDiscount');
-        Route::get('products/ingredient/{id}', [ProductController::class,'ingredient'])->name('products.ingredient');
+        Route::get('products/ingredient/{id}', [ProductController::class, 'ingredient'])->name('products.ingredient');
         // ingredients
         Route::post('/ingredient-dish/store', [IngredientController::class, 'storeDish'])->name('ingredient-dish.store');
         Route::delete('/ingredient-dish/destroy/{id}', [IngredientController::class, 'destroyDish'])->name('ingredient-dish.destroy');
@@ -176,6 +197,7 @@ Route::middleware(['auth','verified'])->group(function () {
         });
     });
     Route::middleware(['role:admin'])->group(function () {
+        Route::get('users/admin', [UserController::class, 'admin'])->name('users.admin');
         Route::resource('users', UserController::class);
 
         Route::prefix('admin-products')->name('admin-products.')->group(function () {

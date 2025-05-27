@@ -1,4 +1,6 @@
-<div class="navbar-bg"></div>
+<div class="navbar-bg"
+    style="{{ Auth::user()->role == 'admin' || Auth::user()->role == 'staff' ? 'background-color:#00008B !important;' : '' }}">
+</div>
 <nav class="navbar navbar-expand-lg main-navbar">
     <form class="form-inline mr-auto">
         <ul class="navbar-nav mr-3">
@@ -6,6 +8,20 @@
                         style="cursor: pointer"></i></a></li>
         </ul>
     </form>
+    @if (App::environment('local'))
+        <ul class="navbar-nav navbar-right">
+            <li class="dropdown dropdown-list-toggle">
+                <a href="#" class="nav-link nav-link-lg" data-toggle="tooltip" data-placement="bottom"
+                    title="{{ \App\Helpers\Network::isOnline() ? 'Online Network' : 'Local Network' }}">
+                    @if (\App\Helpers\Network::isOnline())
+                        <i class="fas fa-wifi"></i>
+                    @else
+                        <i class="fas fa-network-wired"></i>
+                    @endif
+                </a>
+            </li>
+        </ul>
+    @endif
     <ul class="navbar-nav navbar-right">
         <li class="dropdown dropdown-list-toggle ">
             <a href="#" data-toggle="dropdown" class="nav-link nav-link-lg message-toggle beep"
@@ -25,12 +41,14 @@
                 </div>
             </div>
         </li>
-        <a href="#" class="nav-link nav-link-lg beep" data-toggle="modal" data-target="#helpModal">
-            <i class="fas fa-question"></i>
-            <div class="d-sm-none d-lg-inline-block">
-                Help
-            </div>
-        </a>
+        @if (Auth::user()->role != 'admin' && Auth::user()->role != 'staff')
+            <a href="#" class="nav-link nav-link-lg beep" data-toggle="modal" data-target="#helpModal">
+                <i class="fas fa-question"></i>
+                <div class="d-sm-none d-lg-inline-block">
+                    Help
+                </div>
+            </a>
+        @endif
 
 
         <li class="dropdown">
@@ -151,8 +169,10 @@
                     </ol>
                 @endif
                 <div class="text-center">
-                    <a href="{{ route('user.dashboard') }}" class="btn btn-lg btn-primary"><i class="fa fa-message"></i> Support on live chat</a>
-                    <a href="https://wa.me/6282248493036?text=Halo%20tim%20BOMI%20POS%2C%20saya%20ingin%20bertanya%20tentang%20penggunaan%20aplikasi%20BOMI%20POS.%20Mohon%20bantuannya." class="btn btn-lg btn-success" target="_blank">
+                    <a href="{{ route('user.dashboard') }}" class="btn btn-lg btn-primary"><i
+                            class="fa fa-message"></i> Support on live chat</a>
+                    <a href="https://wa.me/6282248493036?text=Halo%20tim%20BOMI%20POS%2C%20saya%20ingin%20bertanya%20tentang%20penggunaan%20aplikasi%20BOMI%20POS.%20Mohon%20bantuannya."
+                        class="btn btn-lg btn-success" target="_blank">
                         <i class="fa-brands fa-whatsapp"></i> Support on Whatsapp
                     </a>
                 </div>

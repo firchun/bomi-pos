@@ -67,13 +67,15 @@
                                         </thead>
                                         <tbody>
                                             @foreach ($ingredient as $data)
+                                                {{-- {{ dd($data) }} --}}
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $data->name }}</td>
-                                                    <td><b>{{$data->qty .' '. $data->sub_unit .' /'.$data->unit}}</b></td>
+                                                    <td><b>{{ $data->qty . ' ' . $data->sub_unit . ' /' . $data->unit }}</b>
+                                                    </td>
                                                     <td class="text-primary">
                                                         <div class="p-2"><i class="fa-regular fa-folder"></i>
-                                                            {{ $data->category->category }}</div>
+                                                            {{ $data->category->category ?? '-' }}</div>
                                                     </td>
                                                     <td>
                                                         <button type="button" class="btn btn-sm btn-warning"
@@ -148,9 +150,11 @@
                                 @enderror
                                 <div class="p-2 bg-light border rounded mt-2">
                                     @if (app()->getLocale() == 'en')
-                                        Example: <strong>kg</strong>, <strong>liter</strong>, <strong>pcs</strong> — this is the main unit used for purchasing ingredients.
+                                        Example: <strong>kg</strong>, <strong>liter</strong>, <strong>pcs</strong> — this is
+                                        the main unit used for purchasing ingredients.
                                     @else
-                                        Contoh: <strong>kg</strong>, <strong>liter</strong>, <strong>pcs</strong> — ini adalah satuan utama untuk pembelian bahan.
+                                        Contoh: <strong>kg</strong>, <strong>liter</strong>, <strong>pcs</strong> — ini
+                                        adalah satuan utama untuk pembelian bahan.
                                     @endif
                                 </div>
                             </div>
@@ -159,16 +163,18 @@
                                     <div class="form-group">
                                         <label for="name">Qty Sub Unit</label>
                                         <input type="number" name="qty"
-                                            class="form-control @error('qty') is-invalid @enderror" value="{{ $data->qty }}"
-                                             required>
+                                            class="form-control @error('qty') is-invalid @enderror"
+                                            value="{{ $data->qty }}" required>
                                         @error('qty')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                         <div class="p-2 bg-light border rounded mt-2">
                                             @if (app()->getLocale() == 'en')
-                                                Example: <strong>12</strong> — means 1 <em>unit</em> contains 12 <em>sub-units</em>.
+                                                Example: <strong>12</strong> — means 1 <em>unit</em> contains 12
+                                                <em>sub-units</em>.
                                             @else
-                                                Contoh: <strong>12</strong> — berarti 1 <em>unit</em> berisi 12 <em>sub unit</em>.
+                                                Contoh: <strong>12</strong> — berarti 1 <em>unit</em> berisi 12 <em>sub
+                                                    unit</em>.
                                             @endif
                                         </div>
                                     </div>
@@ -178,16 +184,18 @@
                                     <div class="form-group">
                                         <label for="name">Sub Unit</label>
                                         <input type="text" name="sub_unit"
-                                            class="form-control @error('sub_unit') is-invalid @enderror" value="{{ $data->sub_unit }}"
-                                            placeholder="sub unit : pcs/cup" required>
+                                            class="form-control @error('sub_unit') is-invalid @enderror"
+                                            value="{{ $data->sub_unit }}" placeholder="sub unit : pcs/cup" required>
                                         @error('sub_unit')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                         <div class="p-2 bg-light border rounded mt-2">
                                             @if (app()->getLocale() == 'en')
-                                                Example: <strong>pcs</strong>, <strong>cup</strong> — the smallest unit used in the kitchen.
+                                                Example: <strong>pcs</strong>, <strong>cup</strong> — the smallest unit used
+                                                in the kitchen.
                                             @else
-                                                Contoh: <strong>pcs</strong>, <strong>cup</strong> — satuan terkecil yang digunakan di dapur.
+                                                Contoh: <strong>pcs</strong>, <strong>cup</strong> — satuan terkecil yang
+                                                digunakan di dapur.
                                             @endif
                                         </div>
                                     </div>
@@ -282,9 +290,11 @@
                             @enderror
                             <div class="p-2 bg-light border rounded mt-2">
                                 @if (app()->getLocale() == 'en')
-                                    Example: <strong>kg</strong>, <strong>liter</strong>, <strong>pcs</strong> — this is the main unit used for purchasing ingredients.
+                                    Example: <strong>kg</strong>, <strong>liter</strong>, <strong>pcs</strong> — this is the
+                                    main unit used for purchasing ingredients.
                                 @else
-                                    Contoh: <strong>kg</strong>, <strong>liter</strong>, <strong>pcs</strong> — ini adalah satuan utama untuk pembelian bahan.
+                                    Contoh: <strong>kg</strong>, <strong>liter</strong>, <strong>pcs</strong> — ini adalah
+                                    satuan utama untuk pembelian bahan.
                                 @endif
                             </div>
                         </div>
@@ -293,16 +303,17 @@
                                 <div class="form-group">
                                     <label for="name">Qty Sub Unit</label>
                                     <input type="number" name="qty"
-                                        class="form-control @error('qty') is-invalid @enderror"
-                                        value="0" required>
+                                        class="form-control @error('qty') is-invalid @enderror" value="0" required>
                                     @error('qty')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                     <div class="p-2 bg-light border rounded mt-2">
                                         @if (app()->getLocale() == 'en')
-                                            Example: <strong>12</strong> — means 1 <em>unit</em> contains 12 <em>sub-units</em>.
+                                            Example: <strong>12</strong> — means 1 <em>unit</em> contains 12
+                                            <em>sub-units</em>.
                                         @else
-                                            Contoh: <strong>12</strong> — berarti 1 <em>unit</em> berisi 12 <em>sub unit</em>.
+                                            Contoh: <strong>12</strong> — berarti 1 <em>unit</em> berisi 12 <em>sub
+                                                unit</em>.
                                         @endif
                                     </div>
                                 </div>
@@ -319,9 +330,11 @@
                                     @enderror
                                     <div class="p-2 bg-light border rounded mt-2">
                                         @if (app()->getLocale() == 'en')
-                                            Example: <strong>pcs</strong>, <strong>cup</strong> — the smallest unit used in the kitchen.
+                                            Example: <strong>pcs</strong>, <strong>cup</strong> — the smallest unit used in
+                                            the kitchen.
                                         @else
-                                            Contoh: <strong>pcs</strong>, <strong>cup</strong> — satuan terkecil yang digunakan di dapur.
+                                            Contoh: <strong>pcs</strong>, <strong>cup</strong> — satuan terkecil yang
+                                            digunakan di dapur.
                                         @endif
                                     </div>
                                 </div>

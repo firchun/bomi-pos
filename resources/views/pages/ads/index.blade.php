@@ -23,15 +23,15 @@
             @if ($ads->count() <= 2)
                 <a href="{{ route('advertisement.create') }}" class="btn btn-primary"><i class="fa fa-plus"></i> Add New
                     Advertisement</a>
-                    @endif
-                    <a href="{{ route('shop.details', $shop->slug) }}" class="btn btn-success "><i
-                      class="fa fa-share"></i>
-                  @if (app()->getLocale() == 'en')
-                      Visit your page
-                  @else
-                      Kunjungi halamanmu
-                  @endif
-              </a>
+            @endif
+            <a href="{{ route('shop.details', $shop->slug) }}" target="__blank" class="btn btn-success "><i
+                    class="fa fa-share"></i>
+                @if (app()->getLocale() == 'en')
+                    Visit your page
+                @else
+                    Kunjungi halamanmu
+                @endif
+            </a>
             <p class="my-2 p-2 border rounded bg-light text-dark"> <i class="fa fa-circle-exclamation text-danger"></i>
                 @if (app()->getLocale() == 'en')
                     Maximum advertisement and promotion is 3, if you want to add you can delete one of them
@@ -40,7 +40,7 @@
                     satunya
                 @endif
             </p>
-          
+
             <div class="section-body">
 
                 <div class="row">
