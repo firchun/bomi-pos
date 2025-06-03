@@ -123,13 +123,21 @@
                         <a class="nav-link" href="{{ route('shop-profiles.index') }}"><i class="fas fa-store"></i><span
                                 class="nav-text">Shop Profile</span></a>
                     </li>
+
+
                     @if (!App::environment('local'))
                         <li class="nav-item {{ request()->routeIs('user.dashboard') ? 'active' : '' }}">
                             <a class="nav-link" href="{{ route('user.dashboard') }}">
                                 <i class="fas fa-comments"></i><span class="nav-text">Support Chat</span>
                             </a>
                         </li>
+                        <li class="menu-header">Setting</li>
+                        <li class='nav-item {{ request()->is('local-server*') ? 'active' : '' }}'>
+                            <a class="nav-link" href="{{ route('local-server.index') }}"><i
+                                    class="fas fa-store"></i><span class="nav-text">Server Token</span></a>
+                        </li>
                     @endif
+
                 @endif
                 {{-- menu admin --}}
                 @if (Auth::user()->role == 'admin')

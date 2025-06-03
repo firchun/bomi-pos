@@ -23,12 +23,14 @@ use App\Http\Controllers\IncomeExpenseCategoryController;
 use App\Http\Controllers\IncomeExpenseController;
 use App\Http\Controllers\IngredientCategoryController;
 use App\Http\Controllers\IngredientController;
+use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\LocalServerTokenController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\SyncController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\App;
 
 /*
 |--------------------------------------------------------------------------
@@ -110,7 +112,7 @@ Route::post('/email/verification-notification', function (Request $request) {
     return back()->with('status', 'verification-link-sent');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 // languange
-Route::post('/change-language', [App\Http\Controllers\LanguageController::class, 'change'])->name('change.language');
+Route::post('/change-language', [LanguageController::class, 'change'])->name('change.language');
 Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('dashboard', [HomeController::class, 'index'])->name('home');
@@ -127,7 +129,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/subscribe', [SubscriptionController::class, 'store']);
     Route::put('profile/update/{id}', [UserController::class, 'update'])->name('profile.update');
     Route::middleware(['role:user'])->group(function () {
-
+        if (App::environment() !== 'local') {
+            // token server
+            Route::get('/local-server', [LocalServerTokenController::class, 'index'])->name('local-server.index');
+            Route::post('/generate-token', [LocalServerTokenController::class, 'generate'])->name('generate-token');
+        }
         // update pro
         Route::post('/subscription/update-pro/{userId}', [SubscriptionController::class, 'updatePro'])->name('subscription.updatePro');
         // calendar
@@ -159,13 +165,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/ratings', [RatingController::class, 'index'])->name('ratings.index');
         Route::get('/comment/{shopId}', [RatingController::class, 'fetchCommentsAdmin'])->name('comments.fetch');
         Route::delete('/ratings/delete/{id}', [RatingController::class, 'deleteComment'])->name('ratings.delete');
-
-        Route::get('/chat', [ChatController::class, 'userChat'])->name('user.chat');
-        Route::post('/message/send-user', [ChatController::class, 'sendMessageUser'])->name('message.sendUser');
-        Route::get('/user', [ChatController::class, 'userDashboard'])->name('user.dashboard');
-        Route::post('/user/get-messages', [ChatController::class, 'getUserMessages'])->name('user.getMessages');
-        Route::post('/user/send-message', [ChatController::class, 'sendMessageToAdmin'])->name('user.sendMessage');
-
+        if (App::environment() !== 'local') {
+            Route::get('/chat', [ChatController::class, 'userChat'])->name('user.chat');
+            Route::post('/message/send-user', [ChatController::class, 'sendMessageUser'])->name('message.sendUser');
+            Route::get('/user', [ChatController::class, 'userDashboard'])->name('user.dashboard');
+            Route::post('/user/get-messages', [ChatController::class, 'getUserMessages'])->name('user.getMessages');
+            Route::post('/user/send-message', [ChatController::class, 'sendMessageToAdmin'])->name('user.sendMessage');
+        }
         Route::get('/home-pos', Pos::class)->name('user.pos');
         Route::get('/payment', Payment::class)->name('user.payment');
 
@@ -196,30 +202,32 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/financial/expenses', [IncomeExpenseController::class, 'expenses'])->name('financial.expenses');
         });
     });
-    Route::middleware(['role:admin'])->group(function () {
-        Route::get('users/admin', [UserController::class, 'admin'])->name('users.admin');
-        Route::resource('users', UserController::class);
+    if (App::environment() !== 'local') {
+        Route::middleware(['role:admin'])->group(function () {
+            Route::get('users/admin', [UserController::class, 'admin'])->name('users.admin');
+            Route::resource('users', UserController::class);
 
-        Route::prefix('admin-products')->name('admin-products.')->group(function () {
-            Route::get('/', [AdminProductController::class, 'index'])->name('index');
-            Route::get('/create', [AdminProductController::class, 'create'])->name('create');
-            Route::post('/', [AdminProductController::class, 'store'])->name('store');
-            Route::get('/{adminproduct}/edit', [AdminProductController::class, 'edit'])->name('edit');
-            Route::put('/{adminproduct}', [AdminProductController::class, 'update'])->name('update');
-            Route::delete('/{adminproduct}', [AdminProductController::class, 'destroy'])->name('destroy');
+            Route::prefix('admin-products')->name('admin-products.')->group(function () {
+                Route::get('/', [AdminProductController::class, 'index'])->name('index');
+                Route::get('/create', [AdminProductController::class, 'create'])->name('create');
+                Route::post('/', [AdminProductController::class, 'store'])->name('store');
+                Route::get('/{adminproduct}/edit', [AdminProductController::class, 'edit'])->name('edit');
+                Route::put('/{adminproduct}', [AdminProductController::class, 'update'])->name('update');
+                Route::delete('/{adminproduct}', [AdminProductController::class, 'destroy'])->name('destroy');
+            });
+
+            Route::get('admin_profiles', [AdminProfileController::class, 'index'])->name('admin_profiles.index');
+            Route::post('admin_profiles', [AdminProfileController::class, 'store'])->name('admin_profiles.store');
+            Route::put('admin_profiles/{admin_profile}', [AdminProfileController::class, 'update'])->name('admin_profiles.update');
+
+            Route::get('/admin/dashboard', [ChatController::class, 'adminDashboard'])->name('admin.dashboard');
+            Route::get('/admin/get-users', [ChatController::class, 'getUserList'])->name('admin.getUserList');
+            Route::post('/admin/get-messages', [ChatController::class, 'getAdminMessages'])->name('admin.getMessages');
+            Route::post('/admin/send-message', [ChatController::class, 'sendMessageToUser'])->name('admin.sendMessage');
+            Route::get('/admin/get-unread-counts', [ChatController::class, 'getUnreadCounts'])->name('admin.getUnreadCounts');
+            // subscription
+            Route::get('/admin/subscriptions', [SubscriptionController::class, 'index'])->name('subscription.index');
+            Route::post('/admin/subscriptions/update', [SubscriptionController::class, 'update'])->name('subscription.update');
         });
-
-        Route::get('admin_profiles', [AdminProfileController::class, 'index'])->name('admin_profiles.index');
-        Route::post('admin_profiles', [AdminProfileController::class, 'store'])->name('admin_profiles.store');
-        Route::put('admin_profiles/{admin_profile}', [AdminProfileController::class, 'update'])->name('admin_profiles.update');
-
-        Route::get('/admin/dashboard', [ChatController::class, 'adminDashboard'])->name('admin.dashboard');
-        Route::get('/admin/get-users', [ChatController::class, 'getUserList'])->name('admin.getUserList');
-        Route::post('/admin/get-messages', [ChatController::class, 'getAdminMessages'])->name('admin.getMessages');
-        Route::post('/admin/send-message', [ChatController::class, 'sendMessageToUser'])->name('admin.sendMessage');
-        Route::get('/admin/get-unread-counts', [ChatController::class, 'getUnreadCounts'])->name('admin.getUnreadCounts');
-        // subscription
-        Route::get('/admin/subscriptions', [SubscriptionController::class, 'index'])->name('subscription.index');
-        Route::post('/admin/subscriptions/update', [SubscriptionController::class, 'update'])->name('subscription.update');
-    });
+    }
 });

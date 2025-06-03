@@ -226,7 +226,7 @@
     </div>
     {{-- ads --}}
     @if ($ads)
-        <div x-data="{ open: true }" x-show="open"
+        <div x-data="{ open: Math.random() < 0.5 }" x-show="open"
             class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 backdrop-blur-sm overflow-auto">
 
             <div class="w-full max-w-5xl mx-auto rounded-lg  p-4  overflow-auto">
@@ -262,26 +262,26 @@
         </div>
     @endif
     <!-- Modal -->
-    <div id="productModal" class="fixed inset-0 z-50 backdrop-blur bg-zinc-900/20 dark:bg-purple-900/20 hidden flex items-center justify-center transition-all duration-300">
-  
+    <div id="productModal"
+        class="fixed inset-0 z-50 backdrop-blur bg-zinc-900/20 dark:bg-purple-900/20 hidden flex items-center justify-center transition-all duration-300">
+
         <!-- Container modal dan logo (relative) -->
         <div class="relative w-3/4 max-w-xl">
-          
-          <!-- Logo di tengah atas -->
-          <img src="{{ asset('home2') }}/assets/svg/logo.svg"
-               alt="logo"
-               class="h-25 w-25 absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-[120%] z-10" />
-      
-          <!-- Card modal -->
-          <div class="bg-white/90 dark:bg-zinc-900/90 rounded-3xl p-6  backdrop-blur-xl relative">
-            <div id="modalContent">
-              <!-- Content will be injected via JS -->
+
+            <!-- Logo di tengah atas -->
+            <img src="{{ asset('home2') }}/assets/svg/logo.svg" alt="logo"
+                class="h-25 w-25 absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-[120%] z-10" />
+
+            <!-- Card modal -->
+            <div class="bg-white/90 dark:bg-zinc-900/90 rounded-3xl p-6  backdrop-blur-xl relative">
+                <div id="modalContent">
+                    <!-- Content will be injected via JS -->
+                </div>
             </div>
-          </div>
-      
+
         </div>
-      
-      </div>
+
+    </div>
 @endsection
 
 @push('js')
@@ -301,13 +301,13 @@
 
                     <div class="p-4 relative">
                                     <span class="absolute top-4 right-4 bg-purple-100 text-purple-700 dark:bg-purple-800/30 dark:text-purple-300 text-sm font-medium px-3 py-1 rounded-full">
-                                        {{$shop->name}}
+                                        {{ $shop->name }}
                                     </span>
                                 <p class="text-2xl font-bold text-purple-700 dark:text-purple-400 mb-1">
                                     ${
                                         product.discount != 0
                                         ? `<del class="text-gray-500 mr-2">Rp ${parseFloat(product.price).toLocaleString()}</del><span class="text-sm text-red-600">${product.discount }% Off</span><br>
-                                                    Rp ${parseFloat(product.price_final).toLocaleString()}`
+                                                            Rp ${parseFloat(product.price_final).toLocaleString()}`
                                         : `Rp ${parseFloat(product.price).toLocaleString()}`
                                     }
                                     </p>
@@ -497,7 +497,7 @@
                                     ${
                                         product.discount != 0
                                         ? `<del class="text-gray-500 mr-2">Rp ${parseFloat(product.price).toLocaleString()}</del><span class="text-sm text-red-600">${product.discount }% Off</span><br>
-                                                    Rp ${parseFloat(product.price_final).toLocaleString()}`
+                                                            Rp ${parseFloat(product.price_final).toLocaleString()}`
                                         : `Rp ${parseFloat(product.price).toLocaleString()}`
                                     }
                                     </p>
