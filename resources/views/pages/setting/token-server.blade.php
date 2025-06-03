@@ -73,7 +73,7 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="card">
+                        {{-- <div class="card">
                             <div class="card-body">
                                 <ul class="list-group list-group-flush shadow-sm rounded border">
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -86,7 +86,7 @@
                                     </li>
                                 </ul>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
 
