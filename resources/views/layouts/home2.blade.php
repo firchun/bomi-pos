@@ -2,9 +2,10 @@
 <html lang="id" class="light">
 
 <head>
-
-    <title>@yield('title', 'Bomi POS - Aplikasi Kasir Terbaik')</title>
     <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>@yield('title', 'Bomi POS - Aplikasi Kasir Terbaik')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="{{ asset('home2') }}/assets/svg/logo.svg" type="image/png" />
 
@@ -31,6 +32,34 @@
     <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        @media (max-width: 499px) {
+            .xs\:block {
+                display: block !important;
+            }
+
+            .xs\:inline-block {
+                display: inline-block !important;
+            }
+
+            .xs\:flex {
+                display: flex !important;
+            }
+
+            .xs\:hidden {
+                display: none !important;
+            }
+        }
+
+        @media (min-width: 500px) {
+
+            .xs\:block,
+            .xs\:inline-block,
+            .xs\:flex {
+                display: none !important;
+            }
+        }
+    </style>
     <style>
         #spotlight {
             position: absolute;

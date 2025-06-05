@@ -6,11 +6,14 @@ use App\Models\AdminProduct;
 use App\Models\AdminProfile;
 use App\Models\Ads;
 use App\Models\Category;
+use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\ShopProfile;
 use App\Models\Visitor;
 use Illuminate\Http\Request;
 use GeoIP;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class HomePageController extends Controller
 {
@@ -37,16 +40,21 @@ class HomePageController extends Controller
     }
     public function outlet_details(Request $request, $slug)
     {
-        
+
         $shop = ShopProfile::with('location')->where('slug', $slug)->firstOrFail();
 
-        //insert visitor
-        // $ip = $request->ip();
-        // if ($ip == '127.0.0.1') {
-        //     $location = null;
-        // } else {
-        //     $location = geoip()->getLocation($ip);
-        // }
+
+        $orderCounts = OrderItem::select('product_id', DB::raw('SUM(quantity) as total_ordered'))
+            ->groupBy('product_id');
+
+        $bestSellerProducts = Product::leftJoinSub($orderCounts, 'order_counts', function ($join) {
+            $join->on('products.id', '=', 'order_counts.product_id');
+        })
+            ->select('products.*', DB::raw('COALESCE(order_counts.total_ordered, 0) as total_ordered'))
+            ->where('products.user_id', $shop->user_id)
+            ->orderByDesc('total_ordered')
+            ->take(5)
+            ->get();
         $location = null;
         Visitor::create([
             'shop_id' => $shop->id,
@@ -73,9 +81,9 @@ class HomePageController extends Controller
         // ads
         $ads = Ads::where('shop_id', $shop->id)->inRandomOrder()->first();
         if ($ads) {
-            $ads->increment('views'); 
+            $ads->increment('views');
         }
-        return view('home-pages.outlet-detail', compact('ads','shop', 'averageRating', 'products', 'categories', 'ratings'));
+        return view('home-pages.outlet-detail', compact('ads', 'shop', 'averageRating', 'products', 'categories', 'ratings', 'bestSellerProducts'));
     }
     public function bomiProduct(Request $request)
     {

@@ -54,10 +54,13 @@ class RatingController extends Controller
             ->when($keyword, function ($query) use ($keyword) {
                 $query->where('comment', 'like', '%' . $keyword . '%');
             })
-            ->orderBy('created_at', 'desc')
-            ->get();
+            ->orderBy('created_at', 'desc');
 
-        return response()->json($comments);
+        if ($request->jumlah) {
+            $comments->take($request->jumlah);
+        }
+
+        return response()->json($comments->get());
     }
 
     public function index()
