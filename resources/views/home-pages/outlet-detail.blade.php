@@ -14,6 +14,11 @@
 
 @push('css')
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        .leaflet-container .leaflet-control-container .leaflet-control-attribution {
+            display: none !important;
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -249,7 +254,8 @@
             </div>
             <!-- Popup -->
             <div id="commentPopup" class="fixed inset-0 z-50 backdrop-blur  flex items-center justify-center hidden">
-                <div class="bg-white/80 dark:bg-zinc-900/80 rounded-xl w-lg max-w-lg max-h-[80vh] relative p-6 mx-3">
+                <div
+                    class="bg-white/80 dark:bg-zinc-900/80 rounded-xl w-[32rem] max-w-[32rem] max-h-[80vh] relative p-6 mx-3">
                     <!-- Tombol close -->
                     <button onclick="document.getElementById('commentPopup').classList.add('hidden')"
                         class="absolute top-3 right-3 text-gray-700 dark:text-gray-300 hover:text-red-500">
@@ -356,7 +362,7 @@
                 class="h-25 w-25 absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-[120%] z-10" />
 
             <!-- Card modal -->
-            <div class="bg-white/90 dark:bg-zinc-900/90 rounded-3xl p-6  backdrop-blur-xl relative">
+            <div class="bg-white/90 dark:bg-zinc-900/90 rounded-2xl p-6  backdrop-blur-xl relative">
                 <div id="modalContent">
                     <!-- Content will be injected via JS -->
                 </div>
@@ -397,11 +403,11 @@
         // Konten HTML popup untuk marker
         function getPopupHTML() {
             return `
-                <div style="text-align: center;">
-                    <strong>${shopName}</strong><br>
+                <div style="text-align: center;" >
+                    <strong  style="color: rgb(126, 34, 206);">${shopName}</strong><br>
                     <a href="https://www.google.com/maps?q=${latitude},${longitude}" target="_blank"
                         style="color: #9900CC; text-decoration: underline; display: inline-block; margin-top: 5px;">
-                        🗺️ Buka di Google Maps
+                         Buka di Google Maps
                     </a>
                 </div>
             `;
@@ -421,11 +427,13 @@
             const map = L.map('map').setView([latitude, longitude], 15);
 
             L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-                attribution: '© Esri & OpenStreetMap contributors'
+                attribution: ''
             }).addTo(map);
 
             const marker = L.marker([latitude, longitude]).addTo(map)
-                .bindPopup(getPopupHTML())
+                .bindPopup(getPopupHTML(), {
+                    closeButton: false
+                })
                 .openPopup();
 
             marker.on('click', () => {
@@ -444,11 +452,13 @@
             const map2 = L.map('mapPopupContent').setView([latitude, longitude], 15);
 
             L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-                attribution: '© Esri & OpenStreetMap contributors'
+                attribution: ''
             }).addTo(map2);
 
             const marker2 = L.marker([latitude, longitude]).addTo(map2)
-                .bindPopup(getPopupHTML())
+                .bindPopup(getPopupHTML(), {
+                    closeButton: false
+                })
                 .openPopup();
 
             marker2.on('click', () => {
@@ -567,21 +577,21 @@
                    ${
                     product.discount != 0
                         ? `
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <div class="mb-1">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <p class="text-2xl font-bold text-purple-700 dark:text-purple-400">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <del class="text-gray-500 mr-2">Rp ${parseFloat(product.price).toLocaleString()}</del>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <span class="text-sm text-red-600">${product.discount}% Off</span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </p>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <p class="text-2xl font-bold text-purple-700 dark:text-purple-400">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                Rp ${parseFloat(product.price_final).toLocaleString()}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </p>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            `
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <div class="mb-1">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <p class="text-2xl font-bold text-purple-700 dark:text-purple-400">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <del class="text-gray-500 mr-2">Rp ${parseFloat(product.price).toLocaleString()}</del>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <span class="text-sm text-red-600">${product.discount}% Off</span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </p>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <p class="text-2xl font-bold text-purple-700 dark:text-purple-400">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Rp ${parseFloat(product.price_final).toLocaleString()}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </p>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                `
                         : `
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <p class="text-2xl font-bold     text-purple-700 dark:text-purple-400 mb-1">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                Rp ${parseFloat(product.price).toLocaleString()}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </p>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            `
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <p class="text-2xl font-bold     text-purple-700 dark:text-purple-400 mb-1">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Rp ${parseFloat(product.price).toLocaleString()}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </p>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                `
                     }
 
                     <!-- Nama toko di bawah harga untuk layar kecil -->
@@ -792,7 +802,7 @@
                                     ${
                                         product.discount != 0
                                         ? `<del class="text-gray-500 mr-2">Rp ${parseFloat(product.price).toLocaleString()}</del><span class="text-sm text-red-600">${product.discount }% Off</span><br>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            Rp ${parseFloat(product.price_final).toLocaleString()}`
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                Rp ${parseFloat(product.price_final).toLocaleString()}`
                                         : `Rp ${parseFloat(product.price).toLocaleString()}`
                                     }
                                     </p>

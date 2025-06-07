@@ -116,7 +116,7 @@
                     <a href="{{ url('/') }}"
                         class="text-sm font-semibold text-purple-700 dark:text-white transition-all duration-300
                         @if (Request::is('/')) border border-purple-700 rounded-full px-4
-                               shadow-sm shadow-purple-700 shadow-inner
+                               shadow-sm shadow-purple-700 shadow-inner bg-white/40
                                @else hover:border hover:border-purple-700 hover:rounded-full hover:px-4  hover:shadow-sm hover:shadow-purple-700 hover:shadow-inner @endif
                                  ">
                         Home
@@ -124,13 +124,13 @@
 
                     <a href="{{ route('shop-page') }}"
                         class="text-sm font-semibold text-purple-700 dark:text-white transition-all duration-300  
-                        @if (Request::is('shop-page')) border border-purple-700 rounded-full px-4
-                               shadow-sm shadow-purple-700 shadow-inner
+                        @if (Request::is('shop-page') || Request::is('shop*')) border border-purple-700 rounded-full px-4
+                               shadow-sm shadow-purple-700 shadow-inner bg-white/40
                                @else hover:border hover:border-purple-700 hover:rounded-full hover:px-4  hover:shadow-sm hover:shadow-purple-700 hover:shadow-inner @endif">Outlet</a>
                     <a href="{{ url('bomi-products') }}"
                         class="text-sm font-semibold text-purple-700 dark:text-white transition-all duration-300  
                         @if (Request::is('bomi-products')) border border-purple-700 rounded-full px-4
-                               shadow-sm shadow-purple-700 shadow-inner
+                               shadow-sm shadow-purple-700 shadow-inner bg-white/40
                                @else hover:border hover:border-purple-700 hover:rounded-full hover:px-4  hover:shadow-sm hover:shadow-purple-700 hover:shadow-inner @endif">Bomi
                         Product</a>
 
