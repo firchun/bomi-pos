@@ -167,43 +167,7 @@
                     });
             }
 
-            // function checkInternetAndSpeed() {
-            //     const testUrl = 'https://www.google.com/favicon.ico'; // file kecil dan cepat di-load
-            //     const start = new Date().getTime();
 
-            //     fetch(testUrl, {
-            //             method: 'GET',
-            //             cache: 'no-cache',
-            //             mode: 'no-cors'
-            //         })
-            //         .then(() => {
-            //             const end = new Date().getTime();
-            //             const duration = (end - start) / 1000;
-
-            //             // Ukuran file dalam MB dan konversi ke Kbps
-            //             const fileSizeMB = 0.001; // ~1KB
-            //             const speedMbps = (fileSizeMB * 8) / duration; // Mbps
-            //             const speedKbps = speedMbps * 1000; // Kbps
-
-            //             const speedText = `${speedKbps.toFixed(0)} Kbps`;
-
-            //             const speedElement = document.getElementById('internetSpeed');
-            //             speedElement.textContent = speedText;
-
-            //             if (speedKbps < 500) {
-            //                 speedElement.classList.add('text-red-600');
-            //                 speedElement.classList.remove('text-green-600');
-            //             } else {
-            //                 speedElement.classList.add('text-green-600');
-            //                 speedElement.classList.remove('text-red-600');
-            //             }
-            //         })
-            //         .catch(() => {
-            //             document.getElementById('internetSpeed').classList.add('text-red-600');
-            //             document.getElementById('internetSpeed').classList.remove('text-green-600');
-            //             document.getElementById('internetSpeed').textContent = 'Tidak ada koneksi';
-            //         });
-            // }
             function checkInternetAndSpeed() {
                 const speedElement = document.getElementById('internetSpeed');
 
