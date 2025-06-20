@@ -42,5 +42,6 @@ class BomiUpdate extends Command
         echo "\r"; // bersihkan spinner
 
         $this->info("✅ Success, Bomi is up to date..");
+        $this->info("ℹ️ Please run `php artisan migrate` to apply any new migrations.");
     }
 }
