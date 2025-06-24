@@ -32,4 +32,7 @@ return [
   'product report' => 'Laporan Produk',
   'ingredient report' => 'Laporan Bahan Baku',
   'Advertisement' => 'Iklan',
+  'Tables' => 'Meja',
+  'Help' => 'Bantuan',
+  'Open' => 'Buka',
 ];

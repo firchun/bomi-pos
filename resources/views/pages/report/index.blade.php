@@ -14,7 +14,7 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>@yield('title')</h1>
+                <h1><i class="fa fa-chart-line"></i> @yield('title')</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="{{ route('home') }}">Dashboard</a></div>
                     <div class="breadcrumb-item">@yield('title')</div>
@@ -26,7 +26,7 @@
                     sales reports. You can also download reports in PDF or Excel format for further record keeping and
                     analysis.
                 @else
-                   Kelola laporan penjualan pada kasir anda dengan mudah di sini, anda dapat melihat laporan penjualan
+                    Kelola laporan penjualan pada kasir anda dengan mudah di sini, anda dapat melihat laporan penjualan
                     harian, mingguan, bulanan, dan tahunan. Anda juga dapat mengunduh laporan dalam format PDF atau Excel
                     untuk keperluan pencatatan dan analisis lebih lanjut.
                 @endif
@@ -207,7 +207,8 @@
                         name: 'payment_method',
                         className: 'text-left',
                         render: function(data) {
-                            return '<span class="text-primary"><i class="fa fa-money-bill-1-wave"></i> ' + data + '</span>';
+                            return '<span class="text-primary"><i class="fa fa-money-bill-1-wave"></i> ' +
+                                data + '</span>';
                         }
                     },
                     {

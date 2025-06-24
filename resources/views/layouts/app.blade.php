@@ -8,7 +8,7 @@
 
     <!-- General CSS Files -->
     <link rel="stylesheet" href="{{ asset('library/bootstrap/dist/css/bootstrap.min.css') }}">
-   
+
     <link rel="stylesheet" href="{{ asset('library/fontawesome/css/all.min.css') }}">
 
     <link rel="icon" href="{{ asset('favicon.png') }}" type="image/png">
@@ -18,6 +18,17 @@
     <!-- Template CSS -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/components.css') }}">
+    <style>
+        .main-sidebar .sidebar-menu li.active a {
+            font-weight: 800 !important;
+            background-color: #f2cdfe !important;
+            /* color: white !important; */
+            border-radius: 10px !important;
+            margin: 0 5px !important;
+            width: 90% !important;
+            font-size: 13px;
+        }
+    </style>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
@@ -94,9 +105,9 @@
     <script src="{{ asset('library/jquery.nicescroll/dist/jquery.nicescroll.min.js') }}"></script>
     <script src="{{ asset('library/moment/min/moment.min.js') }}"></script>
     <script src="{{ asset('js/stisla.js') }}"></script>
-    
+
     @stack('scripts')
-    
+
     <!-- Template JS File -->
     <script src="{{ asset('js/scripts.js') }}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>

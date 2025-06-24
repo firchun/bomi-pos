@@ -45,7 +45,7 @@
             <a href="#" class="nav-link nav-link-lg beep" data-toggle="modal" data-target="#helpModal">
                 <i class="fas fa-question"></i>
                 <div class="d-sm-none d-lg-inline-block">
-                    Help
+                    {{ __('general.Help') }}
                 </div>
             </a>
         @endif
@@ -95,6 +95,9 @@
                         @endif
                     @endif
                 </a>
+                <a href="{{ route('settings.index') }}" class="dropdown-item has-icon">
+                    <i class="far fa-gears"></i>Setting
+                </a>
 
                 <div class="dropdown-divider"></div>
                 <a href="#" class="dropdown-item has-icon text-danger"
@@ -132,7 +135,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title text-primary"><i class="fa fa-circle-info"></i> Help</h5>
+                <h5 class="modal-title text-primary"><i class="fa fa-circle-info"></i> {{ __('general.Help') }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

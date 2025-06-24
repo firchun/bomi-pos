@@ -22,7 +22,9 @@
                 <th>HPP</th>
                 <th>Price</th>
                 <th>Discount</th>
-                <th>Ingredient</th>
+                @if (!empty($setting) && $setting->ingredient)
+                    <th>Ingredient</th>
+                @endif
                 <th>Status</th>
                 <th>{{ __('general.action') }}</th>
             </tr>
@@ -60,8 +62,10 @@
                             <i class="fas fa-edit"></i>
                         </button>
                     </td>
-                    <td class="font-weight-bold text-primary ">
-                        {{ App\Models\IngredientDish::where('id_product', $product->id)->count() }}</td>
+                    @if (!empty($setting) && $setting->ingredient)
+                        <td class="font-weight-bold text-primary ">
+                            {{ App\Models\IngredientDish::where('id_product', $product->id)->count() }}</td>
+                    @endif
                     <td>
                         <span class="badge badge-{{ $product->status == 1 ? 'success' : 'warning' }}">
                             {{ $product->status == 1 ? 'Active' : 'Inactive' }}
@@ -69,15 +73,17 @@
                     </td>
                     <td>
                         <div class="d-flex align-items-center gap-2">
-                            <a href="{{ route('products.ingredient', $product->id) }}"
-                                class="btn btn-sm btn-success d-flex align-items-center mr-2">
-                                <i class="fas fa-cookie-bite"> </i> {{ __('general.ingredient') }}
-                            </a>
+                            @if (!empty($setting) && $setting->ingredient)
+                                <a href="{{ route('products.ingredient', $product->id) }}"
+                                    class="btn btn-sm btn-success d-flex align-items-center mr-2">
+                                    <i class="fas fa-cookie-bite"> </i> {{ __('general.ingredient') }}
+                                </a>
+                            @endif
                             <a href="{{ route('products.edit', $product->id) }}"
                                 class="btn btn-sm btn-warning d-flex align-items-center mr-2">
                                 <i class="fas fa-edit"></i> {{ __('general.edit') }}
                             </a>
-                          
+
                         </div>
                     </td>
                 </tr>
@@ -114,18 +120,20 @@
                             <div class="d-flex flex-wrap gap-1 text-center">
                                 <div class="input-group input-group-sm">
                                     <div class="input-group-prepend">
-                                        <a href="{{ route('products.ingredient', $product->id) }}"
-                                            class="btn btn-success">
-                                            <i class="fas fa-cookie-bite"></i> {{ __('general.ingredient') }}
-                                        </a>
+                                        @if (!empty($setting) && $setting->ingredient)
+                                            <a href="{{ route('products.ingredient', $product->id) }}"
+                                                class="btn btn-success">
+                                                <i class="fas fa-cookie-bite"></i> {{ __('general.ingredient') }}
+                                            </a>
+                                        @endif
                                         <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning">
                                             <i class="fas fa-edit"></i> {{ __('general.edit') }}
                                         </a>
-                                       
+
                                     </div>
                                 </div>
 
-                              
+
                             </div>
                         </div>
                     </div>
@@ -139,5 +147,3 @@
 <div class="float-right mt-3">
     {!! $products->withQueryString()->links() !!}
 </div>
-
-

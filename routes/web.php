@@ -26,8 +26,10 @@ use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\LocalServerTokenController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\SyncController;
+use App\Http\Controllers\TablesController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -50,8 +52,12 @@ Route::get('shop-page', [HomePageController::class, 'outlet'])
     ->middleware('local.to.online')
     ->name('shop-page');
 Route::get('/shop/{slug}', [HomePageController::class, 'outlet_details'])
+    ->middleware('local.to.online')->name('shop.details');
+
+Route::get('/shop/table/{code}', [HomePageController::class, 'order_table'])
     ->middleware('local.to.online')
-    ->name('shop.details');
+    ->name('shop.table');
+
 Route::get('bomi-products', [HomePageController::class, 'bomiProduct'])
     ->middleware('local.to.online')
     ->name('bomi-products.home');
@@ -134,8 +140,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/local-server', [LocalServerTokenController::class, 'index'])->name('local-server.index');
             Route::post('/generate-token', [LocalServerTokenController::class, 'generate'])->name('generate-token');
         }
+        // setting
+        // Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+        Route::match(['get', 'post'], '/settings', [SettingController::class, 'index'])->name('settings.index');
         // update pro
         Route::post('/subscription/update-pro/{userId}', [SubscriptionController::class, 'updatePro'])->name('subscription.updatePro');
+        // calendar
+        Route::resource('tables', TablesController::class);
         // calendar
         Route::get('/calendar', [CalendarController::class, 'index'])->name('calendar');
         // advertisement

@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\ShopProfile;
+use App\Models\Table;
 use App\Models\Visitor;
 use Illuminate\Http\Request;
 use GeoIP;
@@ -85,6 +86,36 @@ class HomePageController extends Controller
         }
         return view('home-pages.outlet-detail', compact('ads', 'shop', 'averageRating', 'products', 'categories', 'ratings', 'bestSellerProducts'));
     }
+    public function order_table($code)
+    {
+        $table = Table::where('code', $code)->firstOrFail();
+        $shop = ShopProfile::with('location')->where('user_id', $table->user_id)->firstOrFail();
+
+        $location = null;
+        Visitor::create([
+            'shop_id' => $shop->id,
+            'ip_address' => $ip ?? null,
+            'iso_code' => $location ? $location->countryCode : null,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $user = $shop->user;
+        $averageRating = $shop->ratings->isNotEmpty() ? $shop->ratings->avg('rating') : 0;
+
+        $products = Product::where('status', true)
+            ->where('user_id', $user->id)
+            ->paginate(6);
+
+        $categories = Category::whereHas('products', function ($query) use ($user) {
+            $query->where('user_id', $user->id)
+                ->where('status', true);
+        })->get();
+
+
+        return view('home-pages.order_table', compact('shop', 'averageRating', 'products', 'categories', 'table'));
+    }
+
     public function bomiProduct(Request $request)
     {
         $query = AdminProduct::query();

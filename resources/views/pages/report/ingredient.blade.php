@@ -14,30 +14,30 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>@yield('title')</h1>
+                <h1><i class="fa fa-chart-line"></i> @yield('title')</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="{{ route('home') }}">Dashboard</a></div>
                     <div class="breadcrumb-item">@yield('title')</div>
                 </div>
             </div>
             <div class="my-2 p-2 border rounded bg-light text-dark">
-              @if (app()->getLocale() == 'en')
-                  Manage your ingredient report from here, you can see the ingredient report that has been sold
-                  within a certain period of time. You can also download the report in PDF or Excel format.
-                  Before that, you need to add ingredients in the available menu and add them to the product
-              @else
-                Kelola laporan bahan baku anda dari sini, anda bisa melihat laporan bahan baku yang terjual
-                  dalam rentang waktu tertentu. Anda juga bisa mengunduh laporan dalam format PDF atau Excel.
-                  sebelum itu anda perlu menambah bahan baku pada menu yang tersedia serta menambahkannya pada produk
-              @endif
-          </div>
+                @if (app()->getLocale() == 'en')
+                    Manage your ingredient report from here, you can see the ingredient report that has been sold
+                    within a certain period of time. You can also download the report in PDF or Excel format.
+                    Before that, you need to add ingredients in the available menu and add them to the product
+                @else
+                    Kelola laporan bahan baku anda dari sini, anda bisa melihat laporan bahan baku yang terjual
+                    dalam rentang waktu tertentu. Anda juga bisa mengunduh laporan dalam format PDF atau Excel.
+                    sebelum itu anda perlu menambah bahan baku pada menu yang tersedia serta menambahkannya pada produk
+                @endif
+            </div>
             <div class="section-body">
                 <div class="row mb-3 align-items-end justify-content-center mx-2 p-2 bg-white rounded shadow-sm">
                     <div class="col-md-4 mb-2">
                         <label for="from-date">Date Range</label>
                         <div class="input-group">
-                          <button class="btn btn-sm btn-outline-success" id="today-btn">Today</button>
-                          <button class="btn btn-sm btn-outline-success" id="week-btn">Week</button>
+                            <button class="btn btn-sm btn-outline-success" id="today-btn">Today</button>
+                            <button class="btn btn-sm btn-outline-success" id="week-btn">Week</button>
                             <input type="date" class="form-control datepicker" name="from-date" id="from-date"
                                 value="{{ date('Y-m-d', strtotime('-7 day')) }}" placeholder="From Date">
                             <input type="date" class="form-control datepicker" name="to-date" id="to-date"
@@ -78,10 +78,10 @@
                                         <tbody></tbody>
                                         <tfoot>
                                             <tr>
-                                              <th>ID</th>
-                                              <th>Name</th>
-                                              <th>Category</th>
-                                              <th>Qty</th>
+                                                <th>ID</th>
+                                                <th>Name</th>
+                                                <th>Category</th>
+                                                <th>Qty</th>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -114,36 +114,36 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
-          const todayBtn = document.getElementById('today-btn');
-          const weekBtn = document.getElementById('week-btn');
-          const fromDate = document.getElementById('from-date');
-          const toDate = document.getElementById('to-date');
+        document.addEventListener('DOMContentLoaded', function() {
+            const todayBtn = document.getElementById('today-btn');
+            const weekBtn = document.getElementById('week-btn');
+            const fromDate = document.getElementById('from-date');
+            const toDate = document.getElementById('to-date');
 
-          // Fungsi format tanggal ke yyyy-mm-dd
-          function formatDate(date) {
-              return date.toISOString().split('T')[0];
-          }
+            // Fungsi format tanggal ke yyyy-mm-dd
+            function formatDate(date) {
+                return date.toISOString().split('T')[0];
+            }
 
-          // Saat tombol "Today" diklik
-          todayBtn.addEventListener('click', function(e) {
-              e.preventDefault();
-              const today = new Date();
-              fromDate.value = formatDate(today);
-              toDate.value = formatDate(today);
-          });
+            // Saat tombol "Today" diklik
+            todayBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const today = new Date();
+                fromDate.value = formatDate(today);
+                toDate.value = formatDate(today);
+            });
 
-          // Saat tombol "Week" diklik
-          weekBtn.addEventListener('click', function(e) {
-              e.preventDefault();
-              const today = new Date();
-              const sevenDaysAgo = new Date();
-              sevenDaysAgo.setDate(today.getDate() - 6); // total 7 hari termasuk hari ini
-              fromDate.value = formatDate(sevenDaysAgo);
-              toDate.value = formatDate(today);
-          });
-      });
-  </script>
+            // Saat tombol "Week" diklik
+            weekBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const today = new Date();
+                const sevenDaysAgo = new Date();
+                sevenDaysAgo.setDate(today.getDate() - 6); // total 7 hari termasuk hari ini
+                fromDate.value = formatDate(sevenDaysAgo);
+                toDate.value = formatDate(today);
+            });
+        });
+    </script>
     <script>
         $(document).ready(function() {
             $('#report-table').DataTable({
@@ -188,7 +188,7 @@
                             `;
                         }
                     },
-                   
+
                     {
                         data: 'qty_order',
                         name: 'qty_order',
@@ -197,7 +197,7 @@
                             return `${data??0} ${row.sub_unit ?? '-'}`;
                         }
                     },
-                   
+
                 ],
                 // dom: 'Blfrtip',
                 dom: '<"d-flex justify-content-between align-items-center mb-3"Bf>rt<"d-flex justify-content-between align-items-center mt-3"lip>',
