@@ -18,6 +18,7 @@ use App\Http\Controllers\ShopProfileController;
 use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\AdminProfileController;
 use App\Http\Controllers\AdsController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\IncomeExpenseCategoryController;
 use App\Http\Controllers\IncomeExpenseController;
@@ -61,6 +62,21 @@ Route::get('/shop/table/{code}', [HomePageController::class, 'order_table'])
 Route::get('bomi-products', [HomePageController::class, 'bomiProduct'])
     ->middleware('local.to.online')
     ->name('bomi-products.home');
+Route::get('bisnis/fb', [HomePageController::class, 'bisnisFb'])
+    ->middleware('local.to.online')
+    ->name('bisnis.fb');
+Route::get('bisnis/jasa', [HomePageController::class, 'bisnisJasa'])
+    ->middleware('local.to.online')
+    ->name('bisnis.jasa');
+Route::get('bisnis/retail', [HomePageController::class, 'bisnisRetail'])
+    ->middleware('local.to.online')
+    ->name('bisnis.retail');
+Route::get('blogs', [HomePageController::class, 'blog'])
+    ->middleware('local.to.online')
+    ->name('blogs');
+Route::get('blogs/{slug}', [HomePageController::class, 'blogDetail'])
+    ->middleware('local.to.online')
+    ->name('blog-detail');
 
 
 // end homepage
@@ -226,7 +242,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 Route::put('/{adminproduct}', [AdminProductController::class, 'update'])->name('update');
                 Route::delete('/{adminproduct}', [AdminProductController::class, 'destroy'])->name('destroy');
             });
-
+            // blogs
+            Route::resource('admin-blogs', BlogController::class);
+            //admin profile
             Route::get('admin_profiles', [AdminProfileController::class, 'index'])->name('admin_profiles.index');
             Route::post('admin_profiles', [AdminProfileController::class, 'store'])->name('admin_profiles.store');
             Route::put('admin_profiles/{admin_profile}', [AdminProfileController::class, 'update'])->name('admin_profiles.update');

@@ -108,20 +108,74 @@
                     <img src="{{ asset('home2') }}/assets/svg/logo.svg" alt="logo" class="h-10">
                 </a>
                 <!-- Navigation (Hidden on small screens) -->
-                <nav class="space-x-10 hidden md:flex ">
+                <nav class="space-x-10 hidden lg:flex ">
                     {{-- <a href="{{ url('/') }}"
                     class="text-sm font-semibold text-purple-700 dark:text-white transition-colors duration-300 @if (request()->is('/')) border border-purple-700/30 rounded-full px-4  bg-gradient-to-r from-purple-400 to-transparent @endif">
                     Home
                  </a> --}}
-                    <a href="{{ url('/') }}"
+                    {{-- <a href="{{ url('/') }}"
                         class="text-sm font-semibold text-purple-700 dark:text-white transition-all duration-300
                         @if (Request::is('/')) border border-purple-700 rounded-full px-4
                                shadow-sm shadow-purple-700 shadow-inner bg-white/40
                                @else hover:border hover:border-purple-700  hover:bg-white/40 hover:rounded-full hover:px-4  hover:shadow-sm hover:shadow-purple-700 hover:shadow-inner @endif
                                  ">
                         Home
-                    </a>
+                    </a> --}}
+                    <!-- Dropdown -->
+                    <!-- Dropdown -->
+                    <div class="relative group">
+                        <button
+                            class="text-sm font-semibold text-purple-700   @if (Request::is('bisnis*')) border border-purple-700 rounded-full px-4
+                               shadow-sm shadow-purple-700 shadow-inner bg-white/40
+                               @else hover:border hover:border-purple-700  hover:bg-white/40 hover:rounded-full hover:px-4  hover:shadow-sm hover:shadow-purple-700 hover:shadow-inner @endif">Bisnis
+                            <i class="bi bi-chevron-down"></i></button>
 
+                        <!-- Invisible hover area untuk menahan dropdown -->
+                        <div class="absolute top-full left-0 w-full h-6 group-hover:block"></div>
+
+                        <div
+                            class="absolute left-0 mt-2 hidden group-hover:flex bg-white shadow-lg rounded-lg p-3 lg:w-[600px] w-[400px] z-50 transition-all duration-200">
+                            <div class="grid lg:grid-cols-3 grid-cols-2 gap-2">
+
+                                <!-- F&B -->
+                                <a href="{{ route('bisnis.fb') }}"
+                                    class="block bg-purple-50 p-2 rounded-lg hover:bg-purple-100 transition">
+                                    <h3 class="text-md font-semibold text-purple-700 mb-2">F&B</h3>
+                                    <p class="text-[12px] text-gray-600">
+                                        Cocok untuk restoran, kedai kopi, minuman, cepat saji, toko roti, dan katering.
+                                    </p>
+                                </a>
+
+                                <!-- Retail -->
+                                <a href="{{ route('bisnis.retail') }}"
+                                    class="block bg-purple-50 p-2 rounded-lg hover:bg-purple-100 transition">
+                                    <h3 class="text-md font-semibold text-purple-700 mb-2">Retail</h3>
+                                    <p class="text-[12px] text-gray-600">
+                                        Cocok untuk supermarket, minimarket, toko butik, toko baju, toko elektronik,
+                                        toko serba ada, dan showroom.
+                                    </p>
+                                </a>
+
+                                <!-- Jasa -->
+                                <a href="{{ route('bisnis.jasa') }}"
+                                    class="block bg-purple-50 p-2 rounded-lg hover:bg-purple-100 transition">
+                                    <h3 class="text-md font-semibold text-purple-700 mb-2">Jasa</h3>
+                                    <p class="text-[12px] text-gray-600">
+                                        Cocok untuk pet shop, salon, spa, klinik kecantikan, barbershop, travel, guest
+                                        house, hotel, bengkel, laundry.
+                                    </p>
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <a href="{{ route('blogs') }}"
+                        class="text-sm font-semibold text-purple-700 dark:text-white transition-all duration-300  
+                        @if (Request::is('blogs*')) border border-purple-700 rounded-full px-4
+                               shadow-sm shadow-purple-700 shadow-inner bg-white/40
+                               @else hover:border hover:border-purple-700 hover:bg-white/40 hover:rounded-full hover:px-4  hover:shadow-sm hover:shadow-purple-700 hover:shadow-inner @endif">Blog</a>
                     <a href="{{ route('shop-page') }}"
                         class="text-sm font-semibold text-purple-700 dark:text-white transition-all duration-300  
                         @if (Request::is('shop-page') || Request::is('shop*')) border border-purple-700 rounded-full px-4
@@ -147,12 +201,22 @@
                     </a>
                     @guest
                         <a href="{{ route('login') }}"
-                            class="text-sm font-semibold text-purple-700  hidden  md:block dark:text-white transition-colors duration-300">Sign
-                            In</a>
+                            class="text-sm font-semibold text-purple-700  hidden  md:block dark:text-white transition-colors duration-300">
+                            @if (app()->getLocale() == 'en')
+                                Sign In
+                            @else
+                                Masuk
+                            @endif
+                        </a>
                         <a href="{{ route('register') }}"
                             class="px-4 py-2 bg-purple-700 text-white rounded-xl hidden md:block 
           hover:shadow-sm transform transition-transform  hover:scale-115 dark:bg-white dark:text-purple-700 transition-colors duration-300">
-                            Get Started <i class="bi bi-arrow-right-short"></i>
+                            @if (app()->getLocale() == 'en')
+                                Get Started
+                            @else
+                                Mulai Sekarang
+                            @endif
+                            <i class="bi bi-arrow-right-short"></i>
                         </a>
                     @else
                         <a href="{{ url('/dashboard') }}"
@@ -164,7 +228,11 @@
                             @csrf
                             <button type="submit"
                                 class="text-sm font-semibold text-red-500 hidden md:block dark:text-red-600 transition-colors duration-300">
-                                Sign Out
+                                @if (app()->getLocale() == 'en')
+                                    Sign Out
+                                @else
+                                    Keluar
+                                @endif
                             </button>
                         </form>
                     @endguest
@@ -172,7 +240,7 @@
 
                 <!-- Hamburger Menu for small screens -->
                 <button
-                    class="md:hidden text-purple-700 bg-white/40 rounded-md p-2 dark:text-zinc-300 transition-colors"
+                    class="lg:hidden text-purple-700 bg-white/40 rounded-md p-2 dark:text-zinc-300 transition-colors"
                     id="hamburgerBtn">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                         class="w-6 h-6">
@@ -183,9 +251,28 @@
             </div>
 
             <!-- Mobile Menu (Hidden by default) -->
-            <div class="md:hidden hidden bg-white/70 px-10 py-4 rounded-md mt-4" id="mobileMenu">
-                <a href="{{ url('/') }}"
-                    class="block text-sm font-semibold text-purple-700 py-2 dark:text-zinc-800 transition-colors">Home</a>
+            <div class="lg:hidden hidden bg-white/70 px-10 py-4 rounded-md mt-4" id="mobileMenu">
+                {{-- <a href="{{ url('/') }}"
+                    class="block text-sm font-semibold text-purple-700 py-2 dark:text-zinc-800 transition-colors">Home</a> --}}
+                <!-- Accordion: Bisnis -->
+                <div x-data="{ open: false }" class="py-2">
+                    <button @click="open = !open"
+                        class="flex justify-between items-center w-full text-sm font-semibold text-purple-700 py-2">
+                        Bisnis
+                        <svg :class="{ 'rotate-180': open }" class="h-4 w-4 transition-transform" fill="none"
+                            stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+
+                    <div x-show="open" class="pl-4 pt-2 space-y-2">
+                        <a href="/fb" class="block text-sm text-gray-700 py-1">F&B</a>
+                        <a href="/retail" class="block text-sm text-gray-700 py-1">Retail</a>
+                        <a href="/jasa" class="block text-sm text-gray-700 py-1">Jasa</a>
+                    </div>
+                </div>
+                <a href="{{ route('blogs') }}"
+                    class="block text-sm font-semibold text-purple-700 py-2 dark:text-zinc-800 transition-colors">Blog</a>
                 <a href="{{ route('shop-page') }}"
                     class="block text-sm font-semibold text-purple-700 py-2 dark:text-zinc-800 transition-colors">Outlet</a>
                 <a href="{{ url('bomi-products') }}"
@@ -193,12 +280,23 @@
                     Product</a>
                 @guest
                     <a href="{{ route('login') }}"
-                        class="block text-sm font-semibold text-purple-700 py-2 dark:text-zinc-800 transition-colors">Sign
-                        In</a>
+                        class="block text-sm font-semibold text-purple-700 py-2 dark:text-zinc-800 transition-colors">
+                        @if (app()->getLocale() == 'en')
+                            Sign
+                            In
+                        @else
+                            Masuk
+                        @endif
+                    </a>
                     <a href="{{ route('register') }}"
                         class="py-2  text-purple-700 mt-[20px] rounded-xl 
           hover:shadow-sm transform transition-transform  hover:scale-115  dark:text-zinc-800 transition-colors duration-300">
-                        Get Started <i class="bi bi-arrow-right-short"></i>
+                        @if (app()->getLocale() == 'en')
+                            Get Started
+                        @else
+                            Mulai Sekarang
+                        @endif
+                        <i class="bi bi-arrow-right-short"></i>
                     @else
                         <a href="{{ route('home') }}"
                             class="py-2  text-purple-700 mt-[20px] rounded-xl 
@@ -208,7 +306,11 @@
                                 @csrf
                                 <button type="submit"
                                     class="text-sm font-semibold text-red-700   dark:text-red-400 transition-colors duration-300">
-                                    Sign Out
+                                    @if (app()->getLocale() == 'en')
+                                        Sign Out
+                                    @else
+                                        Keluar
+                                    @endif
                                 </button>
                             </form>
                         @endguest
@@ -230,8 +332,13 @@
 
                 </div>
                 <p class="text-gray-400 hover:text-white">
-                    We’ve gathered the best features to support your cashier operations.
-                    Choose the perfect solution for your business—quickly and easily!
+                    @if (app()->getLocale() == 'en')
+                        We’ve gathered the best features to support your cashier operations.
+                        Choose the perfect solution for your business quickly and easily!
+                    @else
+                        Kami telah mengumpulkan fitur-fitur terbaik untuk mendukung operasional kasir Anda.
+                        Pilih solusi yang paling tepat untuk bisnis Anda dengan cepat dan mudah!
+                    @endif
                 </p>
             </div>
 
@@ -273,7 +380,6 @@
                             Password</a></li>
                 </ul>
             </div>
-
             <!-- Newsletter -->
             <div>
                 <h3 class="font-bold mb-2">Stay in Touch</h3>
@@ -290,7 +396,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Bottom copyright -->
         <div class="mt-12 text-center text-xs text-[#D1CDE6]">
             © {{ date('Y') }} Bomi POS . All Rights Reserved.

@@ -185,6 +185,11 @@
                         </a>
                     </li>
                     <li class="menu-header">Pages</li>
+                    <li class='nav-item {{ request()->is('admin-blogs*') ? 'active' : '' }}'>
+                        <a class="nav-link" href="{{ route('admin-blogs.index') }}">
+                            <i class="fas fa-newspaper"></i><span class="nav-text">Blogs</span>
+                        </a>
+                    </li>
                     <li class='nav-item {{ request()->is('admin-products*') ? 'active' : '' }}'>
                         <a class="nav-link" href="{{ route('admin-products.index') }}">
                             <i class="fas fa-box"></i><span class="nav-text">Bomi Products</span>

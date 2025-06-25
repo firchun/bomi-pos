@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AdminProduct;
 use App\Models\AdminProfile;
 use App\Models\Ads;
+use App\Models\Blog;
 use App\Models\Category;
 use App\Models\OrderItem;
 use App\Models\Product;
@@ -38,6 +39,39 @@ class HomePageController extends Controller
     {
         $shops = ShopProfile::paginate(1);
         return view('home-pages.outlet', compact('shops'));
+    }
+    public function bisnisFb()
+    {
+        return view('home-pages.bisnis.fb');
+    }
+    public function bisnisJasa()
+    {
+        return view('home-pages.bisnis.jasa');
+    }
+    public function bisnisRetail()
+    {
+        return view('home-pages.bisnis.retail');
+    }
+    public function blog()
+    {
+        $data = [
+            'description' => 'Temukan berbagai artikel menarik dan informatif di blog kami. Dapatkan tips, berita, dan informasi terbaru seputar bisnis, teknologi, dan gaya hidup.',
+            'keywords' => 'blog, artikel, tips, berita, informasi',
+            'blogs' => Blog::with('user')
+                ->where('is_published', true)
+                ->orderByDesc('created_at')
+                ->paginate(6),
+        ];
+        return view('home-pages.blogs', $data);
+    }
+    public function blogDetail($slug)
+    {
+        $data = [
+            'blog' => Blog::where('slug', $slug)->first(),
+            'otherBlogs' => Blog::where('slug', '!=', $slug)->latest()->take(5)->get(),
+            'latestBlogs' => Blog::latest()->take(3)->get(),
+        ];
+        return view('home-pages.blog-detail', $data);
     }
     public function outlet_details(Request $request, $slug)
     {
