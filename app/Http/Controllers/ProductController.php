@@ -58,7 +58,7 @@ class ProductController extends Controller
         $product->category_id = $request->category_id;
         $product->stock = $request->stock ?? 0; // Jika kosong, gunakan default 0
         $product->status = $request->status ?? 1;
-        $product->is_favorite = $request->is_favorite??1;
+        $product->is_favorite = $request->is_favorite ?? 1;
 
         $product->save();
 
@@ -88,13 +88,13 @@ class ProductController extends Controller
         $ingredient = Ingredient::where('id_user', Auth::id())
             ->with(['category'])
             ->get();
-        $dish = IngredientDish::with(['ingredient','product'])
+        $dish = IngredientDish::with(['ingredient', 'product'])
             ->where('id_product', $id)
             ->paginate(20);
-            // dd($dish);
-        return view('pages.products.ingredient', compact('product','ingredient','dish'));
+        // dd($dish);
+        return view('pages.products.ingredient', compact('product', 'ingredient', 'dish'));
     }
-    
+
 
     // update
     public function update(Request $request, $id)
@@ -117,7 +117,7 @@ class ProductController extends Controller
         $product->category_id = $request->category_id;
         $product->stock = $request->stock ?? $product->stock; // Jika kosong, tetap gunakan nilai lama
         $product->status = $request->status ?? 1;
-        $product->is_favorite = $request->is_favorite??1;
+        $product->is_favorite = $request->is_favorite ?? 1;
         $product->save();
 
         //save image
@@ -134,11 +134,11 @@ class ProductController extends Controller
     // destroy
     public function destroy($id)
     {
-      
+
         $product = Product::find($id);
         if ($product && $product->image) {
             $filePath = str_replace('storage/', 'public/', $product->image);
-    
+
             if (Storage::exists($filePath)) {
                 Storage::delete($filePath);
             }
@@ -146,5 +146,25 @@ class ProductController extends Controller
         $product->delete();
 
         return redirect()->route('products.index')->with('success', 'Product deleted successfully');
+    }
+    public function updateDiscount(Request $request)
+    {
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'discount' => 'required|integer|min:0|max:100', // diskon bertipe int
+        ]);
+    
+        $product = Product::find($request->product_id);
+    
+        $product->discount = intval($request->discount);
+    
+        $price = floatval($product->price);
+        $discount = $product->discount;
+    
+        $product->price_final = round($price * (1 - $discount / 100), 2);
+    
+        $product->save();
+    
+        return back()->with('success', 'Discount updated successfully');
     }
 }

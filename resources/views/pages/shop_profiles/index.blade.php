@@ -44,44 +44,47 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>{{ isset($shopProfile) ? 'Update' : 'Create' }} Shop Profile</h1>
+                <h1>{{ isset($shopProfile) ? 'Update' : 'Create' }} @yield('title')</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="{{ route('home') }}">Dashboard</a></div>
-                    <div class="breadcrumb-item">Shop Profile</div>
+                    <div class="breadcrumb-item"> @yield('title') </div>
                 </div>
             </div>
 
             <div class="section-body">
-                <div class="card">
-                    <div class="card-body">
-                        @if (session('success'))
-                            <div id="success-message" class="alert alert-success">
-                                {{ session('success') }}
-                            </div>
-                        @endif
-                        @if (session('error'))
-                            <div id="error-message" class="alert alert-danger">
-                                {{ session('error') }}
-                            </div>
-                        @endif
+                @if (session('success'))
+                    <div id="success-message" class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+                @if (session('error'))
+                    <div id="error-message" class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
 
-                        <script>
-                            setTimeout(function() {
-                                $('#success-message').fadeOut('slow');
-                                $('#error-message').fadeOut('slow');
-                            }, 2000); // 1000ms = 1 detik
-                        </script>
-                        <form
-                            action="{{ isset($shopProfile) ? route('shop-profiles.update', $shopProfile) : route('shop-profiles.store') }}"
-                            method="POST" enctype="multipart/form-data">
-                            @csrf
-                            @if (isset($shopProfile))
-                                @method('PUT')
-                            @endif
+                <script>
+                    setTimeout(function() {
+                        $('#success-message').fadeOut('slow');
+                        $('#error-message').fadeOut('slow');
+                    }, 2000); // 1000ms = 1 detik
+                </script>
+                <form
+                    action="{{ isset($shopProfile) ? route('shop-profiles.update', $shopProfile) : route('shop-profiles.store') }}"
+                    method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @if (isset($shopProfile))
+                        @method('PUT')
+                    @endif
 
-                            <div class="row">
-                                <!-- Shop Name, Shop Type, Address, and other details with col-8 -->
-                                <div class="col-md-8">
+                    <div class="row">
+                        <!-- Shop Name, Shop Type, Address, and other details with col-8 -->
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Shop Information</h4>
+                                </div>
+                                <div class="card-body">
                                     <div class="form-group">
                                         <label for="name">Shop Name</label>
                                         <input type="text" name="name" id="name" class="form-control"
@@ -104,22 +107,31 @@
                                         <label for="description">Description</label>
                                         <textarea name="description" id="description" class="form-control" rows="6" required>{{ old('description', $shopProfile->description ?? '') }}</textarea>
                                     </div>
-
-                                    <div class="form-group">
-                                        <label for="open_time">Open Time</label>
-                                        <input type="time" name="open_time" id="open_time" class="form-control"
-                                            value="{{ old('open_time', $shopProfile->open_time ?? '08:00') }}" required>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="close_time">Close Time</label>
-                                        <input type="time" name="close_time" id="close_time" class="form-control"
-                                            value="{{ old('close_time', $shopProfile->close_time ?? '17:00') }}" required>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="open_time">Open Time</label>
+                                                <input type="time" name="open_time" id="open_time" class="form-control"
+                                                    value="{{ old('open_time', $shopProfile->open_time ?? '08:00') }}" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="close_time">Close Time</label>
+                                                <input type="time" name="close_time" id="close_time" class="form-control"
+                                                    value="{{ old('close_time', $shopProfile->close_time ?? '17:00') }}" required>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
 
-                                <!-- Shop Photo section with col-4 -->
-                                <div class="col-md-4">
+                        <!-- Shop Photo section with col-4 -->
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body">
+
                                     <div class="form-group">
                                         <label for="photo">Shop Photo</label>
                                         @if (isset($shopProfile) && $shopProfile->photo)
@@ -130,75 +142,77 @@
                                         @endif
                                         <input type="file" name="photo" id="photo" class="form-control mt-2">
                                     </div>
-
-                                    <div class="form-group">
-                                        <label for="latitude">Latitude</label>
-                                        <input type="text" name="latitude" id="latitude" class="form-control"
-                                            value="{{ old('latitude', $shopProfile->location->latitude ?? '-8.5003989') }}"
-                                            required>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="longitude">Longitude</label>
-                                        <input type="text" name="longitude" id="longitude" class="form-control"
-                                            value="{{ old('longitude', $shopProfile->location->longitude ?? '140.3659557') }}"
-                                            required>
-                                    </div>
                                 </div>
                             </div>
 
-                            <!-- Map Section (separate card with col-12) -->
-                            <div class="card mb-4">
-                                <div class="card-body">
-                                    <div id="map" style="height: 400px; border-radius: 8px;"></div>
-                                </div>
+                            {{-- <div class="form-group">
+                                <label for="latitude">Latitude</label>
+                                <input type="text" name="latitude" id="latitude" class="form-control"
+                                    value="{{ old('latitude', $shopProfile->location->latitude ?? '-8.5003989') }}"
+                                    required>
                             </div>
 
-                            <button type="submit" class="btn btn-primary m-1">
-                                {{ isset($shopProfile) ? 'Update' : 'Create' }} Shop Profile
-                            </button>
-
-                            <!-- Lihat Shop Profile Button -->
-                            @if (isset($shopProfile))
-                                <a href="{{ route('shop.details', $shopProfile->slug) }}" class="btn btn-secondary m-1">
-                                    Lihat Shop Profile
-                                </a>
-                                <button type="button" class="btn btn-success m-1" data-bs-toggle="modal"
-                                    data-bs-target="#qrModal">
-                                    Generate QR Code Menu
-                                </button>
-                            @endif
-
-
-                            <!-- Modal untuk Generate QR Code -->
-                            <div class="modal fade custom-modal-backdrop" id="qrModal" tabindex="-1"
-                                aria-labelledby="qrModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="qrModalLabel">Generate QR Code Menu</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p>Nama Toko: <strong>{{ $shopProfile->name ?? '' }}</strong> - Menu</p>
-                                            <label for="qrCount">Masukkan jumlah QR Code:</label>
-                                            <input type="number" id="qrCount" class="form-control mb-3"
-                                                placeholder="Jumlah QR Code" min="1">
-                                            <label for="customTables">Atau masukkan nomor meja secara custom (pisahkan
-                                                dengan koma):</label>
-                                            <input type="text" id="customTables" class="form-control mb-3"
-                                                placeholder="Contoh: 1,2,3">
-                                            <button type="button" class="btn btn-primary w-100"
-                                                id="generateQrBtn">Generate</button>
-                                            <div id="qrResults" class="mt-4 text-center"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+                            <div class="form-group">
+                                <label for="longitude">Longitude</label>
+                                <input type="text" name="longitude" id="longitude" class="form-control"
+                                    value="{{ old('longitude', $shopProfile->location->longitude ?? '140.3659557') }}"
+                                    required>
+                            </div> --}}
+                        </div>
                     </div>
-                </div>
+
+                    <!-- Map Section (separate card with col-12) -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4>Shop Location</h4>
+                        </div>
+                        <div class="card-body">
+                            <div id="map" style="height: 400px; border-radius: 8px;"></div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-lg btn btn-primary m-1"> <i class="fa fa-save"></i>
+                        {{ isset($shopProfile) ? 'Update' : 'Create' }} Shop Profile
+                    </button>
+
+                    <!-- Lihat Shop Profile Button -->
+                    @if (isset($shopProfile))
+                        <button type="button" class="btn btn-lg btn-success m-1" data-bs-toggle="modal"
+                            data-bs-target="#qrModal"> <i class="fa fa-table"></i>
+                            Generate Table 
+                        </button>
+                    @endif
+
+
+                    <!-- Modal untuk Generate QR Code -->
+                    <div class="modal fade custom-modal-backdrop" id="qrModal" tabindex="-1"
+                        aria-labelledby="qrModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="qrModalLabel">Generate QR Code Menu</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Nama Toko: <strong>{{ $shopProfile->name ?? '' }}</strong> - Menu</p>
+                                    <label for="qrCount">Masukkan jumlah QR Code:</label>
+                                    <input type="number" id="qrCount" class="form-control mb-3"
+                                        placeholder="Jumlah QR Code" min="1">
+                                    <label for="customTables">Atau masukkan nomor meja secara custom (pisahkan
+                                        dengan koma):</label>
+                                    <input type="text" id="customTables" class="form-control mb-3"
+                                        placeholder="Contoh: 1,2,3">
+                                    <button type="button" class="btn btn-primary w-100"
+                                        id="generateQrBtn">Generate</button>
+                                    <div id="qrResults" class="mt-4 text-center"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+
             </div>
         </section>
     </div>

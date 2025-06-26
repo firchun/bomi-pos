@@ -18,16 +18,22 @@ use App\Http\Controllers\ShopProfileController;
 use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\AdminProfileController;
 use App\Http\Controllers\AdsController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\IncomeExpenseCategoryController;
 use App\Http\Controllers\IncomeExpenseController;
 use App\Http\Controllers\IngredientCategoryController;
 use App\Http\Controllers\IngredientController;
+use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\LocalServerTokenController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\SyncController;
+use App\Http\Controllers\TablesController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\App;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,11 +46,50 @@ use Illuminate\Http\Request;
 |
 */
 // homepage
-Route::get('/', [HomePageController::class, 'index'])->name('homepage');
-Route::get('shop-page', [HomePageController::class, 'outlet'])->name('shop-page');
-Route::get('/shop/{slug}', [HomePageController::class, 'outlet_details'])->name('shop.details');
-Route::get('bomi-products', [HomePageController::class, 'bomiProduct'])->name('bomi-products.home');
+Route::get('/', [HomePageController::class, 'index'])
+    ->middleware('local.redirect')
+    ->name('homepage');
+Route::get('shop-page', [HomePageController::class, 'outlet'])
+    ->middleware('local.to.online')
+    ->name('shop-page');
+Route::get('/shop/{slug}', [HomePageController::class, 'outlet_details'])
+    ->middleware('local.to.online')->name('shop.details');
+
+Route::get('/shop/table/{code}', [HomePageController::class, 'order_table'])
+    ->middleware('local.to.online')
+    ->name('shop.table');
+
+Route::get('bomi-products', [HomePageController::class, 'bomiProduct'])
+    ->middleware('local.to.online')
+    ->name('bomi-products.home');
+Route::get('bisnis/fb', [HomePageController::class, 'bisnisFb'])
+    ->middleware('local.to.online')
+    ->name('bisnis.fb');
+Route::get('bisnis/jasa', [HomePageController::class, 'bisnisJasa'])
+    ->middleware('local.to.online')
+    ->name('bisnis.jasa');
+Route::get('bisnis/retail', [HomePageController::class, 'bisnisRetail'])
+    ->middleware('local.to.online')
+    ->name('bisnis.retail');
+Route::get('blogs', [HomePageController::class, 'blog'])
+    ->middleware('local.to.online')
+    ->name('blogs');
+Route::get('blogs/{slug}', [HomePageController::class, 'blogDetail'])
+    ->middleware('local.to.online')
+    ->name('blog-detail');
+
+
 // end homepage
+// check network
+Route::get('/check-network', function () {
+    return response()->json([
+        'online' => \App\Helpers\Network::isOnline(),
+    ]);
+});
+// singkronisasi data
+Route::post('/api/upload-users', [SyncController::class, 'uploadUsers']);
+Route::get('/api/download-users', [SyncController::class, 'downloadUsers']);
+Route::get('/sync-users', [SyncController::class, 'syncUsersWithCloud']); // Di sisi lokal
 
 // Route::get('shop-page', [ShopPageController::class, 'shop_page'])->name('shop-page');
 // Route::get('/shop/{slug}', [ShopPageController::class, 'shop_details'])->name('shop.details');
@@ -89,8 +134,8 @@ Route::post('/email/verification-notification', function (Request $request) {
     return back()->with('status', 'verification-link-sent');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 // languange
-Route::post('/change-language', [App\Http\Controllers\LanguageController::class, 'change'])->name('change.language');
-Route::middleware(['auth','verified'])->group(function () {
+Route::post('/change-language', [LanguageController::class, 'change'])->name('change.language');
+Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('dashboard', [HomeController::class, 'index'])->name('home');
     Route::get('/dashboard-data', [HomeController::class, 'getDashboardData'])->name('dashboard.data');
@@ -106,17 +151,29 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::post('/subscribe', [SubscriptionController::class, 'store']);
     Route::put('profile/update/{id}', [UserController::class, 'update'])->name('profile.update');
     Route::middleware(['role:user'])->group(function () {
-
+        if (App::environment() !== 'local') {
+            // token server
+            Route::get('/local-server', [LocalServerTokenController::class, 'index'])->name('local-server.index');
+            Route::post('/generate-token', [LocalServerTokenController::class, 'generate'])->name('generate-token');
+        }
+        // setting
+        // Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+        Route::match(['get', 'post'], '/settings', [SettingController::class, 'index'])->name('settings.index');
         // update pro
         Route::post('/subscription/update-pro/{userId}', [SubscriptionController::class, 'updatePro'])->name('subscription.updatePro');
+        // calendar
+        Route::resource('tables', TablesController::class);
         // calendar
         Route::get('/calendar', [CalendarController::class, 'index'])->name('calendar');
         // advertisement
         Route::resource('advertisement', AdsController::class);
         // product
         Route::resource('products', ProductController::class);
-        Route::get('products/ingredient/{id}', [ProductController::class,'ingredient'])->name('products.ingredient');
+        Route::post('/products/update-discount', [ProductController::class, 'updateDiscount'])->name('products.updateDiscount');
+        Route::get('products/ingredient/{id}', [ProductController::class, 'ingredient'])->name('products.ingredient');
+        // ingredients
         Route::post('/ingredient-dish/store', [IngredientController::class, 'storeDish'])->name('ingredient-dish.store');
+        Route::delete('/ingredient-dish/destroy/{id}', [IngredientController::class, 'destroyDish'])->name('ingredient-dish.destroy');
         Route::resource('categories', CategoryController::class);
         // ingredient
         Route::resource('ingredient', IngredientController::class);
@@ -135,13 +192,13 @@ Route::middleware(['auth','verified'])->group(function () {
         Route::get('/ratings', [RatingController::class, 'index'])->name('ratings.index');
         Route::get('/comment/{shopId}', [RatingController::class, 'fetchCommentsAdmin'])->name('comments.fetch');
         Route::delete('/ratings/delete/{id}', [RatingController::class, 'deleteComment'])->name('ratings.delete');
-
-        Route::get('/chat', [ChatController::class, 'userChat'])->name('user.chat');
-        Route::post('/message/send-user', [ChatController::class, 'sendMessageUser'])->name('message.sendUser');
-        Route::get('/user', [ChatController::class, 'userDashboard'])->name('user.dashboard');
-        Route::post('/user/get-messages', [ChatController::class, 'getUserMessages'])->name('user.getMessages');
-        Route::post('/user/send-message', [ChatController::class, 'sendMessageToAdmin'])->name('user.sendMessage');
-
+        if (App::environment() !== 'local') {
+            Route::get('/chat', [ChatController::class, 'userChat'])->name('user.chat');
+            Route::post('/message/send-user', [ChatController::class, 'sendMessageUser'])->name('message.sendUser');
+            Route::get('/user', [ChatController::class, 'userDashboard'])->name('user.dashboard');
+            Route::post('/user/get-messages', [ChatController::class, 'getUserMessages'])->name('user.getMessages');
+            Route::post('/user/send-message', [ChatController::class, 'sendMessageToAdmin'])->name('user.sendMessage');
+        }
         Route::get('/home-pos', Pos::class)->name('user.pos');
         Route::get('/payment', Payment::class)->name('user.payment');
 
@@ -172,29 +229,34 @@ Route::middleware(['auth','verified'])->group(function () {
             Route::get('/financial/expenses', [IncomeExpenseController::class, 'expenses'])->name('financial.expenses');
         });
     });
-    Route::middleware(['role:admin'])->group(function () {
-        Route::resource('users', UserController::class);
+    if (App::environment() !== 'local') {
+        Route::middleware(['role:admin'])->group(function () {
+            Route::get('users/admin', [UserController::class, 'admin'])->name('users.admin');
+            Route::resource('users', UserController::class);
 
-        Route::prefix('admin-products')->name('admin-products.')->group(function () {
-            Route::get('/', [AdminProductController::class, 'index'])->name('index');
-            Route::get('/create', [AdminProductController::class, 'create'])->name('create');
-            Route::post('/', [AdminProductController::class, 'store'])->name('store');
-            Route::get('/{adminproduct}/edit', [AdminProductController::class, 'edit'])->name('edit');
-            Route::put('/{adminproduct}', [AdminProductController::class, 'update'])->name('update');
-            Route::delete('/{adminproduct}', [AdminProductController::class, 'destroy'])->name('destroy');
+            Route::prefix('admin-products')->name('admin-products.')->group(function () {
+                Route::get('/', [AdminProductController::class, 'index'])->name('index');
+                Route::get('/create', [AdminProductController::class, 'create'])->name('create');
+                Route::post('/', [AdminProductController::class, 'store'])->name('store');
+                Route::get('/{adminproduct}/edit', [AdminProductController::class, 'edit'])->name('edit');
+                Route::put('/{adminproduct}', [AdminProductController::class, 'update'])->name('update');
+                Route::delete('/{adminproduct}', [AdminProductController::class, 'destroy'])->name('destroy');
+            });
+            // blogs
+            Route::resource('admin-blogs', BlogController::class);
+            //admin profile
+            Route::get('admin_profiles', [AdminProfileController::class, 'index'])->name('admin_profiles.index');
+            Route::post('admin_profiles', [AdminProfileController::class, 'store'])->name('admin_profiles.store');
+            Route::put('admin_profiles/{admin_profile}', [AdminProfileController::class, 'update'])->name('admin_profiles.update');
+
+            Route::get('/admin/dashboard', [ChatController::class, 'adminDashboard'])->name('admin.dashboard');
+            Route::get('/admin/get-users', [ChatController::class, 'getUserList'])->name('admin.getUserList');
+            Route::post('/admin/get-messages', [ChatController::class, 'getAdminMessages'])->name('admin.getMessages');
+            Route::post('/admin/send-message', [ChatController::class, 'sendMessageToUser'])->name('admin.sendMessage');
+            Route::get('/admin/get-unread-counts', [ChatController::class, 'getUnreadCounts'])->name('admin.getUnreadCounts');
+            // subscription
+            Route::get('/admin/subscriptions', [SubscriptionController::class, 'index'])->name('subscription.index');
+            Route::post('/admin/subscriptions/update', [SubscriptionController::class, 'update'])->name('subscription.update');
         });
-
-        Route::get('admin_profiles', [AdminProfileController::class, 'index'])->name('admin_profiles.index');
-        Route::post('admin_profiles', [AdminProfileController::class, 'store'])->name('admin_profiles.store');
-        Route::put('admin_profiles/{admin_profile}', [AdminProfileController::class, 'update'])->name('admin_profiles.update');
-
-        Route::get('/admin/dashboard', [ChatController::class, 'adminDashboard'])->name('admin.dashboard');
-        Route::get('/admin/get-users', [ChatController::class, 'getUserList'])->name('admin.getUserList');
-        Route::post('/admin/get-messages', [ChatController::class, 'getAdminMessages'])->name('admin.getMessages');
-        Route::post('/admin/send-message', [ChatController::class, 'sendMessageToUser'])->name('admin.sendMessage');
-        Route::get('/admin/get-unread-counts', [ChatController::class, 'getUnreadCounts'])->name('admin.getUnreadCounts');
-        // subscription
-        Route::get('/admin/subscriptions', [SubscriptionController::class, 'index'])->name('subscription.index');
-        Route::post('/admin/subscriptions/update', [SubscriptionController::class, 'update'])->name('subscription.update');
-    });
+    }
 });

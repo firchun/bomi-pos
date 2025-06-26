@@ -12,8 +12,8 @@ class Ingredient extends Model
     protected $table = 'ingredients';
     protected $guarded = [];
 
-    public function category() : BelongsTo
+    public function category(): BelongsTo
     {
-        return $this->BelongsTo(IngredientCategory::class,'id_category','id');
+        return $this->BelongsTo(IngredientCategory::class, 'id_category', 'id');
     }
 }

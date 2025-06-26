@@ -3,7 +3,12 @@
 namespace App\Providers;
 
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Setting;
+use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -12,7 +17,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        View::composer('*', function ($view) {
+            $setting = null;
+            if (Auth::check()) {
+                $setting = Setting::where('id_user', Auth::id())->latest()->first();
+            }
+            $view->with('setting', $setting);
+        });
     }
 
     /**
@@ -21,5 +32,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrapFour();
+        App::setLocale(Session::get('locale', 'id'));
     }
 }

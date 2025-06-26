@@ -28,7 +28,7 @@ class HomeController extends Controller
             return redirect('login');
         }
         $shop_profiles = ShopProfile::where('user_id', Auth::id())->first();
-        if (!$shop_profiles) {
+        if (!$shop_profiles && Auth::user()->role != 'admin') {
             return redirect('shop-profiles');
         }
         $product = Product::query();
@@ -51,23 +51,23 @@ class HomeController extends Controller
                 ->select('products.*', DB::raw('COALESCE(order_counts.total_ordered, 0) as total_ordered'))
                 ->where('products.user_id', Auth::id())
                 ->orderByDesc('total_ordered')
-                ->take(3);
+                ->take(5);
         }])->get();
         $shop = ShopProfile::where('user_id', Auth::id())->first();
         $data = [
             'admin' => User::where('role', 'admin')->count(),
             'user' => User::where('role', 'user')->count(),
-            'average_rating' => round(Rating::where('shop_profile_id', $shop->id)->avg('rating'), 2),
-            'product' => $product->count(),
-            'ads' => Ads::where('shop_id', $shop->id)->get(),
-            'shop' =>$shop ?? null,
-            'visitor_today' => Visitor::where('shop_id', $shop->id)->whereDate('created_at', Carbon::today())->count(),
-            'visitor_week' => Visitor::where('shop_id', $shop->id)
+            'average_rating' => Auth::user()->role != 'admin' ? round(Rating::where('shop_profile_id', $shop->id)->avg('rating'), 2) : 0,
+            'product' =>  $product->count(),
+            'ads' => Auth::user()->role != 'admin' ? Ads::where('shop_id', $shop->id)->get() : Ads::all(),
+            'shop' => $shop ?? null,
+            'visitor_today' => Auth::user()->role != 'admin' ? Visitor::where('shop_id', $shop->id)->whereDate('created_at', Carbon::today())->count() : 0,
+            'visitor_week' => Auth::user()->role != 'admin' ? Visitor::where('shop_id', $shop->id)
                 ->where('created_at', '>=', Carbon::now()->subDays(6)->startOfDay())
-                ->count(),
+                ->count() : 0,
             'popularCategories' => $popularCategories,
         ];
-        return view('pages.dashboard', $data);
+        return view(Auth::user()->role == 'admin' ? 'pages.dashboard_admin' : 'pages.dashboard', $data);
     }
 
     public function getTransactionData(Request $request)
@@ -244,32 +244,32 @@ class HomeController extends Controller
             'reviews' => $reviews
         ]);
     }
-    
+
     public function createForgot()
     {
         if (Auth::check()) {
             return redirect('/dashboard');
         }
-        
+
         return view('pages.auth.forgot-password');
     }
 
     public function storeForgot(Request $request)
     {
         $request->validate(['email' => 'required|email']);
-    
+
         $status = Password::sendResetLink(
             $request->only('email')
         );
-    
+
         return $status === Password::RESET_LINK_SENT
-                    ? back()->with('status', __($status))
-                    : back()->withErrors(['email' => __($status)]);
+            ? back()->with('status', __($status))
+            : back()->withErrors(['email' => __($status)]);
     }
 
     public function createReset(Request $request)
     {
-       
+
         return view('pages.auth.reset-password', ['request' => $request]);
     }
 
@@ -291,9 +291,7 @@ class HomeController extends Controller
         );
 
         return $status === Password::PASSWORD_RESET
-                    ? redirect()->route('login')->with('status', __($status))
-                    : back()->withErrors(['email' => [__($status)]]);
+            ? redirect()->route('login')->with('status', __($status))
+            : back()->withErrors(['email' => [__($status)]]);
     }
-
 }
-

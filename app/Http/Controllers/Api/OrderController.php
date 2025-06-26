@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
@@ -33,6 +34,14 @@ class OrderController extends Controller
 
         //generate unique invoice number
         $no_invoice = 'BR-' . Carbon::now()->format('YmdHis');
+        // hitung total
+        $sub_total = $request->sub_total;
+        $discount_amount = $request->discount_amount ?? 0;
+        $tax = $request->tax ?? 0;
+        $service_charge = $request->service_charge ?? 0;
+
+        // Hitung total akhir
+        $total = ($sub_total - $discount_amount) + $tax + $service_charge;
 
         //create order
         $order = Order::create([
@@ -43,7 +52,8 @@ class OrderController extends Controller
             'discount' => $request->discount,
             'discount_amount' => $request->discount_amount,
             'service_charge' => $request->service_charge,
-            'total' => $request->total,
+            // 'total' => $request->total,
+            'total' => $total,
             'payment_method' => $request->payment_method,
             'total_item' => $request->total_item,
             'id_kasir' => Auth::id(),
@@ -55,11 +65,14 @@ class OrderController extends Controller
 
         //create order items
         foreach ($request->order_items as $item) {
+            $product = Product::find($item['id_product']);
+            $price = $product->discount == 0 ? $product->price : $product->price_final;
             OrderItem::create([
                 'order_id' => $order->id,
                 'product_id' => $item['id_product'],
+                'product_name' => $product->name ?? '-',
                 'quantity' => $item['quantity'],
-                'price' => $item['price']
+                'price' => $price
             ]);
         }
 

@@ -46,9 +46,24 @@
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $data->ingredient->name ?? '' }}</td>
-                                                    <td>{{ $data->qty }} <small>{{ $data->ingredient->unit }}</small>
+                                                    <td>{{ $data->qty }} <small>{{ $data->ingredient->sub_unit }}</small>
                                                     </td>
-                                                    <td></td>
+                                                    <td>
+                                                        <a href="{{ route('ingredient-dish.destroy', $product->id) }}"
+                                                            onclick="event.preventDefault(); 
+                                                              if(confirm('Are you sure you want to delete this data?')) {
+                                                                  document.getElementById('delete-data-{{ $data->id }}').submit();
+                                                              }"
+                                                            class="btn btn-sm btn-danger ">
+                                                            <i class="fas fa-trash m-1"></i> {{ __('general.delete') }}
+                                                        </a>
+                                                        <form id="delete-data-{{ $data->id }}"
+                                                            action="{{ route('ingredient-dish.destroy', $data->id) }}"
+                                                            method="POST" class="d-none">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                        </form>
+                                                    </td>
                                                 </tr>
                                             @empty
                                                 <tr>
@@ -79,8 +94,8 @@
                             </div>
                             <div class="card-body">
                                 @if ($product->image)
-                                    <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="card-img-top"
-                                        style="height: 200px; object-fit: cover;"
+                                    <img src="{{ asset($product->image) }}" alt="{{ $product->name }}"
+                                        class="card-img-top" style="height: 200px; object-fit: cover;"
                                         onerror="this.onerror=null; this.src='{{ asset('home2/assets/img/sample.png') }}';">
                                 @else
                                     <div class="card-img-top d-flex align-items-center justify-content-center bg-light"
@@ -126,7 +141,7 @@
                                 name="id_ingredient">
 
                                 @foreach ($ingredient as $data)
-                                    <option value="{{ $data->id }}">{{ $data->name }} / {{ $data->unit }}
+                                    <option value="{{ $data->id }}">{{ $data->name }} / {{ $data->sub_unit }}
                                     </option>
                                 @endforeach
                             </select>
@@ -136,7 +151,7 @@
                             <input type="number" step="0.01" min="0"
                                 class="form-control @error('qty') is-invalid @enderror" name="qty"
                                 value="{{ old('qty') ?? 0 }}">
-                                <small class="text-mutted">for decimal example = 0.5 not 0,5</small>
+                            <small class="text-mutted">for decimal example = 0.5 not 0,5</small>
                         </div>
                     </div>
 

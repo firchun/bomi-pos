@@ -68,5 +68,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'role' => \App\Http\Middleware\CheckUserLogin::class,
         'check.subscription' => \App\Http\Middleware\CheckSubscription::class,
+        'local.redirect' => \App\Http\Middleware\RedirectIfLocal::class,
+        'local.to.online' => \App\Http\Middleware\LocalToOnline::class,
     ];
 }

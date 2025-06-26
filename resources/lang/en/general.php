@@ -32,4 +32,7 @@ return [
   'product report' => 'Product Report',
   'ingredient report' => 'Ingredient Report',
   'Advertisement' => 'Advertisement',
+  'Tables' => 'Tables',
+  'Help' => 'Help',
+  'Open' => 'Open',
 ];

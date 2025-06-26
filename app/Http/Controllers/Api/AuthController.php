@@ -22,7 +22,7 @@ class AuthController extends Controller
         //check if the user exists
         $user = User::where('email', $request->email)->first();
         if (!$user) {
-            SecurityLogService::logFailedLogin($request->email);
+            // SecurityLogService::logFailedLogin($request->email);
             return response()->json([
                 'status' => 'error',
                 'message' => 'User not found'
@@ -31,7 +31,7 @@ class AuthController extends Controller
 
         //check if the password is correct
         if (!Hash::check($request->password, $user->password)) {
-            SecurityLogService::logFailedLogin($request->email);
+            // SecurityLogService::logFailedLogin($request->email);
             return response()->json([
                 'status' => 'error',
                 'message' => 'Invalid credentials'
@@ -41,7 +41,7 @@ class AuthController extends Controller
         //generate token
         $token = $user->createToken('auth-token')->plainTextToken;
         // Log successful login
-        SecurityLogService::logLogin($user);
+        // SecurityLogService::logLogin($user);
 
         return response()->json([
             'status' => 'success',
@@ -54,7 +54,7 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         // Log logout
-        SecurityLogService::logLogout($request->user());
+        // SecurityLogService::logLogout($request->user());
 
         $request->user()->currentAccessToken()->delete();
 

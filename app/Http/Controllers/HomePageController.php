@@ -5,12 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\AdminProduct;
 use App\Models\AdminProfile;
 use App\Models\Ads;
+use App\Models\Blog;
 use App\Models\Category;
+use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\ShopProfile;
+use App\Models\Table;
 use App\Models\Visitor;
 use Illuminate\Http\Request;
 use GeoIP;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class HomePageController extends Controller
 {
@@ -35,18 +40,56 @@ class HomePageController extends Controller
         $shops = ShopProfile::paginate(1);
         return view('home-pages.outlet', compact('shops'));
     }
+    public function bisnisFb()
+    {
+        return view('home-pages.bisnis.fb');
+    }
+    public function bisnisJasa()
+    {
+        return view('home-pages.bisnis.jasa');
+    }
+    public function bisnisRetail()
+    {
+        return view('home-pages.bisnis.retail');
+    }
+    public function blog()
+    {
+        $data = [
+            'description' => 'Temukan berbagai artikel menarik dan informatif di blog kami. Dapatkan tips, berita, dan informasi terbaru seputar bisnis, teknologi, dan gaya hidup.',
+            'keywords' => 'blog, artikel, tips, berita, informasi',
+            'blogs' => Blog::with('user')
+                ->where('is_published', true)
+                ->orderByDesc('created_at')
+                ->paginate(6),
+        ];
+        return view('home-pages.blogs', $data);
+    }
+    public function blogDetail($slug)
+    {
+        $data = [
+            'blog' => Blog::where('slug', $slug)->first(),
+            'otherBlogs' => Blog::where('slug', '!=', $slug)->latest()->take(5)->get(),
+            'latestBlogs' => Blog::latest()->take(3)->get(),
+        ];
+        return view('home-pages.blog-detail', $data);
+    }
     public function outlet_details(Request $request, $slug)
     {
-        
+
         $shop = ShopProfile::with('location')->where('slug', $slug)->firstOrFail();
 
-        //insert visitor
-        // $ip = $request->ip();
-        // if ($ip == '127.0.0.1') {
-        //     $location = null;
-        // } else {
-        //     $location = geoip()->getLocation($ip);
-        // }
+
+        $orderCounts = OrderItem::select('product_id', DB::raw('SUM(quantity) as total_ordered'))
+            ->groupBy('product_id');
+
+        $bestSellerProducts = Product::leftJoinSub($orderCounts, 'order_counts', function ($join) {
+            $join->on('products.id', '=', 'order_counts.product_id');
+        })
+            ->select('products.*', DB::raw('COALESCE(order_counts.total_ordered, 0) as total_ordered'))
+            ->where('products.user_id', $shop->user_id)
+            ->orderByDesc('total_ordered')
+            ->take(5)
+            ->get();
         $location = null;
         Visitor::create([
             'shop_id' => $shop->id,
@@ -73,10 +116,40 @@ class HomePageController extends Controller
         // ads
         $ads = Ads::where('shop_id', $shop->id)->inRandomOrder()->first();
         if ($ads) {
-            $ads->increment('views'); 
+            $ads->increment('views');
         }
-        return view('home-pages.outlet-detail', compact('ads','shop', 'averageRating', 'products', 'categories', 'ratings'));
+        return view('home-pages.outlet-detail', compact('ads', 'shop', 'averageRating', 'products', 'categories', 'ratings', 'bestSellerProducts'));
     }
+    public function order_table($code)
+    {
+        $table = Table::where('code', $code)->firstOrFail();
+        $shop = ShopProfile::with('location')->where('user_id', $table->user_id)->firstOrFail();
+
+        $location = null;
+        Visitor::create([
+            'shop_id' => $shop->id,
+            'ip_address' => $ip ?? null,
+            'iso_code' => $location ? $location->countryCode : null,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $user = $shop->user;
+        $averageRating = $shop->ratings->isNotEmpty() ? $shop->ratings->avg('rating') : 0;
+
+        $products = Product::where('status', true)
+            ->where('user_id', $user->id)
+            ->paginate(6);
+
+        $categories = Category::whereHas('products', function ($query) use ($user) {
+            $query->where('user_id', $user->id)
+                ->where('status', true);
+        })->get();
+
+
+        return view('home-pages.order_table', compact('shop', 'averageRating', 'products', 'categories', 'table'));
+    }
+
     public function bomiProduct(Request $request)
     {
         $query = AdminProduct::query();

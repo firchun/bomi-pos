@@ -15,9 +15,19 @@ class ProductController extends Controller
     public function index()
     {
 
-        $products = \App\Models\Product::where('user_id', Auth::id())->orderBy('id', 'desc')->get();
+        $products = \App\Models\Product::where('user_id', Auth::id())
+            ->orderBy('id', 'desc')
+            ->get();
 
         $products->load('category');
+
+        $products = $products->map(function ($product) {
+            $productArray = $product->toArray();
+            if ($product->discount != 0) {
+                $productArray['price'] = number_format($product->price_final, 2, '.', '');
+            }
+            return $productArray;
+        });
         return response()->json([
             'success' => true,
             'message' => 'List Data Product',

@@ -2,38 +2,64 @@
 <html lang="id" class="light">
 
 <head>
-    <title>Bomi POS - aplikasi kasir terbaik</title>
     <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>@yield('title', 'Bomi POS - Aplikasi Kasir Terbaik')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="{{ asset('home2') }}/assets/svg/logo.svg" type="image/png" />
+
     <!-- SEO Meta Tags -->
-    <meta name="description"
-        content="Bomi Pos adalah aplikasi dan web kasir untuk usaha retail dan restoran. Kelola penjualan, stok, laporan, dan pembayaran dengan mudah dan cepat.">
-    <meta name="keywords"
-        content="aplikasi kasir, web kasir, kasir restoran, kasir retail, aplikasi POS, sistem kasir online, software kasir, Bomi Pos">
+    <meta name="description" content="@yield('meta-description', 'Bomi Pos adalah aplikasi dan web kasir untuk usaha retail dan restoran. Kelola penjualan, stok, laporan, dan pembayaran dengan mudah dan cepat.')">
+    <meta name="keywords" content="@yield('meta-keywords', 'aplikasi kasir, web kasir, kasir restoran, kasir retail, aplikasi POS, sistem kasir online, software kasir, Bomi Pos')">
     <meta name="author" content="Bomi Pos">
     <meta name="robots" content="index, follow" />
 
-    <!-- Open Graph untuk Sosial Media -->
-    <meta property="og:title" content="Bomi Pos - Aplikasi dan Web Kasir untuk Retail & Restoran" />
-    <meta property="og:description"
-        content="Gunakan Bomi Pos untuk mengelola penjualan, stok, keuangan, dan laporan usaha Anda secara efisien. Cocok untuk UMKM hingga bisnis skala besar." />
-    <meta property="og:image" content="{{ asset('home2') }}/assets/img/logo-bomipos.png" />
-    <meta property="og:url" content="https://bomipos.id" />
+    <!-- Open Graph / Facebook -->
+    <meta property="og:title" content="@yield('meta-og-title', 'Bomi Pos - Aplikasi dan Web Kasir untuk Retail & Restoran')" />
+    <meta property="og:description" content="@yield('meta-og-description', 'Gunakan Bomi Pos untuk mengelola penjualan, stok, keuangan, dan laporan usaha Anda secara efisien. Cocok untuk UMKM hingga bisnis skala besar.')" />
+    <meta property="og:image" content="@yield('meta-og-image', asset('home2/assets/img/logo-bomipos.png'))" />
+    <meta property="og:url" content="@yield('meta-og-url', url()->current())" />
     <meta property="og:type" content="website" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Bomi Pos - Solusi Kasir Modern untuk Bisnis Anda" />
-    <meta name="twitter:description"
-        content="Bomi Pos menyediakan sistem kasir online berbasis aplikasi dan web untuk mendukung operasional toko dan restoran Anda." />
-    <meta name="twitter:image" content="{{ asset('home2') }}/assets/img/logo-bomipos.png" />
-
+    <meta name="twitter:title" content="@yield('meta-twitter-title', 'Bomi Pos - Solusi Kasir Modern untuk Bisnis Anda')" />
+    <meta name="twitter:description" content="@yield('meta-twitter-description', 'Bomi Pos menyediakan sistem kasir online berbasis aplikasi dan web untuk mendukung operasional toko dan restoran Anda.')" />
+    <meta name="twitter:image" content="@yield('meta-twitter-image', asset('home2/assets/img/logo-bomipos.png'))" />
     <!-- Tailwind & Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        @media (max-width: 499px) {
+            .xs\:block {
+                display: block !important;
+            }
+
+            .xs\:inline-block {
+                display: inline-block !important;
+            }
+
+            .xs\:flex {
+                display: flex !important;
+            }
+
+            .xs\:hidden {
+                display: none !important;
+            }
+        }
+
+        @media (min-width: 500px) {
+
+            .xs\:block,
+            .xs\:inline-block,
+            .xs\:flex {
+                display: none !important;
+            }
+        }
+    </style>
     <style>
         #spotlight {
             position: absolute;
@@ -82,39 +108,92 @@
                     <img src="{{ asset('home2') }}/assets/svg/logo.svg" alt="logo" class="h-10">
                 </a>
                 <!-- Navigation (Hidden on small screens) -->
-                <nav class="space-x-10 hidden md:flex ">
+                <nav class="space-x-10 hidden lg:flex ">
                     {{-- <a href="{{ url('/') }}"
                     class="text-sm font-semibold text-purple-700 dark:text-white transition-colors duration-300 @if (request()->is('/')) border border-purple-700/30 rounded-full px-4  bg-gradient-to-r from-purple-400 to-transparent @endif">
                     Home
                  </a> --}}
-                    <a href="{{ url('/') }}"
+                    {{-- <a href="{{ url('/') }}"
                         class="text-sm font-semibold text-purple-700 dark:text-white transition-all duration-300
                         @if (Request::is('/')) border border-purple-700 rounded-full px-4
-                               shadow-sm shadow-purple-700 shadow-inner
-                               @else hover:border hover:border-purple-700 hover:rounded-full hover:px-4  hover:shadow-sm hover:shadow-purple-700 hover:shadow-inner @endif
+                               shadow-sm shadow-purple-700 shadow-inner bg-white/40
+                               @else hover:border hover:border-purple-700  hover:bg-white/40 hover:rounded-full hover:px-4  hover:shadow-sm hover:shadow-purple-700 hover:shadow-inner @endif
                                  ">
                         Home
-                    </a>
+                    </a> --}}
+                    <!-- Dropdown -->
+                    <!-- Dropdown -->
+                    <div class="relative group">
+                        <button
+                            class="text-sm font-semibold text-purple-700   @if (Request::is('bisnis*')) border border-purple-700 rounded-full px-4
+                               shadow-sm shadow-purple-700 shadow-inner bg-white/40
+                               @else hover:border hover:border-purple-700  hover:bg-white/40 hover:rounded-full hover:px-4  hover:shadow-sm hover:shadow-purple-700 hover:shadow-inner @endif">Bisnis
+                            <i class="bi bi-chevron-down"></i></button>
 
+                        <!-- Invisible hover area untuk menahan dropdown -->
+                        <div class="absolute top-full left-0 w-full h-6 group-hover:block"></div>
+
+                        <div
+                            class="absolute left-0 mt-2 hidden group-hover:flex bg-white shadow-lg rounded-lg p-3 lg:w-[600px] w-[400px] z-50 transition-all duration-200">
+                            <div class="grid lg:grid-cols-3 grid-cols-2 gap-2">
+
+                                <!-- F&B -->
+                                <a href="{{ route('bisnis.fb') }}"
+                                    class="block bg-purple-50 p-2 rounded-lg hover:bg-purple-100 transition">
+                                    <h3 class="text-md font-semibold text-purple-700 mb-2">F&B</h3>
+                                    <p class="text-[12px] text-gray-600">
+                                        Cocok untuk restoran, kedai kopi, minuman, cepat saji, toko roti, dan katering.
+                                    </p>
+                                </a>
+
+                                <!-- Retail -->
+                                <a href="{{ route('bisnis.retail') }}"
+                                    class="block bg-purple-50 p-2 rounded-lg hover:bg-purple-100 transition">
+                                    <h3 class="text-md font-semibold text-purple-700 mb-2">Retail</h3>
+                                    <p class="text-[12px] text-gray-600">
+                                        Cocok untuk supermarket, minimarket, toko butik, toko baju, toko elektronik,
+                                        toko serba ada, dan showroom.
+                                    </p>
+                                </a>
+
+                                <!-- Jasa -->
+                                <a href="{{ route('bisnis.jasa') }}"
+                                    class="block bg-purple-50 p-2 rounded-lg hover:bg-purple-100 transition">
+                                    <h3 class="text-md font-semibold text-purple-700 mb-2">Jasa</h3>
+                                    <p class="text-[12px] text-gray-600">
+                                        Cocok untuk pet shop, salon, spa, klinik kecantikan, barbershop, travel, guest
+                                        house, hotel, bengkel, laundry.
+                                    </p>
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <a href="{{ route('blogs') }}"
+                        class="text-sm font-semibold text-purple-700 dark:text-white transition-all duration-300  
+                        @if (Request::is('blogs*')) border border-purple-700 rounded-full px-4
+                               shadow-sm shadow-purple-700 shadow-inner bg-white/40
+                               @else hover:border hover:border-purple-700 hover:bg-white/40 hover:rounded-full hover:px-4  hover:shadow-sm hover:shadow-purple-700 hover:shadow-inner @endif">Blog</a>
                     <a href="{{ route('shop-page') }}"
                         class="text-sm font-semibold text-purple-700 dark:text-white transition-all duration-300  
-                        @if (Request::is('shop-page')) border border-purple-700 rounded-full px-4
-                               shadow-sm shadow-purple-700 shadow-inner
-                               @else hover:border hover:border-purple-700 hover:rounded-full hover:px-4  hover:shadow-sm hover:shadow-purple-700 hover:shadow-inner @endif">Outlet</a>
+                        @if (Request::is('shop-page') || Request::is('shop*')) border border-purple-700 rounded-full px-4
+                               shadow-sm shadow-purple-700 shadow-inner bg-white/40
+                               @else hover:border hover:border-purple-700 hover:bg-white/40 hover:rounded-full hover:px-4  hover:shadow-sm hover:shadow-purple-700 hover:shadow-inner @endif">Outlet</a>
                     <a href="{{ url('bomi-products') }}"
                         class="text-sm font-semibold text-purple-700 dark:text-white transition-all duration-300  
                         @if (Request::is('bomi-products')) border border-purple-700 rounded-full px-4
-                               shadow-sm shadow-purple-700 shadow-inner
-                               @else hover:border hover:border-purple-700 hover:rounded-full hover:px-4  hover:shadow-sm hover:shadow-purple-700 hover:shadow-inner @endif">Bomi
+                               shadow-sm shadow-purple-700 shadow-inner bg-white/40
+                               @else hover:border hover:border-purple-700  hover:bg-white/40 hover:rounded-full hover:px-4  hover:shadow-sm hover:shadow-purple-700 hover:shadow-inner @endif">Bomi
                         Product</a>
-                        
                 </nav>
 
                 <!-- Login Button -->
                 <div class="flex items-center space-x-5">
-                    <button type="button"  onclick="toggleSearchNavModal()"
+                    <button type="button" onclick="toggleSearchNavModal()"
                         class="text-lg font-semibold text-purple-700 dark:text-white transition-colors duration-300 ">
-                        <i  class="bi bi-search"></i>
+                        <i class="bi bi-search"></i>
                     </button>
                     <a href="#" id="toggleDark"
                         class="text-lg font-semibold text-purple-700 dark:text-white transition-colors duration-300 ">
@@ -122,12 +201,22 @@
                     </a>
                     @guest
                         <a href="{{ route('login') }}"
-                            class="text-sm font-semibold text-purple-700  hidden  md:block dark:text-white transition-colors duration-300">Sign
-                            In</a>
+                            class="text-sm font-semibold text-purple-700  hidden  md:block dark:text-white transition-colors duration-300">
+                            @if (app()->getLocale() == 'en')
+                                Sign In
+                            @else
+                                Masuk
+                            @endif
+                        </a>
                         <a href="{{ route('register') }}"
                             class="px-4 py-2 bg-purple-700 text-white rounded-xl hidden md:block 
           hover:shadow-sm transform transition-transform  hover:scale-115 dark:bg-white dark:text-purple-700 transition-colors duration-300">
-                            Get Started <i class="bi bi-arrow-right-short"></i>
+                            @if (app()->getLocale() == 'en')
+                                Get Started
+                            @else
+                                Mulai Sekarang
+                            @endif
+                            <i class="bi bi-arrow-right-short"></i>
                         </a>
                     @else
                         <a href="{{ url('/dashboard') }}"
@@ -139,7 +228,11 @@
                             @csrf
                             <button type="submit"
                                 class="text-sm font-semibold text-red-500 hidden md:block dark:text-red-600 transition-colors duration-300">
-                                Sign Out
+                                @if (app()->getLocale() == 'en')
+                                    Sign Out
+                                @else
+                                    Keluar
+                                @endif
                             </button>
                         </form>
                     @endguest
@@ -147,7 +240,7 @@
 
                 <!-- Hamburger Menu for small screens -->
                 <button
-                    class="md:hidden text-purple-700 bg-white/40 rounded-md p-2 dark:text-zinc-300 transition-colors"
+                    class="lg:hidden text-purple-700 bg-white/40 rounded-md p-2 dark:text-zinc-300 transition-colors"
                     id="hamburgerBtn">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                         class="w-6 h-6">
@@ -158,9 +251,28 @@
             </div>
 
             <!-- Mobile Menu (Hidden by default) -->
-            <div class="md:hidden hidden bg-white/70 px-10 py-4 rounded-md mt-4" id="mobileMenu">
-                <a href="{{ url('/') }}"
-                    class="block text-sm font-semibold text-purple-700 py-2 dark:text-zinc-800 transition-colors">Home</a>
+            <div class="lg:hidden hidden bg-white/70 px-10 py-4 rounded-md mt-4" id="mobileMenu">
+                {{-- <a href="{{ url('/') }}"
+                    class="block text-sm font-semibold text-purple-700 py-2 dark:text-zinc-800 transition-colors">Home</a> --}}
+                <!-- Accordion: Bisnis -->
+                <div x-data="{ open: false }" class="py-2">
+                    <button @click="open = !open"
+                        class="flex justify-between items-center w-full text-sm font-semibold text-purple-700 py-2">
+                        Bisnis
+                        <svg :class="{ 'rotate-180': open }" class="h-4 w-4 transition-transform" fill="none"
+                            stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+
+                    <div x-show="open" class="pl-4 pt-2 space-y-2">
+                        <a href="/fb" class="block text-sm text-gray-700 py-1">F&B</a>
+                        <a href="/retail" class="block text-sm text-gray-700 py-1">Retail</a>
+                        <a href="/jasa" class="block text-sm text-gray-700 py-1">Jasa</a>
+                    </div>
+                </div>
+                <a href="{{ route('blogs') }}"
+                    class="block text-sm font-semibold text-purple-700 py-2 dark:text-zinc-800 transition-colors">Blog</a>
                 <a href="{{ route('shop-page') }}"
                     class="block text-sm font-semibold text-purple-700 py-2 dark:text-zinc-800 transition-colors">Outlet</a>
                 <a href="{{ url('bomi-products') }}"
@@ -168,12 +280,23 @@
                     Product</a>
                 @guest
                     <a href="{{ route('login') }}"
-                        class="block text-sm font-semibold text-purple-700 py-2 dark:text-zinc-800 transition-colors">Sign
-                        In</a>
+                        class="block text-sm font-semibold text-purple-700 py-2 dark:text-zinc-800 transition-colors">
+                        @if (app()->getLocale() == 'en')
+                            Sign
+                            In
+                        @else
+                            Masuk
+                        @endif
+                    </a>
                     <a href="{{ route('register') }}"
                         class="py-2  text-purple-700 mt-[20px] rounded-xl 
           hover:shadow-sm transform transition-transform  hover:scale-115  dark:text-zinc-800 transition-colors duration-300">
-                        Get Started <i class="bi bi-arrow-right-short"></i>
+                        @if (app()->getLocale() == 'en')
+                            Get Started
+                        @else
+                            Mulai Sekarang
+                        @endif
+                        <i class="bi bi-arrow-right-short"></i>
                     @else
                         <a href="{{ route('home') }}"
                             class="py-2  text-purple-700 mt-[20px] rounded-xl 
@@ -183,7 +306,11 @@
                                 @csrf
                                 <button type="submit"
                                     class="text-sm font-semibold text-red-700   dark:text-red-400 transition-colors duration-300">
-                                    Sign Out
+                                    @if (app()->getLocale() == 'en')
+                                        Sign Out
+                                    @else
+                                        Keluar
+                                    @endif
                                 </button>
                             </form>
                         @endguest
@@ -205,8 +332,13 @@
 
                 </div>
                 <p class="text-gray-400 hover:text-white">
-                    We’ve gathered the best features to support your cashier operations.
-                    Choose the perfect solution for your business—quickly and easily!
+                    @if (app()->getLocale() == 'en')
+                        We’ve gathered the best features to support your cashier operations.
+                        Choose the perfect solution for your business quickly and easily!
+                    @else
+                        Kami telah mengumpulkan fitur-fitur terbaik untuk mendukung operasional kasir Anda.
+                        Pilih solusi yang paling tepat untuk bisnis Anda dengan cepat dan mudah!
+                    @endif
                 </p>
             </div>
 
@@ -248,7 +380,6 @@
                             Password</a></li>
                 </ul>
             </div>
-
             <!-- Newsletter -->
             <div>
                 <h3 class="font-bold mb-2">Stay in Touch</h3>
@@ -265,7 +396,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Bottom copyright -->
         <div class="mt-12 text-center text-xs text-[#D1CDE6]">
             © {{ date('Y') }} Bomi POS . All Rights Reserved.
@@ -319,6 +449,7 @@
             modal.classList.toggle("hidden");
             modal.classList.toggle("flex");
         }
+
         function toggleSearchNavModal() {
             const modalNav = document.getElementById("searchNavModal");
             modalNav.classList.toggle("hidden");

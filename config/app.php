@@ -30,6 +30,7 @@ return [
     */
 
     'env' => env('APP_ENV', 'production'),
+    'server' => env('APP_SERVER', 'https://bomi-pos.id'),
 
     /*
     |--------------------------------------------------------------------------

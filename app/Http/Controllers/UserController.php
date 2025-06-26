@@ -11,12 +11,27 @@ use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
     // index
+    public function admin(Request $request)
+    {
+        //get all users with pagination
+        $users = DB::table('users')
+            ->whereIn('role', ['admin','staff'])
+            ->when($request->input('name'), function ($query, $name) {
+                $query->where('name', 'like', '%' . $name . '%')
+                    ->whereIn('role', ['admin','staff'])
+                    ->orWhere('email', 'like', '%' . $name . '%');
+            })
+            ->paginate(10);
+        return view('pages.users.admin', compact('users'));
+    }
     public function index(Request $request)
     {
         //get all users with pagination
         $users = DB::table('users')
+        ->where('role', 'user')
             ->when($request->input('name'), function ($query, $name) {
                 $query->where('name', 'like', '%' . $name . '%')
+                ->where('role', 'user')
                     ->orWhere('email', 'like', '%' . $name . '%');
             })
             ->paginate(10);
@@ -38,7 +53,7 @@ class UserController extends Controller
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8',
             'business_name' => 'nullable',
-            'role' => 'required|in:admin,user',
+            'role' => 'required|in:admin,staff',
         ]);
 
         // store the request...
@@ -46,18 +61,18 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
-        $user->business_name = $request->business_name;
+        $user->business_name = '-';
         $user->role = $request->role;
         $user->save();
 
-        return redirect()->route('users.index')->with('success', 'User created successfully');
+        return redirect()->back()->with('success', 'User created successfully');
     }
 
     // show
-    public function show($id)
-    {
-        return view('pages.users.show');
-    }
+    // public function show($id)
+    // {
+    //     return view('pages.users.show');
+    // }
 
     // edit
     public function edit($id)
@@ -74,7 +89,7 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required',
             'business_name' => 'nullable',
-            'role' => 'required|in:admin,user',
+            'role' => 'required|in:admin,staff',
         ]);
         
         dd($request);
@@ -83,7 +98,7 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->business_name = $request->business_name;
-        $user->role = $request->role;
+        $user->role = $request->role ;
         $user->update();
 
         //if password is not empty
@@ -102,6 +117,6 @@ class UserController extends Controller
         $user = User::find($id);
         $user->delete();
 
-        return redirect()->route('users.index')->with('success', 'User deleted successfully');
+        return redirect()->back()->with('success', 'User deleted successfully');
     }
 }

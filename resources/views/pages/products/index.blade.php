@@ -11,7 +11,7 @@
      <div class="main-content">
          <section class="section">
              <div class="section-header">
-                 <h1>Product</h1>
+                 <h1><i class="fa fa-folder"></i> Product</h1>
 
                  <div class="section-header-breadcrumb">
                      <div class="breadcrumb-item active"><a href="{{ route('home') }}">Dashboard</a></div>
@@ -90,6 +90,36 @@
              </div>
          </div>
      </div>
+     <!-- MODAL -->
+     @foreach ($products as $product)
+         <div class="modal fade" id="discountModal{{ $product->id }}" tabindex="-1" role="dialog"
+             aria-labelledby="discountModalLabel{{ $product->id }}" aria-hidden="true">
+             <div class="modal-dialog modal-sm" role="document">
+                 <form action="{{ route('products.updateDiscount') }}" method="POST">
+                     @csrf
+                     @method('POST')
+                     <div class="modal-content">
+                         <div class="modal-header">
+                             <h5 class="modal-title">Discount : {{ $product->name }}</h5>
+
+                         </div>
+                         <div class="modal-body">
+                             <input type="hidden" name="product_id" value="{{ $product->id }}">
+                             <div class="form-group">
+                                 <label for="discount">Discount (%)</label>
+                                 <input type="number" min="0" max="100" class="form-control" name="discount"
+                                     value="{{ $product->discount }}" required>
+                             </div>
+                             <div class="d-flex justify-content-center gap-3">
+                                 <button type="button" class="btn btn-secondary mr-2" data-dismiss="modal">Batal</button>
+                                 <button type="submit" class="btn btn-primary">Simpan</button>
+                             </div>
+                         </div>
+                     </div>
+                 </form>
+             </div>
+         </div>
+     @endforeach
  @endsection
 
  @push('scripts')

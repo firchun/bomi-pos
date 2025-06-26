@@ -9,30 +9,47 @@
         <div class="container mx-auto relative z-10">
             <!-- Heading -->
             <h1
-                class="text-zinc-700 text-3xl sm:text-4xl lg:text-5xl font-extrabold font-['Lexend'] max-w-xl mb-6 dark:text-white transition-colors duration-300">
-                Make Cashier Tasks Easier with Bomi POS — Every Transaction Done in Seconds!
+                class="text-zinc-700 text-3xl sm:text-3xl lg:text-5xl font-extrabold font-['Lexend'] max-w-xl mb-6 dark:text-white transition-colors duration-300">
+                @if (app()->getLocale() == 'en')
+                    Make Cashier Tasks Easier with Bomi POS — Every Transaction Done in Seconds!
+                @else
+                    Permudah Tugas Kasir dengan Bomi POS, Setiap Transaksi Selesai dalam Hitungan Detik!
+                @endif
             </h1>
 
             <!-- Subheading -->
             <p
                 class="text-zinc-600 text-base sm:text-lg lg:text-xl font-semibold font-['Lexend'] max-w-2xl mb-8 dark:text-zinc-400">
-                We’ve gathered the best features to support your cashier operations. Choose the perfect solution for
-                your
-                business—quickly and easily!
+                @if (app()->getLocale() == 'en')
+                    We’ve gathered the best features to support your cashier operations. Choose the perfect solution for
+                    your
+                    business—quickly and easily!
+                @else
+                    Kami telah mengumpulkan fitur terbaik untuk mendukung operasional kasir Anda. Pilih solusi yang
+                    tepat untuk bisnis Anda—cepat dan mudah!
+                @endif
             </p>
 
             <!-- Buttons -->
             <div class="flex flex-col sm:flex-row gap-4">
-                <a href="href="{{route('register')}}""
+                <a href="href="{{ route('register') }}""
                     class="w-full sm:w-56 h-14 bg-purple-700 rounded-[20px] flex items-center justify-center text-white text-lg sm:text-xl font-semibold font-['Lexend'] transition-all duration-300 hover:scale-105">
-                    Get Started Free
+                    @if (app()->getLocale() == 'en')
+                        Get Started Free
+                    @else
+                        Mulai Gratis
+                    @endif
                 </a>
                 <a href="#"
                     class="w-full sm:w-64 h-14 bg-neutral-900 rounded-[20px] flex items-center justify-center 
      text-white text-lg sm:text-xl font-semibold font-['Lexend'] 
      transition-all duration-300 transform hover:scale-105 
      dark:bg-white dark:text-neutral-900">
-                    Download Now
+                    @if (app()->getLocale() == 'en')
+                        Download Now
+                    @else
+                        Unduh Sekarang
+                    @endif
                     <i class="bi bi-google-play ml-2"></i>
                 </a>
             </div>
@@ -40,7 +57,7 @@
 
         <!-- Image -->
         <img src="{{ asset('home2') }}/assets/img/hero-image2.png" alt="Bomi POS illustration"
-        class="absolute right-10 bottom-10 h-3/4 hidden lg:block rounded-lg  object-contain opacity-80 pointer-events-none" />
+            class="absolute right-10 bottom-10 h-3/4 hidden lg:block rounded-lg  object-contain opacity-80 pointer-events-none" />
 
         <!-- Spotlight gelap -->
         <div id="spotlight"
@@ -51,8 +68,13 @@
         <!-- Heading -->
         <div
             class="text-center text-zinc-700 text-3xl font-extrabold font-['Lexend'] mb-10 dark:text-white transition-colors duration-300">
-            Manage your cashier anytime, <br />
-            anywhere, on any device.
+            @if (app()->getLocale() == 'en')
+                Manage your cashier anytime, <br />
+                anywhere, on any device.
+            @else
+                Kelola kasir Anda kapan saja, <br />
+                di mana saja, di perangkat apa pun.
+            @endif
         </div>
 
         <!-- Tabs -->
@@ -92,10 +114,14 @@
     <section class="relative w-full bg-violet-950 overflow-hidden py-12 dark:bg-black/50 transition-colors duration-300">
         <!-- Title -->
         <h2 class="text-white text-3xl font-extrabold font-['Lexend'] text-center mb-10 px-4">
-            The key benefits of using <br />our application
+            @if (app()->getLocale() == 'en')
+                The key benefits of using <br />our application
+            @else
+                Manfaat utama menggunakan <br />aplikasi kami
+            @endif
         </h2>
 
-      <!-- Responsive Container with Scale -->
+        <!-- Responsive Container with Scale -->
         <div class="w-full flex justify-center">
             <div
                 class="transform origin-top scale-65  sm:scale-[0.80] md:scale-[0.95] lg:scale-100 transition-transform duration-300">
@@ -103,11 +129,23 @@
                     <!-- Left Card -->
                     <div class="w-96 h-auto sm:w-60 sm:h-96 rounded-3xl bg-gradient-to-br from-purple-600 to-sky-500 p-6">
                         <h3 class="text-white text-lg font-extrabold font-['Lexend'] mb-2 leading-snug">
-                          Craft Professional-Grade Retail Management
-                          with Bomi POS
+                            @if (app()->getLocale() == 'en')
+                                Craft Professional-Grade Retail Management
+                                with Bomi POS
+                            @else
+                                Ciptakan Manajemen Ritel Kelas Profesional
+                                dengan Bomi POS
+                            @endif
                         </h3>
                         <p class="text-white text-[10px] font-normal font-['Lexend'] leading-relaxed">
-                          Discover the smart features of Bomi POS — an AI-enhanced solution that simplifies your sales, inventory, and reporting, so you can focus on growing your business.
+                            @if (app()->getLocale() == 'en')
+                                Discover the smart features of Bomi POS — an AI-enhanced solution that simplifies your
+                                sales,
+                                inventory, and reporting, so you can focus on growing your business.
+                            @else
+                                Temukan fitur cerdas Bomi POS — solusi yang ditingkatkan AI yang menyederhanakan penjualan,
+                                inventaris, dan pelaporan Anda, sehingga Anda dapat fokus pada pertumbuhan bisnis Anda.
+                            @endif
                         </p>
                     </div>
 
@@ -116,20 +154,41 @@
                         <!-- Top Right Card -->
                         <div class="w-96 h-40 rounded-3xl bg-gradient-to-bl from-cyan-400 to-green-500 p-6">
                             <h3 class="text-white text-lg font-extrabold font-['Lexend'] mb-2 leading-snug">
-                              Boost Your Business 10X with Bomi POS
+                                @if (app()->getLocale() == 'en')
+                                    Boost Your Business 10X with Bomi POS
+                                @else
+                                    Tingkatkan Bisnis Anda 10X dengan Bomi POS
+                                @endif
                             </h3>
                             <p class="text-white text-[10px] font-normal font-['Lexend'] leading-relaxed">
-                              Discover smart POS tools designed to simplify sales, manage stock, and generate accurate reports — built to help your business grow.
+                                @if (app()->getLocale() == 'en')
+                                    Discover smart POS tools designed to simplify sales, manage stock, and generate accurate
+                                    reports — built to help your business grow.
+                                @else
+                                    Temukan alat POS cerdas yang dirancang untuk menyederhanakan penjualan, mengelola stok,
+                                    dan menghasilkan laporan yang akurat — dibuat untuk membantu bisnis Anda tumbuh.
+                                @endif
                             </p>
                         </div>
 
                         <!-- Bottom Right Card -->
                         <div class="w-96 h-40 rounded-3xl bg-gradient-to-br from-orange-500 to-fuchsia-600 p-6 text-right">
                             <h3 class="text-white text-lg font-extrabold font-['Lexend'] mb-2 leading-snug">
-                              Overcome Operational Chaos Today
+                                @if (app()->getLocale() == 'en')
+                                    Overcome Operational Chaos Today
+                                @else
+                                    Atasi Kekacauan Operasional Hari Ini
+                                @endif
                             </h3>
                             <p class="text-white text-[10px] font-normal font-['Lexend'] leading-relaxed">
-                              Discover powerful POS tools from Bomi POS that streamline sales, inventory, and reporting — all with precision and ease.
+                                @if (app()->getLocale() == 'en')
+                                    Discover powerful POS tools from Bomi POS that streamline sales, inventory, and
+                                    reporting —
+                                    all with precision and ease.
+                                @else
+                                    Temukan alat POS yang kuat dari Bomi POS yang menyederhanakan penjualan, inventaris, dan
+                                    pelaporan — semuanya dengan presisi dan kemudahan.
+                                @endif
                             </p>
                         </div>
                     </div>
@@ -142,11 +201,20 @@
         <div class="text-center mb-10">
             <h2
                 class="text-zinc-700 text-3xl font-extrabold font-['Lexend'] dark:text-white transition-colors duration-300">
-                What Clients Say?
+                @if (app()->getLocale() == 'en')
+                    What Clients Say?
+                @else
+                    Apa Kata Klien Kami?
+                @endif
             </h2>
             <p class="text-zinc-600 text-xl font-normal font-['Lexend'] dark:text-zinc-400 transition-colors duration-300">
-                There are many variations of passages of Lorem Ipsum available but the <br />
-                majority have suffered alteration in some form.
+                @if (app()->getLocale() == 'en')
+                    There are many variations of passages of Lorem Ipsum available but the <br />
+                    majority have suffered alteration in some form.
+                @else
+                    Ada banyak variasi dari teks Lorem Ipsum yang tersedia, tetapi sebagian besar telah mengalami
+                    perubahan dalam beberapa bentuk.
+                @endif
             </p>
 
         </div>
@@ -159,10 +227,10 @@
                 <div class="h-auto bg-white rounded-2xl mb-4 p-4 dark:bg-neutral-900 transition-colors duration-300">
                     <div
                         class="text-black text-base font-semibold font-['Lexend'] dark:text-white transition-colors duration-300">
-                       Customers
+                        Customers
                     </div>
                     <p class="text-stone-500 text-xs font-normal font-['Lexend']">
-                       Pemilik Kafe
+                        Pemilik Kafe
                     </p>
                 </div>
                 <div class="h-auto bg-white rounded-2xl p-4 dark:bg-neutral-900 transition-colors duration-300">
@@ -178,10 +246,10 @@
                 <div class="h-auto bg-white rounded-2xl mb-4 p-4 dark:bg-neutral-900 transition-colors duration-300">
                     <div
                         class="text-black text-base font-semibold font-['Lexend'] dark:text-white transition-colors duration-300">
-                       Customers
+                        Customers
                     </div>
                     <p class="text-stone-500 text-xs font-normal font-['Lexend']">
-                       Pemilik Kafe
+                        Pemilik Kafe
                     </p>
                 </div>
                 <div class="h-auto bg-white rounded-2xl p-4 dark:bg-neutral-900 transition-colors duration-300">
@@ -197,7 +265,7 @@
                 <div class="h-auto bg-white rounded-2xl mb-4 p-4 dark:bg-neutral-900 transition-colors duration-300">
                     <div
                         class="text-black text-base font-semibold font-['Lexend'] dark:text-white transition-colors duration-300">
-                       Customer
+                        Customer
                     </div>
                     <p class="text-stone-500 text-xs font-normal font-['Lexend']">
                         Pemilik Kafe

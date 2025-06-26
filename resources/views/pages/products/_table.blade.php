@@ -21,7 +21,10 @@
                 <th>Name</th>
                 <th>HPP</th>
                 <th>Price</th>
-                <th>Ingredient</th>
+                <th>Discount</th>
+                @if (!empty($setting) && $setting->ingredient)
+                    <th>Ingredient</th>
+                @endif
                 <th>Status</th>
                 <th>{{ __('general.action') }}</th>
             </tr>
@@ -43,8 +46,26 @@
                         {{ $product->category->name ?? '-' }}
                     </td>
                     <td>Rp {{ number_format($product->hpp, 0, ',', '.') }}</td>
-                    <td>Rp {{ number_format($product->price, 0, ',', '.') }}</td>
-                    <td class="font-weight-bold text-primary ">{{ App\Models\IngredientDish::where('id_product',$product->id)->count()}}</td>
+                    <td>
+                        @if ($product->discount != 0)
+                            <del class="text-danger">Rp {{ number_format($product->price, 0, ',', '.') }}</del><br>
+                            <strong class="text-success">Rp
+                                {{ number_format($product->price_final, 0, ',', '.') }}</strong>
+                        @else
+                            Rp {{ number_format($product->price, 0, ',', '.') }}
+                        @endif
+                    </td>
+                    <td class="text-center">
+                        <strong class="text-warning">{{ $product->discount }} %</strong>
+                        <button class="btn btn-sm text-warning" data-toggle="modal"
+                            data-target="#discountModal{{ $product->id }}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </td>
+                    @if (!empty($setting) && $setting->ingredient)
+                        <td class="font-weight-bold text-primary ">
+                            {{ App\Models\IngredientDish::where('id_product', $product->id)->count() }}</td>
+                    @endif
                     <td>
                         <span class="badge badge-{{ $product->status == 1 ? 'success' : 'warning' }}">
                             {{ $product->status == 1 ? 'Active' : 'Inactive' }}
@@ -52,27 +73,17 @@
                     </td>
                     <td>
                         <div class="d-flex align-items-center gap-2">
-                            <a href="{{ route('products.ingredient', $product->id) }}"
-                                class="btn btn-sm btn-success d-flex align-items-center mr-2">
-                                <i class="fas fa-cookie-bite"> </i> {{ __('general.ingredient') }}
-                            </a>
+                            @if (!empty($setting) && $setting->ingredient)
+                                <a href="{{ route('products.ingredient', $product->id) }}"
+                                    class="btn btn-sm btn-success d-flex align-items-center mr-2">
+                                    <i class="fas fa-cookie-bite"> </i> {{ __('general.ingredient') }}
+                                </a>
+                            @endif
                             <a href="{{ route('products.edit', $product->id) }}"
                                 class="btn btn-sm btn-warning d-flex align-items-center mr-2">
                                 <i class="fas fa-edit"></i> {{ __('general.edit') }}
                             </a>
-                            <a href="{{ route('products.destroy', $product->id) }}"
-                                onclick="event.preventDefault(); 
-                                        if(confirm('Are you sure you want to delete this product?')) {
-                                            document.getElementById('delete-product-{{ $product->id }}').submit();
-                                        }"
-                                class="btn btn-sm btn-danger d-flex align-items-center">
-                                <i class="fas fa-trash m-1"></i> {{ __('general.delete') }}
-                            </a>
-                            <form id="delete-product-{{ $product->id }}"
-                                action="{{ route('products.destroy', $product->id) }}" method="POST" class="d-none">
-                                @csrf
-                                @method('DELETE')
-                            </form>
+
                         </div>
                     </td>
                 </tr>
@@ -109,29 +120,20 @@
                             <div class="d-flex flex-wrap gap-1 text-center">
                                 <div class="input-group input-group-sm">
                                     <div class="input-group-prepend">
-                                        <a href="{{ route('products.ingredient', $product->id) }}" class="btn btn-success">
-                                            <i class="fas fa-cookie-bite"></i> {{ __('general.ingredient') }}
-                                        </a>
+                                        @if (!empty($setting) && $setting->ingredient)
+                                            <a href="{{ route('products.ingredient', $product->id) }}"
+                                                class="btn btn-success">
+                                                <i class="fas fa-cookie-bite"></i> {{ __('general.ingredient') }}
+                                            </a>
+                                        @endif
                                         <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning">
                                             <i class="fas fa-edit"></i> {{ __('general.edit') }}
                                         </a>
-                                        <a href="{{ route('products.destroy', $product->id) }}"
-                                            onclick="event.preventDefault(); 
-                                                    if(confirm('Are you sure you want to delete this product?')) {
-                                                        document.getElementById('delete-product-{{ $product->id }}').submit();
-                                                    }"
-                                            class="btn btn-danger">
-                                            <i class="fas fa-trash"></i> {{ __('general.delete') }}
-                                        </a>
+
                                     </div>
                                 </div>
 
-                                <form id="delete-product-{{ $product->id }}"
-                                    action="{{ route('products.destroy', $product->id) }}" method="POST"
-                                    class="d-none">
-                                    @csrf
-                                    @method('DELETE')
-                                </form>
+
                             </div>
                         </div>
                     </div>

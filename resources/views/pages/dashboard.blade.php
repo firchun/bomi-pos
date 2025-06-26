@@ -346,7 +346,6 @@
     <script src="{{ asset('library/chart.js/dist/Chart.js') }}"></script>
     <script src="{{ asset('library/owl.carousel/dist/owl.carousel.min.js') }}"></script>
     <script src="{{ asset('library/summernote/dist/summernote-bs4.min.js') }}"></script>
-    <script src="{{ asset('library/chocolat/dist/js/jquery.chocolat.min.js') }}"></script>
 
     <!-- Page Specific JS File -->
     <script src="{{ asset('js/page/index.js') }}"></script>
