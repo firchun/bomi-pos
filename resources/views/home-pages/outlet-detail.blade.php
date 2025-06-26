@@ -21,7 +21,7 @@
             class="mt-[110px] rounded-2xl bg-white/50 text-purple-700 dark:text-white dark:bg-zinc-800/70 transitions-colors duration-300 p-5 w-full">
             Home / Outlet / {{ $shop->name }}
         </section>
-        <!-- images -->
+    <!-- images -->
         <section class="mt-10 flex justify-center">
             <div class="relative w-full h-[300px]">
                 <!-- Gambar kiri -->
