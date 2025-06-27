@@ -1,5 +1,17 @@
 @extends('layouts.home2')
 
+@section('title', $blog->title)
+@section('meta-title', $blog->title . ' | Bomi POS')
+@section('meta-description', Str::limit(strip_tags($blog->content), 50))
+@section('meta-keywords', $blog->title . ', ' . $blog->description . ', Bomi POS, Blog')
+
+@section('meta-og-title', $blog->title . ' | Bomi POS')
+@section('meta-og-description', Str::limit(strip_tags($blog->content), 50))
+@section('meta-og-image', asset('storage/' . $blog->thumbnail))
+@section('meta-og-url', url()->current())
+@section('meta-twitter-image', asset('storage/' . $blog->thumbnail))
+@section('meta-og-image', asset('storage/' . $blog->thumbnail))
+
 @section('content')
     <div class="container mx-auto px-4 mt-[110px]">
 
