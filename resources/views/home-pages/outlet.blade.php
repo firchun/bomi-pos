@@ -1,12 +1,11 @@
 @extends('layouts.home2')
 
 @section('content')
-    <div class="container mx-auto px-4">
+    <div class="container mx-auto px-4 mt-[110px]">
         <!-- broadcom -->
-        <section
-            class="mt-[110px] rounded-2xl bg-white/50 text-purple-700 dark:text-white dark:bg-zinc-800/70 transitions-colors duration-300 p-5 w-full">
-            Home / Outlet
-        </section>
+        @include('home-pages.components.breadcrumbs', [
+            'title' => 'Outlets',
+        ])
         <!-- Search Section (Trigger) -->
 
         @include('home-pages._search')

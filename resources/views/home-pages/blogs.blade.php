@@ -1,12 +1,11 @@
 @extends('layouts.home2')
 
 @section('content')
-    <div class="container mx-auto px-4">
+    <div class="container mx-auto px-4 mt-[110px]">
         <!-- broadcom -->
-        <section
-            class="mt-[110px] rounded-2xl bg-white/50 text-purple-700 dark:text-white dark:bg-zinc-800/70 transitions-colors duration-300 p-5 w-full">
-            Home / Blogs
-        </section>
+        @include('home-pages.components.breadcrumbs', [
+            'title' => 'Blogs',
+        ])
         <!-- Search Section (Trigger) -->
 
         {{-- @include('home-pages._search') --}}
@@ -25,13 +24,13 @@
                             <h3 class="text-lg font-semibold text-purple-700 dark:text-white font-['Lexend'] ">
                                 {{ $item->title }}
                             </h3>
-                            <p class="text-sm text-zinc-600 dark:text-zinc-300 font-['Lexend'] mt-2 mb-4">
+                            <div class="text-sm text-zinc-600 dark:text-zinc-300 font-['Lexend'] mt-2 mb-4">
                                 {!! implode(' ', array_slice(explode(' ', $item->content), 0, 15)) !!}
                                 @if (str_word_count($item->content) > 15)
                                     ...
                                 @endif
-                            </p>
-                            <hr>
+                            </div>
+                            <hr class="my-2">
                             <p class="mt-2 text-sm font-['Lexend'] text-zinc-600 dark:text-zinc-300">
                                 Author : {{ $item->user->name }} |
                                 {{ $item->created_at->diffForHumans() }}

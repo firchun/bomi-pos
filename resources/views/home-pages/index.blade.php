@@ -109,8 +109,16 @@
         </div>
     </section>
 
-    <img id="device-image" src="{{ asset('home2') }}/assets/img/teknologi.png" alt="App mockup"
-        class="item-center mx-auto mb-10" />
+
+    <div class="overflow-hidden whitespace-nowrap mb-4">
+        <div class="animate-scroll flex w-max">
+            @for ($i = 0; $i < 10; $i++)
+                {{-- repeat 10 times --}}
+                <img id="device-image" src="{{ asset('home2') }}/assets/img/teknologi-bomi.svg" alt="App mockup"
+                    class="inline-block mx-4 h-8" />
+            @endfor
+        </div>
+    </div>
     <section class="relative w-full bg-violet-950 overflow-hidden py-12 dark:bg-black/50 transition-colors duration-300">
         <!-- Title -->
         <h2 class="text-white text-3xl font-extrabold font-['Lexend'] text-center mb-10 px-4">

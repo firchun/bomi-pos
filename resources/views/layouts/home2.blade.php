@@ -33,6 +33,22 @@
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
+        @layer utilities {
+            .animate-scroll {
+                animation: scroll-horizontal 20s linear infinite;
+            }
+
+            @keyframes scroll-horizontal {
+                0% {
+                    transform: translateX(0%);
+                }
+
+                100% {
+                    transform: translateX(-10%);
+                }
+            }
+        }
+
         @media (max-width: 499px) {
             .xs\:block {
                 display: block !important;
@@ -125,44 +141,68 @@
                     <!-- Dropdown -->
                     <div class="relative group">
                         <button
-                            class="text-sm font-semibold text-purple-700   @if (Request::is('bisnis*')) border border-purple-700 rounded-full px-4
+                            class="text-sm font-semibold text-purple-700 dark:text-white   @if (Request::is('bisnis*')) border border-purple-700 rounded-full px-4
                                shadow-sm shadow-purple-700 shadow-inner bg-white/40
-                               @else hover:border hover:border-purple-700  hover:bg-white/40 hover:rounded-full hover:px-4  hover:shadow-sm hover:shadow-purple-700 hover:shadow-inner @endif">Bisnis
-                            <i class="bi bi-chevron-down"></i></button>
+                               @else hover:border hover:border-purple-700  hover:bg-white/40 hover:rounded-full hover:px-4  hover:shadow-sm hover:shadow-purple-700 hover:shadow-inner @endif">
+                            @if (app()->getLocale() == 'en')
+                                Bussiness
+                            @else
+                                Bisnis
+                            @endif
+                            <i class="bi bi-chevron-down"></i>
+                        </button>
 
                         <!-- Invisible hover area untuk menahan dropdown -->
                         <div class="absolute top-full left-0 w-full h-6 group-hover:block"></div>
 
                         <div
-                            class="absolute left-0 mt-2 hidden group-hover:flex bg-white shadow-lg rounded-lg p-3 lg:w-[600px] w-[400px] z-50 transition-all duration-200">
+                            class="absolute left-0 mt-2 hidden group-hover:flex bg-white dark:bg-zinc-800 shadow-lg rounded-lg p-3 lg:w-[600px] w-[400px] z-50 transition-all duration-200">
                             <div class="grid lg:grid-cols-3 grid-cols-2 gap-2">
 
                                 <!-- F&B -->
                                 <a href="{{ route('bisnis.fb') }}"
-                                    class="block bg-purple-50 p-2 rounded-lg hover:bg-purple-100 transition">
-                                    <h3 class="text-md font-semibold text-purple-700 mb-2">F&B</h3>
-                                    <p class="text-[12px] text-gray-600">
-                                        Cocok untuk restoran, kedai kopi, minuman, cepat saji, toko roti, dan katering.
+                                    class="block bg-purple-50 dark:bg-zinc-700 p-2 rounded-lg dark:hover:bg-zinc-800 hover:bg-purple-100 transition">
+                                    <h3 class="text-md font-semibold text-purple-700 mb-2 dark:text-white">F&B</h3>
+                                    <p class="text-[12px] text-gray-600 dark:text-gray-300">
+                                        @if (app()->getLocale() == 'en')
+                                            Suitable for restaurants, coffee shops, beverages, fast food, bakeries,
+                                            and catering.
+                                        @else
+                                            Cocok untuk restoran, kedai kopi, minuman, cepat saji, toko roti, dan
+                                            katering.
+                                        @endif
                                     </p>
                                 </a>
 
                                 <!-- Retail -->
                                 <a href="{{ route('bisnis.retail') }}"
-                                    class="block bg-purple-50 p-2 rounded-lg hover:bg-purple-100 transition">
-                                    <h3 class="text-md font-semibold text-purple-700 mb-2">Retail</h3>
-                                    <p class="text-[12px] text-gray-600">
-                                        Cocok untuk supermarket, minimarket, toko butik, toko baju, toko elektronik,
-                                        toko serba ada, dan showroom.
+                                    class="block bg-purple-50 dark:bg-zinc-700  p-2 rounded-lg dark:hover:bg-zinc-800 hover:bg-purple-100 transition">
+                                    <h3 class="text-md font-semibold text-purple-700 mb-2 dark:text-white">Retail</h3>
+                                    <p class="text-[12px] text-gray-600 dark:text-gray-300">
+                                        @if (app()->getLocale() == 'en')
+                                            Suitable for supermarkets, minimarkets, boutiques, clothing stores,
+                                            electronics stores, convenience stores, and showrooms.
+                                        @else
+                                            Cocok untuk supermarket, minimarket, toko butik, toko baju, toko elektronik,
+                                            toko serba ada, dan showroom.
+                                        @endif
+
                                     </p>
                                 </a>
 
                                 <!-- Jasa -->
                                 <a href="{{ route('bisnis.jasa') }}"
-                                    class="block bg-purple-50 p-2 rounded-lg hover:bg-purple-100 transition">
-                                    <h3 class="text-md font-semibold text-purple-700 mb-2">Jasa</h3>
-                                    <p class="text-[12px] text-gray-600">
-                                        Cocok untuk pet shop, salon, spa, klinik kecantikan, barbershop, travel, guest
-                                        house, hotel, bengkel, laundry.
+                                    class="block bg-purple-50 dark:bg-zinc-700  p-2 rounded-lg dark:hover:bg-zinc-800 hover:bg-purple-100 transition">
+                                    <h3 class="text-md font-semibold text-purple-700 mb-2 dark:text-white">Jasa</h3>
+                                    <p class="text-[12px] text-gray-600 dark:text-gray-300">
+                                        @if (app()->getLocale() == 'en')
+                                            Suitable for pet shops, salons, spas, beauty clinics, barbershops, travel
+                                            agencies, guest houses, hotels, workshops, and laundry services.
+                                        @else
+                                            Cocok untuk pet shop, salon, spa, klinik kecantikan, barbershop, travel,
+                                            guest
+                                            house, hotel, bengkel, laundry.
+                                        @endif
                                     </p>
                                 </a>
 
@@ -185,8 +225,13 @@
                         class="text-sm font-semibold text-purple-700 dark:text-white transition-all duration-300  
                         @if (Request::is('bomi-products')) border border-purple-700 rounded-full px-4
                                shadow-sm shadow-purple-700 shadow-inner bg-white/40
-                               @else hover:border hover:border-purple-700  hover:bg-white/40 hover:rounded-full hover:px-4  hover:shadow-sm hover:shadow-purple-700 hover:shadow-inner @endif">Bomi
-                        Product</a>
+                               @else hover:border hover:border-purple-700  hover:bg-white/40 hover:rounded-full hover:px-4  hover:shadow-sm hover:shadow-purple-700 hover:shadow-inner @endif">
+                        @if (app()->getLocale() == 'en')
+                            Packages & Pricing
+                        @else
+                            Paket & Harga
+                        @endif
+                    </a>
                 </nav>
 
                 <!-- Login Button -->
@@ -198,6 +243,16 @@
                     <a href="#" id="toggleDark"
                         class="text-lg font-semibold text-purple-700 dark:text-white transition-colors duration-300 ">
                         <i id="darkIcon" class="bi bi-brightness-high"></i>
+                    </a>
+                    <form id="languageForm" action="{{ route('change.language') }}" method="POST" class="hidden">
+                        @csrf
+                        <input type="hidden" name="language" id="languageInput" value="">
+                    </form>
+
+                    <a href="#" id="toggleLanguage"
+                        class="text-lg font-semibold text-purple-700 dark:text-white transition-colors duration-300 border border-purple-700 rounded-xl px-2">
+                        <i id="langIcon" class="bi bi-translate "></i>
+                        <span id="langText" class="text-sm">En</span>
                     </a>
                     @guest
                         <a href="{{ route('login') }}"
@@ -258,7 +313,11 @@
                 <div x-data="{ open: false }" class="py-2">
                     <button @click="open = !open"
                         class="flex justify-between items-center w-full text-sm font-semibold text-purple-700 py-2">
-                        Bisnis
+                        @if (app()->getLocale() == 'en')
+                            Bussiness
+                        @else
+                            Bisnis
+                        @endif
                         <svg :class="{ 'rotate-180': open }" class="h-4 w-4 transition-transform" fill="none"
                             stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
@@ -276,8 +335,13 @@
                 <a href="{{ route('shop-page') }}"
                     class="block text-sm font-semibold text-purple-700 py-2 dark:text-zinc-800 transition-colors">Outlet</a>
                 <a href="{{ url('bomi-products') }}"
-                    class="block text-sm font-semibold text-purple-700 py-2 dark:text-zinc-800 transition-colors">Bomi
-                    Product</a>
+                    class="block text-sm font-semibold text-purple-700 py-2 dark:text-zinc-800 transition-colors">
+                    @if (app()->getLocale() == 'en')
+                        Packages & Pricing
+                    @else
+                        Paket & Harga
+                    @endif
+                </a>
                 @guest
                     <a href="{{ route('login') }}"
                         class="block text-sm font-semibold text-purple-700 py-2 dark:text-zinc-800 transition-colors">
@@ -402,6 +466,32 @@
         </div>
     </footer>
     @stack('js')
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const toggleBtn = document.getElementById("toggleLanguage");
+            const langInput = document.getElementById("languageInput");
+            const langText = document.getElementById("langText");
+            const form = document.getElementById("languageForm");
+
+            // Simpan status bahasa di localStorage
+            let currentLang = localStorage.getItem("lang") || "{{ app()->getLocale() }}";
+
+            function updateUI() {
+                langText.textContent = currentLang === "en" ? "Id" : "En";
+            }
+
+            updateUI();
+
+            toggleBtn.addEventListener("click", (e) => {
+                e.preventDefault();
+
+                const newLang = currentLang === "en" ? "id" : "en";
+                langInput.value = newLang;
+                localStorage.setItem("lang", newLang);
+                form.submit();
+            });
+        });
+    </script>
     <script>
         // review
         let selectedRating = 0;
