@@ -116,6 +116,7 @@
     </div>
     <!-- Main Content -->
     <div class="container mx-auto px-4 ">
+        <!-- 🔵 Banner di atas header -->
         <header
             class="fixed top-0 left-0 w-full z-50 bg-white/2 backdrop-blur-lg p-6 dark:bg-black/10 transition-colors duration-300">
             <div class="container mx-auto flex justify-between items-center px-4">
@@ -125,19 +126,7 @@
                 </a>
                 <!-- Navigation (Hidden on small screens) -->
                 <nav class="space-x-10 hidden lg:flex ">
-                    {{-- <a href="{{ url('/') }}"
-                    class="text-sm font-semibold text-purple-700 dark:text-white transition-colors duration-300 @if (request()->is('/')) border border-purple-700/30 rounded-full px-4  bg-gradient-to-r from-purple-400 to-transparent @endif">
-                    Home
-                 </a> --}}
-                    {{-- <a href="{{ url('/') }}"
-                        class="text-sm font-semibold text-purple-700 dark:text-white transition-all duration-300
-                        @if (Request::is('/')) border border-purple-700 rounded-full px-4
-                               shadow-sm shadow-purple-700 shadow-inner bg-white/40
-                               @else hover:border hover:border-purple-700  hover:bg-white/40 hover:rounded-full hover:px-4  hover:shadow-sm hover:shadow-purple-700 hover:shadow-inner @endif
-                                 ">
-                        Home
-                    </a> --}}
-                    <!-- Dropdown -->
+
                     <!-- Dropdown -->
                     <div class="relative group">
                         <button
@@ -385,6 +374,14 @@
     </div>
     @yield('content')
     @include('home-pages._searchNav')
+    <div
+        class="fixed bottom-10 right-10 flex flex-col items-end space-y-2 z-50 p-3 bg-white/2 backdrop-blur-sm rounded-full">
+        <a href="https://wa.me/682248493036" target="_blank"
+            class="flex items-center gap-2 px-5 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition">
+            <i class="bi bi-whatsapp text-4xl"></i>
+            <span class="hidden sm:inline">WhatsApp</span>
+        </a>
+    </div>
 
     <footer class="bg-[#1B0054] text-white px-8 py-12 dark:bg-black/50 transition-colors duration-300">
         <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-5 gap-8 text-sm ">

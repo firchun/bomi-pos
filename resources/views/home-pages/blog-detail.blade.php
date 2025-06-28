@@ -66,7 +66,7 @@
                     @forelse ($otherBlogs as $item)
                         <li>
                             <a href="{{ route('blog-detail', $item->slug) }}"
-                                class="flex gap-3 items-start bg-purple-50/90 hover:bg-white rounded-lg p-2 transition dark:hover:bg-zinc-700">
+                                class="flex gap-3 items-start bg-purple-50/90 dark:bg-zinc-700 hover:bg-white rounded-lg p-2 transition dark:hover:bg-zinc-800">
                                 <img src="{{ asset('storage/' . $item->thumbnail) }}" alt="{{ $item->title }}"
                                     class="w-16 h-16 object-cover rounded-md shrink-0">
                                 <p class="text-black text-sm font-medium leading-snug dark:text-white">
