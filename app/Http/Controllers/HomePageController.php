@@ -66,9 +66,13 @@ class HomePageController extends Controller
     }
     public function blogDetail($slug)
     {
+        $blog = Blog::where('slug', $slug)->first();
+        $blog->views++;
+        $blog->save();
+
         $data = [
             'blog' => Blog::where('slug', $slug)->first(),
-            'otherBlogs' => Blog::where('slug', '!=', $slug)->latest()->take(5)->get(),
+            'otherBlogs' => Blog::latest()->take(10)->get(),
             'latestBlogs' => Blog::latest()->take(3)->get(),
         ];
         return view('home-pages.blog-detail', $data);

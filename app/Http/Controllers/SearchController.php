@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Blog;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\ShopProfile;
@@ -18,6 +19,20 @@ class SearchController extends Controller
         return response()->json([
             'products' => $products,
             'outlets' => $outlets,
+        ]);
+    }
+    public function blog(Request $request)
+    {
+        $query = $request->input('query');
+
+        $blogs = Blog::search($query)->get();
+        $blogs->transform(function ($blog) {
+            $blog->created_at_formatted = \Carbon\Carbon::parse($blog->created_at)->translatedFormat('d F Y');
+            return $blog;
+        });
+
+        return response()->json([
+            'blogs' => $blogs,
         ]);
     }
     public function search(Request $request)
@@ -61,6 +76,22 @@ class SearchController extends Controller
         }
 
         return response()->json(['products' => $products]);
+    }
+    public function ajaxSearchBlog(Request $request)
+    {
+        $query = $request->input('query');
+
+        // Pastikan query lebih dari 0 karakter
+        if (strlen($query) > 0) {
+            // Cari produk yang dimulai dengan huruf pertama input query
+            $blog = Blog::where('title', 'like', "{$query}%")
+                ->limit(10)
+                ->get();
+        } else {
+            $blog = [];
+        }
+
+        return response()->json(['blogs' => $blog]);
     }
 
     public function getProductDetails(Request $request)

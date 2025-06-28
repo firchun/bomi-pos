@@ -2,12 +2,12 @@
 
 @section('title', $blog->title)
 @section('meta-title', $blog->title . ' | Bomi POS')
-@section('meta-description', Str::limit(strip_tags($blog->content), 50))
+@section('meta-description', Str::limit(strip_tags($blog->content), 100))
 @section('meta-keywords', $blog->title . ', ' . $blog->description . ', Bomi POS, Blog')
 
 @section('meta-og-title', $blog->title . ' | Bomi POS')
-@section('meta-og-description', Str::limit(strip_tags($blog->content), 50))
-@section('meta-og-image', asset('storage/' . $blog->thumbnail))
+@section('meta-og-description', Str::limit(strip_tags($blog->content), 100))
+@section('meta-og-image', $blog->thumbnail)
 @section('meta-og-url', url()->current())
 @section('meta-twitter-image', asset('storage/' . $blog->thumbnail))
 @section('meta-og-image', asset('storage/' . $blog->thumbnail))
@@ -21,12 +21,28 @@
             'url_before' => url('blogs'),
             'title' => $blog->title,
         ])
-
+        @include('home-pages._search_blog')
         <!-- Main Content -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
 
             <!-- Blog Content -->
             <div class="md:col-span-2 bg-white/60 dark:bg-zinc-800/60 rounded-xl overflow-hidden shadow p-0">
+                <div class="p-6">
+                    <h1 class="text-3xl font-bold text-purple-700 mb-2 dark:text-white">{{ $blog->title }}</h1>
+
+                    <div class="flex items-center text-sm text-gray-500 mb-4">
+                        <span><i class="bi bi-people"></i> {{ $blog->user->name ?? 'Admin' }}</span>
+                        <span class="mx-2">•</span>
+                        <span>{{ $blog->created_at->format('d M Y') }}</span>
+                        <span class="mx-2">•</span>
+                        <span class="text-purple-700"><i class="bi bi-eye"></i> {{ $blog->views }}x</span>
+                        <span class="mx-2">•</span>
+                        <button id="shareBtn" class="text-purple-700">
+                            <i class="bi bi-share-fill"></i>
+                            <span>Share</span>
+                        </button>
+                    </div>
+                </div>
                 @if ($blog->thumbnail)
                     <div class="w-full h-[400px]">
                         <img src="{{ asset('storage/' . $blog->thumbnail) }}" alt="{{ $blog->title }}"
@@ -35,13 +51,7 @@
                 @endif
 
                 <div class="p-6">
-                    <h1 class="text-3xl font-bold text-purple-700 mb-2 dark:text-white">{{ $blog->title }}</h1>
 
-                    <div class="flex items-center text-sm text-gray-500 mb-4">
-                        <span>By {{ $blog->user->name ?? 'Admin' }}</span>
-                        <span class="mx-2">•</span>
-                        <span>{{ $blog->created_at->format('d M Y') }}</span>
-                    </div>
 
                     <div class="prose max-w-none dark:prose-invert dark:text-white">
                         {!! $blog->content !!}
@@ -50,23 +60,30 @@
             </div>
 
             <!-- Sidebar: Other Blogs -->
-            <div class="bg-white/60 dark:bg-zinc-800/60 rounded-xl p-6">
-                <h2 class="text-xl font-semibold text-purple-700 mb-4 dark:text-white">Blog Lainnya</h2>
+            <div class="p-6">
+                <h2 class="text-xl font-bold text-purple-700 mb-4 dark:text-white">Artikel Terkait</h2>
                 <ul class="space-y-3">
-                    @foreach ($otherBlogs as $item)
+                    @forelse ($otherBlogs as $item)
                         <li>
-                            <a href="{{ route('blog-detail', $item->slug) }}" class="text-purple-700 hover:underline">
-                                {{ $item->title }}
+                            <a href="{{ route('blog-detail', $item->slug) }}"
+                                class="flex gap-3 items-start bg-purple-50/90 hover:bg-white rounded-lg p-2 transition dark:hover:bg-zinc-700">
+                                <img src="{{ asset('storage/' . $item->thumbnail) }}" alt="{{ $item->title }}"
+                                    class="w-16 h-16 object-cover rounded-md shrink-0">
+                                <p class="text-black text-sm font-medium leading-snug dark:text-white">
+                                    {{ \Illuminate\Support\Str::limit($item->title, 60) }}
+                                </p>
                             </a>
                         </li>
-                    @endforeach
+                    @empty
+                        <li class="text-gray-500 dark:text-gray-400">Belum ada artikel lain yang tersedia.</li>
+                    @endforelse
                 </ul>
             </div>
         </div>
 
         <!-- 3 Blog Terbaru -->
         <div class="mt-12 mb-10">
-            <h2 class="text-2xl font-semibold text-purple-700 mb-6 dark:text-white">Blog Terbaru</h2>
+            <h2 class="text-2xl font-semibold text-purple-700 mb-6 dark:text-white">Artikel Terbaru</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 @foreach ($latestBlogs as $item)
                     <div
@@ -92,3 +109,30 @@
         'class' => 'mb-10',
     ])
 @endsection
+@push('js')
+    <script>
+        const shareBtn = document.getElementById('shareBtn');
+
+        shareBtn.addEventListener('click', async () => {
+            const shareData = {
+                title: document.title,
+                text: 'Check out this awesome product!',
+                url: window.location.href
+            }
+
+            if (navigator.share) {
+                try {
+                    await navigator.share(shareData);
+                    console.log('Content shared successfully');
+                } catch (err) {
+                    console.error('Error sharing:', err);
+                }
+            } else {
+                // fallback: contoh ke WhatsApp Web
+                const whatsappUrl =
+                    `https://wa.me/?text=${encodeURIComponent(shareData.text + ' ' + shareData.url)}`;
+                window.open(whatsappUrl, '_blank');
+            }
+        });
+    </script>
+@endpush

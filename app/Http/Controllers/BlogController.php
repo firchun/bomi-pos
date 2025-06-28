@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\BlogPublished;
+use Illuminate\Support\Facades\Mail;
+use App\Models\User;
 use App\Models\Blog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -41,7 +44,7 @@ class BlogController extends Controller
             $thumbnailPath = $request->file('thumbnail')->store('blogs', 'public');
         }
 
-        Blog::create([
+        $blog = Blog::create([
             'title' => $request->title,
             'content' => $request->content,
             'slug' => $slug,
@@ -50,6 +53,10 @@ class BlogController extends Controller
             'is_published' => $request->is_published ?? true,
             'views' => 0
         ]);
+        $users = User::where('role', 'user')->whereNotNull('email')->get();
+        foreach ($users as $user) {
+            Mail::to($user->email)->queue(new BlogPublished($blog));
+        }
 
         return redirect()->route('admin-blogs.index')->with('success', 'Blog created successfully.');
     }

@@ -325,9 +325,9 @@
                     </button>
 
                     <div x-show="open" class="pl-4 pt-2 space-y-2">
-                        <a href="/fb" class="block text-sm text-gray-700 py-1">F&B</a>
-                        <a href="/retail" class="block text-sm text-gray-700 py-1">Retail</a>
-                        <a href="/jasa" class="block text-sm text-gray-700 py-1">Jasa</a>
+                        <a href="{{ route('bisnis.fb') }}" class="block text-sm text-gray-700 py-1">F&B</a>
+                        <a href="{{ route('bisnis.retail') }}" class="block text-sm text-gray-700 py-1">Retail</a>
+                        <a href="{{ route('bisnis.jasa') }}" class="block text-sm text-gray-700 py-1">Jasa</a>
                     </div>
                 </div>
                 <a href="{{ route('blogs') }}"

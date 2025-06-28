@@ -1,15 +1,20 @@
 @extends('layouts.home2')
 
+@section('title', 'Harga dan Paket Bomi POS')
+@section('meta-title', 'Harga dan Paket Bomi POS' . ' | Bomi POS')
+@section('meta-description', 'Langganan bomi pos dan dapatkan penwarangan terbaru tentang produk kami.')
+@section('meta-keywords', 'Harga dan Paket Bomi POS, Bomi POS, price, paket, subscription')
 
+@section('meta-og-title', 'Harga dan Paket Bomi POS' . ' | Bomi POS')
+@section('meta-og-description', 'Langganan bomi pos dan dapatkan penwarangan terbaru tentang produk kami.')
+@section('meta-og-url', url()->current())
 
 @section('content')
-    <div class="container mx-auto px-4">
+    <div class="container mx-auto px-4 mt-[110px]">
         <!-- broadcom -->
-        <section
-            class="mt-[110px] rounded-2xl bg-white/50 text-purple-700 dark:text-white dark:bg-zinc-800/70 transitions-colors duration-300 p-5 w-full">
-            Home / Bomi Product
-        </section>
-
+        @include('home-pages.components.breadcrumbs', [
+            'title' => App::getLocale() == 'en' ? 'Price & Packages' : 'Paket & Harga',
+        ])
         <!-- hero -->
         <section id="hero"
             class="mb-[100px] mt-[50px] relative w-full h-auto overflow-hidden rounded-[20px] 

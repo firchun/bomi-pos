@@ -7,8 +7,7 @@
             'title' => 'Blogs',
         ])
         <!-- Search Section (Trigger) -->
-
-        {{-- @include('home-pages._search') --}}
+        @include('home-pages._search_blog')
         <!-- list outlet -->
         <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-[50px] px-4 container mx-auto">
             @foreach ($blogs as $item)

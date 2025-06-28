@@ -104,7 +104,9 @@ Route::post('/shop/{slug}/rate', [RatingController::class, 'storeRating'])->name
 
 // Route::get('/search', [SearchController::class, 'search'])->name('search');
 Route::get('/search', [SearchController::class, 'index']);
+Route::get('/search-blog', [SearchController::class, 'blog']);
 Route::get('/ajax/search', [SearchController::class, 'ajaxSearch'])->name('ajax.search');
+Route::get('/ajax/search-blog', [SearchController::class, 'ajaxSearchBlog'])->name('ajax.search-blog');
 Route::get('/ajax/product/details', [SearchController::class, 'getProductDetails'])->name('ajax.product.details');
 // autenticated
 Route::get('/login', [HomeController::class, 'login'])->name('login');
