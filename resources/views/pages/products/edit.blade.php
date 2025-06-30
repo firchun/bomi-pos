@@ -88,6 +88,14 @@
                                             </div>
                                         @enderror
                                     </div>
+                                    <label class="custom-switch">
+                                        <input type="checkbox" name="with_stock" value="1" class="custom-switch-input"
+                                            {{ old('with_stock', $product->with_stock ?? false) ? 'checked' : '' }}>
+                                        <span class="custom-switch-indicator"></span>
+                                        <span class="custom-switch-description">
+                                            {{ old('with_stock', $product->with_stock ?? false) ? 'With stock' : 'not stock' }}
+                                        </span>
+                                    </label>
 
                                 </div>
                             </div>
@@ -96,7 +104,6 @@
                             @if ($product->image)
                                 <img src="{{ asset($product->image) }}" alt=""
                                     style="width:100%; height:auto; object-fit:cover; cursor:pointer" class="img-thumbnail"
-                                   
                                     onerror="this.onerror=null; this.src='{{ asset('home2/assets/img/sample.png') }}';">
                             @else
                                 <span class="badge badge-danger">No Image</span>

@@ -46,6 +46,7 @@ class ProductController extends Controller
             'price' => 'required|numeric',
             'category_id' => 'required',
             'stock' => 'nullable|numeric',
+            'with_stock' => 'nullable|boolean',
         ]);
 
         // store the request...
@@ -58,6 +59,7 @@ class ProductController extends Controller
         $product->category_id = $request->category_id;
         $product->stock = $request->stock ?? 0; // Jika kosong, gunakan default 0
         $product->status = $request->status ?? 1;
+        $product->with_stock = $request->with_stock ?? true;
         $product->is_favorite = $request->is_favorite ?? 1;
 
         $product->save();
@@ -106,6 +108,7 @@ class ProductController extends Controller
             'price' => 'required|numeric',
             'category_id' => 'required',
             'stock' => 'nullable|numeric', // stock diizinkan kosong
+            'with_stock' => 'nullable|boolean',
         ]);
 
         // update the request...
@@ -117,6 +120,7 @@ class ProductController extends Controller
         $product->category_id = $request->category_id;
         $product->stock = $request->stock ?? $product->stock; // Jika kosong, tetap gunakan nilai lama
         $product->status = $request->status ?? 1;
+        $product->with_stock = $request->has('with_stock');
         $product->is_favorite = $request->is_favorite ?? 1;
         $product->save();
 
@@ -153,18 +157,18 @@ class ProductController extends Controller
             'product_id' => 'required|exists:products,id',
             'discount' => 'required|integer|min:0|max:100', // diskon bertipe int
         ]);
-    
+
         $product = Product::find($request->product_id);
-    
+
         $product->discount = intval($request->discount);
-    
+
         $price = floatval($product->price);
         $discount = $product->discount;
-    
+
         $product->price_final = round($price * (1 - $discount / 100), 2);
-    
+
         $product->save();
-    
+
         return back()->with('success', 'Discount updated successfully');
     }
 }

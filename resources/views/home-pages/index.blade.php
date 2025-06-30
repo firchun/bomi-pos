@@ -1,69 +1,7 @@
 @extends('layouts.home2')
 
 @section('content')
-    <section id="hero"
-        class=" container mx-auto  mt-[110px] relative w-full h-auto overflow-hidden rounded-[20px] 
-     bg-gradient-to-br from-fuchsia-100 to-purple-200 
-     dark:from-zinc-900/50 dark:to-zinc-600/50  dark:backdrop-blur-sm
-     px-6 py-12 md:py-20 lg:py-28 transition-colors duration-300">
-        <div class="container mx-auto relative z-10">
-            <!-- Heading -->
-            <h1
-                class="text-zinc-700 text-3xl sm:text-3xl lg:text-5xl font-extrabold font-['Lexend'] max-w-xl mb-6 dark:text-white transition-colors duration-300">
-                @if (app()->getLocale() == 'en')
-                    Make Cashier Tasks Easier with Bomi POS — Every Transaction Done in Seconds!
-                @else
-                    Permudah Tugas Kasir dengan Bomi POS, Setiap Transaksi Selesai dalam Hitungan Detik!
-                @endif
-            </h1>
-
-            <!-- Subheading -->
-            <p
-                class="text-zinc-600 text-base sm:text-lg lg:text-xl font-semibold font-['Lexend'] max-w-2xl mb-8 dark:text-zinc-400">
-                @if (app()->getLocale() == 'en')
-                    We’ve gathered the best features to support your cashier operations. Choose the perfect solution for
-                    your
-                    business—quickly and easily!
-                @else
-                    Kami telah mengumpulkan fitur terbaik untuk mendukung operasional kasir Anda. Pilih solusi yang
-                    tepat untuk bisnis Anda—cepat dan mudah!
-                @endif
-            </p>
-
-            <!-- Buttons -->
-            <div class="flex flex-col sm:flex-row gap-4">
-                <a href="href="{{ route('register') }}""
-                    class="w-full sm:w-56 h-14 bg-purple-700 rounded-[20px] flex items-center justify-center text-white text-lg sm:text-xl font-semibold font-['Lexend'] transition-all duration-300 hover:scale-105">
-                    @if (app()->getLocale() == 'en')
-                        Get Started Free
-                    @else
-                        Mulai Gratis
-                    @endif
-                </a>
-                <a href="#"
-                    class="w-full sm:w-64 h-14 bg-neutral-900 rounded-[20px] flex items-center justify-center 
-     text-white text-lg sm:text-xl font-semibold font-['Lexend'] 
-     transition-all duration-300 transform hover:scale-105 
-     dark:bg-white dark:text-neutral-900">
-                    @if (app()->getLocale() == 'en')
-                        Download Now
-                    @else
-                        Unduh Sekarang
-                    @endif
-                    <i class="bi bi-google-play ml-2"></i>
-                </a>
-            </div>
-        </div>
-
-        <!-- Image -->
-        <img src="{{ asset('home2') }}/assets/img/hero-image2.png" alt="Bomi POS illustration"
-            class="absolute right-10 bottom-10 h-3/4 hidden lg:block rounded-lg  object-contain opacity-80 pointer-events-none" />
-
-        <!-- Spotlight gelap -->
-        <div id="spotlight"
-            class="pointer-events-none absolute w-96 h-96 rounded-full bg-black/25 blur-3xl opacity-0 z-10 transition-opacity duration-300 ease-out mix-blend-multiply">
-        </div>
-    </section>
+    @include('home-pages.components.hero', ['class' => 'mt-[110px]'])
     <section class="mt-20 container mx-auto px-4 h-full">
         <!-- Heading -->
         <div
@@ -108,8 +46,6 @@
             </div>
         </div>
     </section>
-
-
     <div class="overflow-hidden whitespace-nowrap mb-4">
         <div class="animate-scroll flex w-max">
             @for ($i = 0; $i < 10; $i++)
@@ -128,7 +64,6 @@
                 Manfaat utama menggunakan <br />aplikasi kami
             @endif
         </h2>
-
         <!-- Responsive Container with Scale -->
         <div class="w-full flex justify-center">
             <div
@@ -156,7 +91,6 @@
                             @endif
                         </p>
                     </div>
-
                     <!-- Right Cards -->
                     <div class="flex flex-col gap-6">
                         <!-- Top Right Card -->
@@ -178,7 +112,6 @@
                                 @endif
                             </p>
                         </div>
-
                         <!-- Bottom Right Card -->
                         <div class="w-96 h-40 rounded-3xl bg-gradient-to-br from-orange-500 to-fuchsia-600 p-6 text-right">
                             <h3 class="text-white text-lg font-extrabold font-['Lexend'] mb-2 leading-snug">
@@ -224,7 +157,6 @@
                     perubahan dalam beberapa bentuk.
                 @endif
             </p>
-
         </div>
 
         <!-- Testimonials Section (Grid Layout) -->
@@ -288,4 +220,7 @@
             </div>
         </div>
     </section>
+    @include('home-pages.components.hero2', [
+        'class' => 'mb-10',
+    ])
 @endsection

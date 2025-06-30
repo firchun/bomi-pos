@@ -23,6 +23,8 @@ class SettingController extends Controller
             $setting->ingredient = $request->has('ingredient');
             $setting->calendar = $request->has('calendar');
             $setting->ads = $request->has('ads');
+            $setting->order_on_table = $request->has('order_on_table');
+            $setting->color_number_table = $request->input('color_number_table');
             $setting->local_server = $request->has('local_server');
 
             $setting->save();

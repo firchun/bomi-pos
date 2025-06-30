@@ -17,22 +17,25 @@
                 <button class="btn btn-primary btn-lg mb-3" data-toggle="modal" data-target="#generateModal">
                     <i class="fa fa-plus"></i> {{ __('general.add') }} {{ __('general.Tables') }}
                 </button>
-                <button class="btn btn-danger btn-lg mb-3">
+                <a class="btn btn-danger btn-lg mb-3" href="{{ route('tables.print') }}" target="_blank">
                     <i class="fa fa-print"></i> {{ __('general.print') }} {{ __('general.Tables') }}
-                </button>
+                </a>
 
                 <div class="row" id="table-container">
                     @foreach ($tables as $table)
                         <div class="col-md-3 col-sm-6 mb-3">
-                            <div class="card bg-primary text-white" style="border-radius:20px;">
+                            <div class="card bg-primary text-white" style="border-radius:10px;">
                                 <div class="card-body text-center">
+
                                     <h5 class="mb-0">{{ $table->name }}</h5>
+                                    <img src="{{ asset('img/table-icon.png') }}" alt="Table Image" class="img-fluid m-2"
+                                        style="max-width: 100px;">
                                     <div class="d-flex justify-content-center mt-3">
                                         <a href="{{ route('shop.table', $table->code) }}" target="_blank"
                                             class="btn btn-light btn-sm me-2">
                                             {{ __('general.Open') }}
                                         </a>
-                                        <form action="" method="POST"
+                                        <form action="{{ route('tables.destroy', $table->id) }}" method="POST"
                                             onsubmit="return confirm('Yakin ingin menghapus?')">
                                             @csrf
                                             @method('DELETE')

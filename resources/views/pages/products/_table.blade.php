@@ -25,6 +25,7 @@
                 @if (!empty($setting) && $setting->ingredient)
                     <th>Ingredient</th>
                 @endif
+                <th>Stock</th>
                 <th>Status</th>
                 <th>{{ __('general.action') }}</th>
             </tr>
@@ -66,11 +67,24 @@
                         <td class="font-weight-bold text-primary ">
                             {{ App\Models\IngredientDish::where('id_product', $product->id)->count() }}</td>
                     @endif
+                    <td class="text-center">
+                        @if ($product->with_stock)
+                            <h4>{{ $product->stock }}
+                                <button class="btn btn-sm text-primary font-weight-bold" data-toggle="modal"
+                                    data-target="#stockModal{{ $product->id }}">
+                                    <i class="fas fa-plus"></i> Add
+                                </button>
+                            </h4>
+                        @else
+                            <span class="badge badge-danger">No Stock</span>
+                        @endif
+                    </td>
                     <td>
                         <span class="badge badge-{{ $product->status == 1 ? 'success' : 'warning' }}">
                             {{ $product->status == 1 ? 'Active' : 'Inactive' }}
                         </span>
                     </td>
+
                     <td>
                         <div class="d-flex align-items-center gap-2">
                             @if (!empty($setting) && $setting->ingredient)

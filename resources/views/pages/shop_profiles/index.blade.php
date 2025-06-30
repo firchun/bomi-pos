@@ -112,14 +112,16 @@
                                             <div class="form-group">
                                                 <label for="open_time">Open Time</label>
                                                 <input type="time" name="open_time" id="open_time" class="form-control"
-                                                    value="{{ old('open_time', $shopProfile->open_time ?? '08:00') }}" required>
+                                                    value="{{ old('open_time', $shopProfile->open_time ?? '08:00') }}"
+                                                    required>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="close_time">Close Time</label>
                                                 <input type="time" name="close_time" id="close_time" class="form-control"
-                                                    value="{{ old('close_time', $shopProfile->close_time ?? '17:00') }}" required>
+                                                    value="{{ old('close_time', $shopProfile->close_time ?? '17:00') }}"
+                                                    required>
                                             </div>
                                         </div>
                                     </div>
@@ -176,12 +178,12 @@
                     </button>
 
                     <!-- Lihat Shop Profile Button -->
-                    @if (isset($shopProfile))
+                    {{-- @if (isset($shopProfile))
                         <button type="button" class="btn btn-lg btn-success m-1" data-bs-toggle="modal"
                             data-bs-target="#qrModal"> <i class="fa fa-table"></i>
                             Generate Table 
                         </button>
-                    @endif
+                    @endif --}}
 
 
                     <!-- Modal untuk Generate QR Code -->

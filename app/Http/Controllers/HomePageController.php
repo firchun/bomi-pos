@@ -8,7 +8,10 @@ use App\Models\Ads;
 use App\Models\Blog;
 use App\Models\Category;
 use App\Models\OrderItem;
+use App\Models\PackageAccount;
+use App\Models\PackageDevice;
 use App\Models\Product;
+use App\Models\Setting;
 use App\Models\ShopProfile;
 use App\Models\Table;
 use App\Models\Visitor;
@@ -128,7 +131,7 @@ class HomePageController extends Controller
     {
         $table = Table::where('code', $code)->firstOrFail();
         $shop = ShopProfile::with('location')->where('user_id', $table->user_id)->firstOrFail();
-
+        $settings = Setting::where('id_user', $table->user_id)->first();
         $location = null;
         Visitor::create([
             'shop_id' => $shop->id,
@@ -151,18 +154,27 @@ class HomePageController extends Controller
         })->get();
 
 
-        return view('home-pages.order_table', compact('shop', 'averageRating', 'products', 'categories', 'table'));
+        return view('home-pages.order_table', compact('shop', 'averageRating', 'products', 'categories', 'table', 'settings'));
     }
 
     public function bomiProduct(Request $request)
     {
         $query = AdminProduct::query();
+        $packages = PackageDevice::orderBy('created_at', 'desc')->get()->map(function ($item) {
+            $item->image_url = $item->image
+                ? asset('storage/' . $item->image)
+                : asset('img/default.png'); // fallback image
+            return $item;
+        });
+        $packagesAccountEcomnomical = PackageAccount::where('type', 'Economical')->get();
+        $packagesAccountMonthly = PackageAccount::where('type', 'Monthly')->get();
+        $packagesAccountYearly = PackageAccount::where('type', 'Yearly')->get();
 
         if ($request->has('name')) {
             $query->where('name', 'like', '%' . $request->name . '%');
         }
 
         $adminproducts = $query->paginate(10);
-        return view('home-pages.bomi-product', compact('adminproducts'));
+        return view('home-pages.bomi-product', compact('adminproducts', 'packages', 'packagesAccountEcomnomical', 'packagesAccountMonthly', 'packagesAccountYearly'));
     }
 }

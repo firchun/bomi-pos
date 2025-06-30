@@ -91,8 +91,12 @@
         <div class="max-w-md mx-auto">
             <header class="sticky top-0 z-50 bg-purple-700/90 backdrop-blur-lg p-4 ">
                 <div class="flex justify-center items-center">
-                    <h3 class="text-2xl font-bold text-white">
-                        Order {{ $table->name }}
+                    <h3 class="text-2xl font-bold text-white text-center">
+                        @if ($settings->order_on_table == true)
+                            Order {{ $table->name }}
+                        @else
+                            Menu
+                        @endif
                         <br>
                         <small class="text-sm">{{ $shop->name }}</small>
                     </h3>
@@ -125,112 +129,113 @@
                                 <h3 class="font-semibold text-base text-gray-800 mb-1">{{ $product->name }}</h3>
                                 <p class="text-sm text-gray-500 mb-2">Rp
                                     {{ number_format($product->price, 0, ',', '.') }}
-
                                 </p>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center justify-start gap-2">
-                                        <button
-                                            class="bg-red-600 text-white px-3 py-1 rounded-full text-2xl minus-to-cart"
-                                            data-id="{{ $product->id }}" data-name="{{ $product->name }}">
-                                            -
-                                        </button>
-                                        <button
-                                            class="bg-purple-600 text-white px-3 py-1 rounded-full text-2xl add-to-cart"
-                                            data-id="{{ $product->id }}" data-name="{{ $product->name }}">
-                                            +
-                                        </button>
+                                @if ($settings->order_on_table == true)
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center justify-start gap-2">
+                                            <button
+                                                class="bg-red-600 text-white px-3 py-1 rounded-full text-2xl minus-to-cart"
+                                                data-id="{{ $product->id }}" data-name="{{ $product->name }}">
+                                                -
+                                            </button>
+                                            <button
+                                                class="bg-purple-600 text-white px-3 py-1 rounded-full text-2xl add-to-cart"
+                                                data-id="{{ $product->id }}" data-name="{{ $product->name }}">
+                                                +
+                                            </button>
+                                        </div>
+                                        <div
+                                            class="flex items-center justify-center w-10 h-10 rounded-full bg-purple-600 text-white font-bold text-lg">
+                                            <span class="quantity" data-id="{{ $product->id }}">0</span>
+                                        </div>
                                     </div>
-                                    <div
-                                        class="flex items-center justify-center w-10 h-10 rounded-full bg-purple-600 text-white font-bold text-lg">
-                                        <span class="quantity" data-id="{{ $product->id }}">0</span>
-                                    </div>
-                                </div>
+                                @endif
                             </div>
                         </div>
                     @endforeach
                 </div>
             </div>
         </div>
+        @if ($settings->order_on_table == true)
+            <!-- Floating Cart -->
+            <div id="floating-cart"
+                class="fixed bottom-4 left-1/2 -translate-x-1/2 bg-purple-600 text-white px-6 py-3 rounded-2xl hidden flex items-center gap-3 border border-white border-3">
 
-        <!-- Floating Cart -->
-        <div id="floating-cart"
-            class="fixed bottom-4 left-1/2 -translate-x-1/2 bg-purple-600 text-white px-6 py-3 rounded-2xl hidden flex items-center gap-3 border border-white border-3">
-
-            <div class="flex items-center justify-center bg-white text-purple-700 font-bold rounded-full w-10 h-10">
-                <span id="total-item">0</span>
+                <div class="flex items-center justify-center bg-white text-purple-700 font-bold rounded-full w-10 h-10">
+                    <span id="total-item">0</span>
+                </div>
+                <button class="font-semibold text-lg">Order</button>
             </div>
-            <button class="font-semibold text-lg">Order</button>
-        </div>
 
 
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                let cart = {};
-                const productsPaginated = @json($products);
-                const productData = productsPaginated.data; // <= aman
-                const updateFloatingCart = () => {
-                    const total = Object.values(cart).reduce((sum, qty) => sum + qty, 0);
-                    document.getElementById('total-item').innerText = total;
-                    const floatingCart = document.getElementById('floating-cart');
-                    if (total > 0) {
-                        floatingCart.classList.remove('hidden');
-                    } else {
-                        floatingCart.classList.add('hidden');
-                    }
-                };
-
-                document.querySelectorAll('.add-to-cart').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        const id = btn.dataset.id;
-                        if (!cart[id]) {
-                            cart[id] = 1;
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    let cart = {};
+                    const productsPaginated = @json($products);
+                    const productData = productsPaginated.data; // <= aman
+                    const updateFloatingCart = () => {
+                        const total = Object.values(cart).reduce((sum, qty) => sum + qty, 0);
+                        document.getElementById('total-item').innerText = total;
+                        const floatingCart = document.getElementById('floating-cart');
+                        if (total > 0) {
+                            floatingCart.classList.remove('hidden');
                         } else {
-                            cart[id]++;
+                            floatingCart.classList.add('hidden');
                         }
-                        document.querySelector(`.quantity[data-id="${id}"]`).innerText = cart[id];
-                        updateFloatingCart();
+                    };
+
+                    document.querySelectorAll('.add-to-cart').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            const id = btn.dataset.id;
+                            if (!cart[id]) {
+                                cart[id] = 1;
+                            } else {
+                                cart[id]++;
+                            }
+                            document.querySelector(`.quantity[data-id="${id}"]`).innerText = cart[id];
+                            updateFloatingCart();
+                        });
                     });
-                });
 
-                document.querySelectorAll('.minus-to-cart').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        const id = btn.dataset.id;
-                        if (cart[id] && cart[id] > 0) {
-                            cart[id]--;
-                        }
-                        if (cart[id] <= 0) {
-                            delete cart[id];
-                        }
-                        document.querySelector(`.quantity[data-id="${id}"]`).innerText = cart[id] ?? 0;
-                        updateFloatingCart();
+                    document.querySelectorAll('.minus-to-cart').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            const id = btn.dataset.id;
+                            if (cart[id] && cart[id] > 0) {
+                                cart[id]--;
+                            }
+                            if (cart[id] <= 0) {
+                                delete cart[id];
+                            }
+                            document.querySelector(`.quantity[data-id="${id}"]`).innerText = cart[id] ?? 0;
+                            updateFloatingCart();
+                        });
                     });
-                });
 
-                document.getElementById('floating-cart').addEventListener('click', () => {
-                    let totalPrice = 0;
-                    let orderHtml = "";
+                    document.getElementById('floating-cart').addEventListener('click', () => {
+                        let totalPrice = 0;
+                        let orderHtml = "";
 
-                    for (const [id, qty] of Object.entries(cart)) {
-                        const product = productData.find(p => p.id == id);
-                        console.log(productData);
-                        if (!product) {
-                            console.warn(`Produk dengan id ${id} tidak ditemukan!`);
-                            continue;
-                        }
+                        for (const [id, qty] of Object.entries(cart)) {
+                            const product = productData.find(p => p.id == id);
+                            console.log(productData);
+                            if (!product) {
+                                console.warn(`Produk dengan id ${id} tidak ditemukan!`);
+                                continue;
+                            }
 
-                        const subtotal = product.price * qty;
-                        totalPrice += subtotal;
-                        orderHtml += `
+                            const subtotal = product.price * qty;
+                            totalPrice += subtotal;
+                            orderHtml += `
                         <tr>
                             <td>${product.name}</td>
                             <td class="text-center">${qty}</td>
                             <td class="text-right">${subtotal.toLocaleString('id-ID')}</td>
                         </tr>
                     `;
-                    }
+                        }
 
-                    const modalHtml = `
+                        const modalHtml = `
                     <div id="order-modal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                         <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
                             <h2 class="text-xl font-bold mb-4">Konfirmasi Pesanan</h2>
@@ -249,16 +254,16 @@
                             </div>
                         </div>
                     </div>`;
-                    document.body.insertAdjacentHTML('beforeend', modalHtml);
+                        document.body.insertAdjacentHTML('beforeend', modalHtml);
 
-                    // pasang event setelah elemen muncul
-                    document.querySelector('#close-modal').addEventListener('click', () => {
-                        document.querySelector('#order-modal').remove();
-                    });
-                    document.querySelector('#confirm-order').addEventListener('click', () => {
-                        document.querySelector('#order-modal').remove();
+                        // pasang event setelah elemen muncul
+                        document.querySelector('#close-modal').addEventListener('click', () => {
+                            document.querySelector('#order-modal').remove();
+                        });
+                        document.querySelector('#confirm-order').addEventListener('click', () => {
+                            document.querySelector('#order-modal').remove();
 
-                        const successModal = `
+                            const successModal = `
                         <div id="success-modal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                           <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full text-center">
                             
@@ -280,19 +285,20 @@
                           </div>
                         </div>
                       `;
-                        document.body.insertAdjacentHTML('beforeend', successModal);
+                            document.body.insertAdjacentHTML('beforeend', successModal);
 
-                        document.querySelector('#close-success-modal').addEventListener('click', () => {
-                            document.querySelector('#success-modal').remove();
-                            cart = {};
-                            document.querySelectorAll('.quantity').forEach(span => span
-                                .innerText = 0);
-                            updateFloatingCart();
+                            document.querySelector('#close-success-modal').addEventListener('click', () => {
+                                document.querySelector('#success-modal').remove();
+                                cart = {};
+                                document.querySelectorAll('.quantity').forEach(span => span
+                                    .innerText = 0);
+                                updateFloatingCart();
+                            });
                         });
                     });
                 });
-            });
-        </script>
+            </script>
+        @endif
         <script>
             // Loading Screen
             window.addEventListener("DOMContentLoaded", () => {

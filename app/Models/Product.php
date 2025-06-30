@@ -20,6 +20,7 @@ class Product extends Model
         'stock',
         'status',
         'is_favorite',
+        'with_stock',
         'category_id',
     ];
 
@@ -55,7 +56,7 @@ class Product extends Model
             ->withTimestamps();
     }
     public function order_items()
-{
-    return $this->hasMany(OrderItem::class, 'product_id');
-}
+    {
+        return $this->hasMany(OrderItem::class, 'product_id');
+    }
 }

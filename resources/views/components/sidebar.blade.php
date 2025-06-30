@@ -144,8 +144,6 @@
                         <a class="nav-link" href="{{ route('shop-profiles.index') }}"><i class="fas fa-store"></i><span
                                 class="nav-text">Shop Profile</span></a>
                     </li>
-
-
                     @if (!App::environment('local'))
                         <li class="nav-item {{ request()->routeIs('user.dashboard') ? 'active' : '' }}">
                             <a class="nav-link" href="{{ route('user.dashboard') }}">
@@ -163,9 +161,7 @@
                                         class="fas fa-store"></i><span class="nav-text">Server Token</span></a>
                             </li>
                         @endif
-
                     @endif
-
                 @endif
                 {{-- menu admin --}}
                 @if (Auth::user()->role == 'admin')
@@ -182,6 +178,17 @@
                         <a class="nav-link" href="{{ route('subscription.index') }}"><i
                                 class="fas fa-house-user"></i>
                             <span class="nav-text">Subscription</span>
+                        </a>
+                    </li>
+                    <li class="menu-header">Packages</li>
+                    <li class='nav-item {{ request()->is('packages-device*') ? 'active' : '' }}'>
+                        <a class="nav-link" href="{{ route('packages-device.index') }}">
+                            <i class="fas fa-folder"></i><span class="nav-text">Packages Device</span>
+                        </a>
+                    </li>
+                    <li class='nav-item {{ request()->is('packages-account*') ? 'active' : '' }}'>
+                        <a class="nav-link" href="{{ route('packages-account.index') }}">
+                            <i class="fas fa-folder"></i><span class="nav-text">Packages Account</span>
                         </a>
                     </li>
                     <li class="menu-header">Pages</li>

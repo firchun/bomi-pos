@@ -64,6 +64,35 @@
                                                         {{ old('tables', $setting_table->tables ?? false) ? 'Active' : 'Non-active' }}
                                                     </span>
                                                 </label>
+                                                <label class="custom-switch">
+                                                    <input type="checkbox" name="order_on_table" value="1"
+                                                        class="custom-switch-input"
+                                                        {{ old('order_on_table', $setting_table->order_on_table ?? false) ? 'checked' : '' }}>
+                                                    <span class="custom-switch-indicator"></span>
+                                                    <span class="custom-switch-description">
+                                                        Order On Table
+                                                    </span>
+                                                </label>
+                                                <div class="my-2">
+                                                    <label for="color_mode">Warna Nomor Meja</label>
+                                                    <select id="color_mode" class="form-select mb-2"
+                                                        onchange="toggleColorInput(this.value)">
+                                                        <option value="solid" selected>Warna Solid</option>
+                                                        <option value="gradient">Gradient CSS</option>
+                                                        <option value="none">Default</option>
+                                                    </select>
+
+                                                    <input type="color" class="form-control mb-2" id="color_solid"
+                                                        name="color_number_table"
+                                                        value="{{ old('color_number_table', $setting_table->color_number_table ?? '#000000') }}">
+
+                                                    <input type="text" class="form-control mb-2 d-none"
+                                                        id="color_gradient" name="color_number_table_gradient"
+                                                        placeholder="Contoh: linear-gradient(to right, #ff512f, #dd2476)">
+
+                                                    <input type="hidden" id="final_color" name="color_number_table"
+                                                        value="{{ old('color_number_table', $setting_table->color_number_table ?? '') }}">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -227,3 +256,41 @@
         </section>
     </div>
 @endsection
+@push('scripts')
+    <script>
+        function toggleColorInput(mode) {
+            const colorSolid = document.getElementById('color_solid');
+            const colorGradient = document.getElementById('color_gradient');
+            const finalColor = document.getElementById('final_color');
+
+            if (mode === 'solid') {
+                colorSolid.classList.remove('d-none');
+                colorGradient.classList.add('d-none');
+                finalColor.value = colorSolid.value;
+                colorSolid.oninput = () => finalColor.value = colorSolid.value;
+            } else if (mode === 'gradient') {
+                colorSolid.classList.add('d-none');
+                colorGradient.classList.remove('d-none');
+                colorGradient.oninput = () => finalColor.value = colorGradient.value;
+            } else {
+                colorSolid.classList.add('d-none');
+                colorGradient.classList.add('d-none');
+                finalColor.value = '';
+            }
+        }
+
+        // Inisialisasi nilai awal (jika dari DB berupa gradient atau kosong)
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentValue = "{{ old('color_number_table', $setting_table->color_number_table ?? '') }}";
+            const modeSelect = document.getElementById('color_mode');
+            if (!currentValue) {
+                modeSelect.value = 'none';
+            } else if (currentValue.includes('gradient')) {
+                modeSelect.value = 'gradient';
+            } else {
+                modeSelect.value = 'solid';
+            }
+            toggleColorInput(modeSelect.value);
+        });
+    </script>
+@endpush

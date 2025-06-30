@@ -8,9 +8,9 @@ px-6 py-12 md:py-20 lg:py-28 transition-colors duration-300 {{ $class ?? '' }}">
         <h1
             class="text-zinc-700 text-3xl sm:text-3xl lg:text-5xl font-extrabold font-['Lexend'] max-w-xl mb-6 dark:text-white transition-colors duration-300">
             @if (app()->getLocale() == 'en')
-                Make Cashier Tasks Easier with Bomi POS — Every Transaction Done in Seconds!
+                Simplify Cashier & Manager Tasks with Bomi POS — Transactions & Reports Done in Seconds!
             @else
-                Permudah Tugas Kasir dengan Bomi POS, Setiap Transaksi Selesai dalam Hitungan Detik!
+                Permudah Tugas Kasir & Manajer dengan Bomi POS — Transaksi & Laporan Selesai dalam Hitungan Detik!
             @endif
         </h1>
 
@@ -18,12 +18,11 @@ px-6 py-12 md:py-20 lg:py-28 transition-colors duration-300 {{ $class ?? '' }}">
         <p
             class="text-zinc-600 text-base sm:text-lg lg:text-xl font-semibold font-['Lexend'] max-w-2xl mb-8 dark:text-zinc-400">
             @if (app()->getLocale() == 'en')
-                We’ve gathered the best features to support your cashier operations. Choose the perfect solution for
-                your
-                business—quickly and easily!
+                We've gathered the best features to support your cashier operations, with full control for managers and
+                business owners. Choose the perfect solution for your business—quickly and easily!
             @else
-                Kami telah mengumpulkan fitur terbaik untuk mendukung operasional kasir Anda. Pilih solusi yang
-                tepat untuk bisnis Anda—cepat dan mudah!
+                kemikiran fitur terbaik untuk mendukung operasional kasir Anda, dengan kontrol penuh bagi manajer dan
+                pemilik bisnis. Pilih solusi yang tepat untuk bisnis Anda—cepat dan mudah!
             @endif
         </p>
 

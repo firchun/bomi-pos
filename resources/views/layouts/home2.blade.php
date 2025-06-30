@@ -375,11 +375,14 @@
     @yield('content')
     @include('home-pages._searchNav')
     <div
-        class="fixed bottom-10 right-10 flex flex-col items-end space-y-2 z-50 p-3 bg-white/2 backdrop-blur-sm rounded-full">
+        class="fixed bottom-10 right-10 flex flex-col items-end space-y-2 z-50 p-3 bg-white/20 dark:bg-black/10 backdrop-blur-sm rounded-full">
         <a href="https://wa.me/682248493036" target="_blank"
-            class="flex items-center gap-2 px-5 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition">
+            class="group flex items-center gap-2 px-5 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition-all duration-800 overflow-hidden">
             <i class="bi bi-whatsapp text-4xl"></i>
-            <span class="hidden sm:inline">WhatsApp</span>
+            <span
+                class="max-w-0 opacity-0 overflow-hidden group-hover:max-w-xs group-hover:opacity-100 transition-all duration-600 ease-in-out whitespace-nowrap">
+                WhatsApp
+            </span>
         </a>
     </div>
 
