@@ -84,19 +84,11 @@
                     <!-- Free Account -->
                     @foreach ($packagesAccountEcomnomical as $item)
                         @php
-                            function formatPrice($price)
-                            {
-                                if ($price == 0) {
-                                    return 'FREE';
-                                }
-                                if ($price >= 1000000) {
-                                    return $price / 1000000 . 'Milo';
-                                }
-                                if ($price >= 1000) {
-                                    return $price / 1000 . 'K';
-                                }
-                                return number_format($price);
-                            }
+                            $formatPrice = fn($price) => $price == 0
+                                ? 'FREE'
+                                : ($price >= 1_000_000
+                                    ? $price / 1_000_000 . 'Milo'
+                                    : $price / 1_000 . 'K');
                         @endphp
                         <div
                             class="bg-gradient-to-br from-fuchsia-400 to-purple-400 dark:from-fuchsia-700/30 dark:to-purple-800/30 rounded-3xl p-6 h-full text-white  flex flex-col justify-between w-full sm:w-3/4 hover:scale-105 border border-transparent border hover:ring-purple-700  transition-transform duration-300">
@@ -144,19 +136,11 @@
                     <!-- Free Account -->
                     @foreach ($packagesAccountMonthly as $item)
                         @php
-                            function formatPrice($price)
-                            {
-                                if ($price == 0) {
-                                    return 'FREE';
-                                }
-                                if ($price >= 1000000) {
-                                    return $price / 1000000 . 'Milo';
-                                }
-                                if ($price >= 1000) {
-                                    return $price / 1000 . 'K';
-                                }
-                                return number_format($price);
-                            }
+                            $formatPrice = fn($price) => $price == 0
+                                ? 'FREE'
+                                : ($price >= 1_000_000
+                                    ? $price / 1_000_000 . 'Milo'
+                                    : $price / 1_000 . 'K');
                         @endphp
                         <div
                             class="bg-gradient-to-br from-fuchsia-400 to-purple-400 dark:from-fuchsia-700/30 dark:to-purple-800/30 rounded-3xl p-6 h-full text-white  flex flex-col justify-between w-full sm:w-3/4 hover:scale-105 border border-transparent border hover:ring-purple-700  transition-transform duration-300">
