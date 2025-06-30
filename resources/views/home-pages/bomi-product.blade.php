@@ -97,7 +97,7 @@
                                 <h3 class="text-xl font-bold text-purple-700 dark:text-purple-300">{{ $item->name }}</h3>
                                 <div class="flex align-star mt-2">
                                     <p class="text-6xl font-bold text-white">
-                                        {{ formatPrice($item->price) }}</p>
+                                        {{ $formatPrice($item->price) }}</p>
                                     <span class="ml-2 text-sm font-bold text-neutral-200">/ {{ $item->type }}</span>
                                 </div>
                                 <hr class="my-4 border-white border-t-2 ">
@@ -149,7 +149,7 @@
                                 <h3 class="text-xl font-bold text-purple-700 dark:text-purple-300">{{ $item->name }}</h3>
                                 <div class="flex align-star mt-2">
                                     <p class="text-6xl font-bold text-white">
-                                        {{ formatPrice($item->price) }}</p>
+                                        {{ $formatPrice($item->price) }}</p>
                                     <span class="ml-2 text-sm font-bold text-neutral-200">/ {{ $item->type }}</span>
                                 </div>
                                 <hr class="my-4 border-white border-t-2 ">
