@@ -205,12 +205,13 @@
                 <div x-show="openModal"
                     class="fixed inset-0  bg-black/40 dark:bg-black/0 backdrop-blur-sm flex items-center justify-center z-50"
                     x-transition>
-                    <div class="bg-white dark:bg-black/90 dark:backdrop-blur-2xl rounded-2xl shadow-xl max-w-4xl w-full overflow-hidden relative"
+                    <div class="bg-white dark:bg-black/90 dark:backdrop-blur-2xl rounded-2xl shadow-xl max-w-lg sm:max-w-lg w-full overflow-hidden relative "
                         @click.away="openModal = false">
                         <button class="absolute top-2 right-2 text-gray-500" @click="openModal = false">✕</button>
-                        <div class="flex flex-col md:flex-row gap-6 p-6">
+                        <div class="flex flex-col sm:flex-col md:flex-row gap-6 p-4 sm:p-6 max-h-[90vh] overflow-y-auto">
                             <div class="md:w-3/4">
-                                <img :src="selected?.image_url" alt="" class="w-full h-auto object-contain">
+                                <img :src="selected?.image_url" alt=""
+                                    class="w-full md:h-auto h-60  object-contain">
                             </div>
                             <div class="md:w-1/2">
                                 <div class="text-sm dark:text-white text-blue-600 font-medium" x-text="selected?.tag">
