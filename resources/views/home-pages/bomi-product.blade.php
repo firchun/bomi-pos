@@ -205,7 +205,7 @@
                 <div x-show="openModal"
                     class="fixed inset-0  bg-black/40 dark:bg-black/0 backdrop-blur-sm flex items-center justify-center z-50"
                     x-transition>
-                    <div class="bg-white dark:bg-black/90 dark:backdrop-blur-2xl rounded-2xl shadow-xl max-w-lg sm:max-w-lg w-full overflow-hidden relative "
+                    <div class="bg-white dark:bg-black/90 dark:backdrop-blur-2xl rounded-2xl shadow-xl max-w-lg md:max-w-3xl w-full overflow-hidden relative "
                         @click.away="openModal = false">
                         <button class="absolute top-2 right-2 text-gray-500" @click="openModal = false">✕</button>
                         <div class="flex flex-col sm:flex-col md:flex-row gap-6 p-4 sm:p-6 max-h-[90vh] overflow-y-auto">
