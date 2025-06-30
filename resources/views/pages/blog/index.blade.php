@@ -41,8 +41,10 @@
                                 @forelse ($blogs as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td><a href="{{ route('blog-detail', $item->slug) }}" target="__blank">
+                                        <td>
+                                            <a href="{{ route('blog-detail', $item->slug) }}" target="__blank">
                                                 {{ $item->title }}</a>
+                                            <br><small class="text-mutted">{{ $item->views }} View</small>
                                         </td>
                                         <td><img alt="image" src="{{ asset('img/avatar/avatar-1.png') }}"
                                                 class="rounded-circle mr-1"

@@ -83,22 +83,37 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl w-full">
                     <!-- Free Account -->
                     @foreach ($packagesAccountEcomnomical as $item)
+                        @php
+                            function formatPrice($price)
+                            {
+                                if ($price == 0) {
+                                    return 'FREE';
+                                }
+                                if ($price >= 1000000) {
+                                    return $price / 1000000 . 'Milo';
+                                }
+                                if ($price >= 1000) {
+                                    return $price / 1000 . 'K';
+                                }
+                                return number_format($price);
+                            }
+                        @endphp
                         <div
                             class="bg-gradient-to-br from-fuchsia-400 to-purple-400 dark:from-fuchsia-700/30 dark:to-purple-800/30 rounded-3xl p-6 h-full text-white  flex flex-col justify-between w-full sm:w-3/4 hover:scale-105 border border-transparent border hover:ring-purple-700  transition-transform duration-300">
                             <!-- Konten Atas -->
                             <div>
-                                <h3 class="text-xl font-bold text-purple-700 dark:text-purple-300"{{ $item->name }}</h3>
-                                    <div class="flex align-star mt-2">
-                                        <p class="text-6xl font-bold text-white">
-                                            {{ $item->price == 0 ? 'FREE' : $item->price }}</p>
-                                        <span class="ml-2 text-sm font-bold text-neutral-200">/ {{ $item->type }}</span>
-                                    </div>
-                                    <hr class="my-4 border-white border-t-2 ">
-                                    <ul class="text-neutral-900 dark:text-neutral-200 font-semibold space-y-2 text-lg">
-                                        @foreach ($item->features as $feat)
-                                            <li><i class="bi bi-check-square-fill text-white"></i> {{ $feat }}</li>
-                                        @endforeach
-                                    </ul>
+                                <h3 class="text-xl font-bold text-purple-700 dark:text-purple-300">{{ $item->name }}</h3>
+                                <div class="flex align-star mt-2">
+                                    <p class="text-6xl font-bold text-white">
+                                        {{ formatPrice($item->price) }}</p>
+                                    <span class="ml-2 text-sm font-bold text-neutral-200">/ {{ $item->type }}</span>
+                                </div>
+                                <hr class="my-4 border-white border-t-2 ">
+                                <ul class="text-neutral-900 dark:text-neutral-200 font-semibold space-y-2 text-lg">
+                                    @foreach ($item->features as $feat)
+                                        <li><i class="bi bi-check-square-fill text-white"></i> {{ $feat }}</li>
+                                    @endforeach
+                                </ul>
                             </div>
                             @guest
                                 <a href="{{ route('register') }}"
@@ -128,22 +143,37 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl w-full">
                     <!-- Free Account -->
                     @foreach ($packagesAccountMonthly as $item)
+                        @php
+                            function formatPrice($price)
+                            {
+                                if ($price == 0) {
+                                    return 'FREE';
+                                }
+                                if ($price >= 1000000) {
+                                    return $price / 1000000 . 'Milo';
+                                }
+                                if ($price >= 1000) {
+                                    return $price / 1000 . 'K';
+                                }
+                                return number_format($price);
+                            }
+                        @endphp
                         <div
                             class="bg-gradient-to-br from-fuchsia-400 to-purple-400 dark:from-fuchsia-700/30 dark:to-purple-800/30 rounded-3xl p-6 h-full text-white  flex flex-col justify-between w-full sm:w-3/4 hover:scale-105 border border-transparent border hover:ring-purple-700  transition-transform duration-300">
                             <!-- Konten Atas -->
                             <div>
-                                <h3 class="text-xl font-bold text-purple-700 dark:text-purple-300"{{ $item->name }}</h3>
-                                    <div class="flex align-star mt-2">
-                                        <p class="text-6xl font-bold text-white">
-                                            {{ $item->price == 0 ? 'FREE' : $item->price }}</p>
-                                        <span class="ml-2 text-sm font-bold text-neutral-200">/ {{ $item->type }}</span>
-                                    </div>
-                                    <hr class="my-4 border-white border-t-2 ">
-                                    <ul class="text-neutral-900 dark:text-neutral-200 font-semibold space-y-2 text-lg">
-                                        @foreach ($item->features as $feat)
-                                            <li><i class="bi bi-check-square-fill text-white"></i> {{ $feat }}</li>
-                                        @endforeach
-                                    </ul>
+                                <h3 class="text-xl font-bold text-purple-700 dark:text-purple-300">{{ $item->name }}</h3>
+                                <div class="flex align-star mt-2">
+                                    <p class="text-6xl font-bold text-white">
+                                        {{ formatPrice($item->price) }}</p>
+                                    <span class="ml-2 text-sm font-bold text-neutral-200">/ {{ $item->type }}</span>
+                                </div>
+                                <hr class="my-4 border-white border-t-2 ">
+                                <ul class="text-neutral-900 dark:text-neutral-200 font-semibold space-y-2 text-lg">
+                                    @foreach ($item->features as $feat)
+                                        <li><i class="bi bi-check-square-fill text-white"></i> {{ $feat }}</li>
+                                    @endforeach
+                                </ul>
                             </div>
                             @guest
                                 <a href="{{ route('register') }}"

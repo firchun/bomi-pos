@@ -55,7 +55,7 @@
 
                                         <td>
                                             <ul class="pl-3 mb-0">
-                                                @foreach ($item->features as $feature)
+                                                @foreach (collect($item->features)->take(5) as $feature)
                                                     <li>{{ $feature }}</li>
                                                 @endforeach
                                             </ul>
