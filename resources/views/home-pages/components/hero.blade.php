@@ -28,7 +28,7 @@ px-6 py-12 md:py-20 lg:py-28 transition-colors duration-300 {{ $class ?? '' }}">
 
         <!-- Buttons -->
         <div class="flex flex-col sm:flex-row gap-4">
-            <a href="href="{{ route('register') }}""
+            <a href="{{ route('register') }}"
                 class="w-full sm:w-56 h-14 bg-purple-700 rounded-[20px] flex items-center justify-center text-white text-lg sm:text-xl font-semibold font-['Lexend'] transition-all duration-300 hover:scale-105">
                 @if (app()->getLocale() == 'en')
                     Get Started Free
