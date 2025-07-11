@@ -209,7 +209,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('/user/send-message', [ChatController::class, 'sendMessageToAdmin'])->name('user.sendMessage');
         }
         Route::get('/home-pos', Pos::class)->name('user.pos');
-        Route::get('/payment', Payment::class)->name('user.payment');
 
         Route::get('/ingredient-report', [ReportController::class, 'ingredientReport'])->name('ingredient.report');
         Route::get('/daily-report', [ReportController::class, 'dailyReport'])->name('daily.report');

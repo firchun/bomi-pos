@@ -1,7 +1,6 @@
 <!-- Modal Tambah Produk -->
-<div id="addProductModalOverlay"
-    class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-40 backdrop-blur hidden"
-    wire:ignore.self>
+<div x-cloak x-show="$wire.showProductModal" @keydown.escape.window="$wire.showProductModal = false" x-transition.opacity
+    class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
     <div id="addProductModal"
         class="bg-white rounded-xl shadow-xl w-full max-w-3xl mx-4 md:mx-auto p-6 md:p-8 max-h-[90vh] flex flex-col">
         <div class="flex justify-between items-center mb-6">
@@ -82,7 +81,7 @@
                                             class="px-2 py-1 bg-gray-100 rounded-md">+</button>
                                     </div>
                                 @else
-                                    <button wire:click="addToCart({{ $product->id }})"
+                                    <button wire:click="selectForBatchAdd({{ $product->id }})"
                                         class="px-3 py-1 bg-green-100 text-green-600 rounded-md hover:bg-green-200">
                                         Tambah
                                     </button>
@@ -112,12 +111,10 @@
 
         <!-- Tombol Aksi -->
         <div class="mt-auto pt-6 border-t border-gray-200 flex space-x-3">
-            <button wire:click="closeAddProductModal"
-                class="flex-1 py-3 border border-resto-purple-light text-resto-purple-light rounded-lg font-semibold hover:bg-purple-50 transition-colors text-sm">
+            <button wire:click="closeProductModal" class="flex-1 py-3 border border-resto-purple-light text-resto-purple-light rounded-lg font-semibold hover:bg-purple-50 transition-colors text-sm"">
                 Kembali
             </button>
-            <button wire:click="submitToCart"
-                class="flex-1 bg-resto-purple text-white py-3 rounded-lg font-semibold hover:bg-resto-purple-dark transition-colors text-sm">
+            <button wire:click="submitToCart" class="flex-1 bg-resto-purple text-white py-3 rounded-lg font-semibold hover:bg-resto-purple-dark transition-colors text-sm">
                 Tambah Produk
             </button>
         </div>

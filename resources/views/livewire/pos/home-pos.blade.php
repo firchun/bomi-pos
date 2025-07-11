@@ -1,7 +1,12 @@
     <div id="posViewContainer" class="flex flex-1">
-        <main id="posMainContent" class="flex-1 ml-20 mr-[380px] p-6 overflow-y-auto">
+        <main id="posMainContent" class="flex-1 ml-20 mr-[380px] p-6 overflow-auto min-w-0">
             <header class="mb-6">
-                <h1 class="text-3xl font-bold text-resto-text-primary">BOMI RESTO</h1>
+                @php
+                    $shop = \App\Models\ShopProfile::first();
+                @endphp
+                <h1 class="text-3xl font-bold text-resto-text-primary">
+                    {{ strtoupper($shop->name) }}
+                </h1>
                 <p class="text-resto-text-secondary">{{ now()->translatedFormat('l, d F Y') }}</p>
                 <div class="mt-4 relative">
                     <input type="text" wire:model.live.debounce.300ms="search"
@@ -28,52 +33,114 @@
                 @endforeach
             </nav>
 
-            <section
-                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 flex-1 min-w-0">
-                @forelse($products as $product)
-                    <div
-                        class="bg-white rounded-xl shadow-md overflow-hidden transform hover:scale-105 transition-transform duration-300 w-full">
-                        <div class="relative">
-                            <!-- Product Image -->
-                            <img class="w-full h-48 object-cover" src="{{ asset($product->image) }}"
-                                alt="{{ $product->name }}">
-
-                            <!-- Add to Cart Button -->
-                            <button wire:click="addToCart({{ $product->id }})"
-                                class="absolute top-3 right-3 bg-resto-purple-light text-white p-2 rounded-lg hover:bg-resto-purple">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z">
-                                    </path>
-                                </svg>
-                            </button>
-                        </div>
-
-                        <div class="p-4">
-                            <h3 class="text-lg font-semibold text-resto-text-primary mb-1">
-                                {{ $product->name }}
-                            </h3>
-                            <p class="text-sm text-resto-text-secondary mb-2">
-                                {{ $product->category->name ?? 'Tanpa Kategori' }}
-                            </p>
-                            <p class="text-lg font-bold text-resto-purple-light">
-                                Rp. {{ number_format($product->price, 0, ',', '.') }}
-                            </p>
-                        </div>
+            <section>
+                <div>
+                    <div class="mb-5 flex border-b border-gray-200">
+                        <button wire:click="setViewMode('card')"
+                            class="py-2 px-4 -mb-px border-b-2 font-medium text-sm focus:outline-none 
+                   {{ $viewMode === 'card' ? 'text-resto-purple border-resto-purple' : 'text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300' }}">
+                            <i class="fa fa-th-large mr-2"></i> Card View
+                        </button>
+                        <button wire:click="setViewMode('list')"
+                            class="py-2 px-4 -mb-px border-b-2 font-medium text-sm focus:outline-none
+                   {{ $viewMode === 'list' ? 'text-resto-purple border-resto-purple' : 'text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300' }}">
+                            <i class="fa fa-list mr-2"></i>
+                            List View
+                        </button>
                     </div>
-                @empty
-                    <div class="col-span-full text-center py-12">
-                        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor"
-                            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
-                            </path>
-                        </svg>
-                        <h3 class="mt-2 text-lg font-medium text-gray-900">Tidak ada produk ditemukan</h3>
-                        <p class="mt-1 text-gray-500">Coba ubah filter pencarian Anda</p>
-                    </div>
-                @endforelse
+
+                    @if ($viewMode === 'card')
+                        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            @forelse($products as $product)
+                                <div wire:click="addToCart({{ $product->id }})"
+                                    class="bg-white rounded-xl shadow-md overflow-hidden transform hover:scale-105 transition-transform duration-300 w-full cursor-pointer group">
+                                    <div class="relative">
+                                        <img class="w-full h-48 object-cover" src="{{ asset($product->image) }}"
+                                            alt="{{ $product->name }}">
+                                        <div
+                                            class="absolute top-3 right-3 bg-resto-purple-light text-white p-2 rounded-lg group-hover:bg-resto-purple transition-colors">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z">
+                                                </path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="p-4">
+                                        <h3 class="text-lg font-semibold text-resto-text-primary mb-1">
+                                            {{ $product->name }}
+                                        </h3>
+                                        <p class="text-sm text-resto-text-secondary mb-2">
+                                            {{ $product->category->name ?? 'Tanpa Kategori' }}
+                                        </p>
+                                        <p class="text-lg font-bold text-resto-purple-light">
+                                            Rp. {{ number_format($product->price, 0, ',', '.') }}
+                                        </p>
+                                    </div>
+                                </div>
+                            @empty
+                                <div class="col-span-full text-center py-12 text-gray-500">
+                                    <p>Tidak ada produk ditemukan.</p>
+                                </div>
+                            @endforelse
+                        </section>
+                    @elseif ($viewMode === 'list')
+                        <section class="bg-white rounded-xl shadow-md">
+                            <table class="w-full text-sm text-left table-fixed">
+                                <thead class="bg-gray-50 border-b border-gray-200">
+                                    <tr>
+                                        <th class="p-4 font-medium text-gray-600 w-[40%]">Produk</th>
+                                        <th class="p-4 font-medium text-gray-600 w-[20%]">Kategori</th>
+                                        <th class="p-4 font-medium text-gray-600 w-[15%]">Harga</th>
+                                        <th class="p-4 font-medium text-gray-600 w-[10%]">Discount</th>
+                                        <th class="p-4 font-medium text-gray-600 text-center w-[15%]">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($products as $product)
+                                        <tr class="border-b border-gray-100 hover:bg-gray-50">
+                                            <td class="p-3">
+                                                <div class="flex items-center space-x-3">
+                                                    <img class="w-14 h-14 object-cover rounded-md"
+                                                        src="{{ asset($product->image) }}" alt="{{ $product->name }}">
+                                                    <span
+                                                        class="font-semibold text-resto-text-primary">{{ $product->name }}</span>
+                                                </div>
+                                            </td>
+                                            <td class="p-3 text-resto-text-secondary">
+                                                {{ $product->category->name ?? 'Tanpa Kategori' }}</td>
+                                            <td class="p-3 text-resto-text-secondary">
+                                                @if ($product->discount > 0)
+                                                    <span class="line-through text-gray-400">
+                                                        Rp. {{ number_format($product->price, 0, ',', '.') }}
+                                                    </span><br />
+                                                @endif
+                                                Rp.
+                                                {{ number_format($product->price - $product->discount, 0, ',', '.') }}
+                                            </td>
+                                            <td class="p-3 text-red-500">
+                                                Rp. {{ number_format($product->discount ?? 0, 0, ',', '.') }}
+                                            </td>
+                                            <td class="p-3 text-center">
+                                                <button wire:click="addToCart({{ $product->id }})"
+                                                    class="bg-purple-100 text-resto-purple font-semibold px-4 py-2 rounded-lg hover:bg-purple-200 transition-colors">
+                                                    Tambah
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="4" class="text-center py-12 text-gray-500">
+                                                Tidak ada produk ditemukan.
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </section>
+                    @endif
+                </div>
             </section>
 
             <!-- Pagination -->
@@ -91,20 +158,26 @@
                 Orders
             </h2>
             <div class="flex space-x-2 mb-6">
-                <button class="flex-1 py-2 px-4 rounded-lg order-type-active text-sm">
+                <button wire:click="setOrderType('Dine In')"
+                    class="flex-1 py-2 px-4 rounded-lg text-sm transition-colors
+                   {{ $orderType === 'Dine In' ? 'order-type-active' : 'order-type-inactive' }}">
                     Dine In
                 </button>
-                <button class="flex-1 py-2 px-4 rounded-lg order-type-inactive text-sm">
+                <button wire:click="setOrderType('To Go')"
+                    class="flex-1 py-2 px-4 rounded-lg text-sm transition-colors
+                   {{ $orderType === 'To Go' ? 'order-type-active' : 'order-type-inactive' }}">
                     To Go
                 </button>
-                <button class="flex-1 py-2 px-4 rounded-lg order-type-inactive text-sm">
+                <button wire:click="setOrderType('Delivery')"
+                    class="flex-1 py-2 px-4 rounded-lg text-sm transition-colors
+                   {{ $orderType === 'Delivery' ? 'order-type-active' : 'order-type-inactive' }}">
                     Delivery
                 </button>
             </div>
 
-            <div class="flex justify-between text-sm font-semibold text-resto-text-secondary mb-3">
+            <div class="flex justify-between text-sm pr-4 font-semibold text-resto-text-secondary mb-3">
                 <span>Item</span>
-                <div class="flex space-x-12">
+                <div class="flex space-x-14">
                     <span>Qty</span>
                     <span>Price</span>
                 </div>
@@ -119,7 +192,7 @@
                                 class="w-12 h-12 rounded-lg object-cover">
 
                             <div class="flex-grow">
-                                <p class="text-sm font-semibold text-resto-text-primary">
+                                <p class="text-sm font-semibold w-20 text-resto-text-primary">
                                     {{ \Illuminate\Support\Str::limit($item['name'], 30) }}
                                 </p>
                                 <p class="text-xs text-resto-text-secondary">Rp.
@@ -130,7 +203,7 @@
                                 <button wire:click="decreaseQuantity('{{ $id }}')"
                                     class="px-2 py-1 bg-gray-100 rounded-md">-</button>
                                 <input type="number" wire:model.live="cartItems.{{ $id }}.quantity"
-                                    class="w-12 text-center border border-gray-300 rounded-md p-1.5 focus:outline-none focus:ring-1 focus:ring-resto-purple-light">
+                                    class="w-10 text-center border border-gray-300 rounded-md p-1.5 focus:outline-none focus:ring-1 focus:ring-resto-purple-light">
                                 <button wire:click="increaseQuantity('{{ $id }}')"
                                     class="px-2 py-1 bg-gray-100 rounded-md">+</button>
                             </div>
@@ -144,7 +217,7 @@
                         <div class="flex items-center mt-2 space-x-2">
                             <div class="flex-grow">
                                 <input type="text" wire:model.debounce.300ms="cartItems.{{ $id }}.notes"
-                                    placeholder="Catatan pesanan"
+                                    placeholder="Tulis catatan pesanan"
                                     class="w-full text-xs p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-resto-purple-light">
                             </div>
 
@@ -171,7 +244,8 @@
 
             <div class="mt-auto pt-6 border-t border-gray-200">
                 <div class="flex justify-around mb-4">
-                    <button class="flex flex-col items-center text-resto-text-secondary hover:text-resto-purple-light">
+                    <button wire:click="openSettingsModal('discount')"
+                        class="flex flex-col items-center text-resto-text-secondary hover:text-resto-purple-light">
                         <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -180,7 +254,8 @@
                         </svg>
                         <span class="text-xs">Diskon</span>
                     </button>
-                    <button class="flex flex-col items-center text-resto-text-secondary hover:text-resto-purple-light">
+                    <button wire:click="openSettingsModal('tax')"
+                        class="flex flex-col items-center text-resto-text-secondary hover:text-resto-purple-light">
                         <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -188,7 +263,8 @@
                         </svg>
                         <span class="text-xs">Pajak</span>
                     </button>
-                    <button class="flex flex-col items-center text-resto-text-secondary hover:text-resto-purple-light">
+                    <button wire:click="openSettingsModal('service')"
+                        class="flex flex-col items-center text-resto-text-secondary hover:text-resto-purple-light">
                         <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -200,31 +276,47 @@
                 </div>
                 <div class="space-y-2 mb-4 text-sm">
                     <div class="flex justify-between text-resto-text-secondary">
-                        <span>Ongkir</span>
-                        <span>0</span>
+                        <span>Subtotal</span>
+                        <span>Rp. {{ number_format($this->subtotal, 0, ',', '.') }}</span>
                     </div>
                     <div class="flex justify-between text-resto-text-secondary">
-                        <span>Pajak</span>
-                        <span>10 %</span>
+                        {{-- Menampilkan persentase pajak yang diterapkan --}}
+                        <span>Pajak ({{ $taxRate }}%)</span>
+                        <span>Rp. {{ number_format($this->taxAmount, 0, ',', '.') }}</span>
+                    </div>
+                    <div class="flex justify-between text-resto-text-secondary">
+                        {{-- Menampilkan persentase layanan yang diterapkan --}}
+                        <span>Layanan ({{ $serviceCharge }}%)</span>
+                        <span>Rp. {{ number_format(($this->subtotal * $serviceCharge) / 100, 0, ',', '.') }}</span>
                     </div>
                     <div class="flex justify-between text-resto-text-secondary">
                         <span>Diskon</span>
-                        <span>Rp. 0</span>
+                        {{-- Menampilkan jumlah diskon dalam Rupiah --}}
+                        <span>Rp. {{ number_format($discount, 0, ',', '.') }}</span>
                     </div>
-                    <div class="flex justify-between font-semibold text-resto-text-primary text-lg">
-                        <span>Sub total</span>
-                        <span>Rp. {{ number_format($subtotal, 0, ',', '.') }}</span>
+
+                    <hr class="border-dashed my-2">
+
+                    <div class="flex justify-between font-bold text-resto-text-primary text-lg">
+                        <span>TOTAL</span>
+                        {{-- Menampilkan total akhir setelah semua perhitungan --}}
+                        <span>Rp. {{ number_format($this->totalBill, 0, ',', '.') }}</span>
                     </div>
                 </div>
-                <button id="lanjutkanPembayaranBtn"
+                <button wire:click="openPaymentModal"
                     class="w-full bg-resto-purple text-white py-3 rounded-lg font-semibold hover:bg-resto-purple-dark transition-colors">
                     Lanjutkan Pembayaran
                 </button>
             </div>
         </aside>
 
+
         @include('livewire.pos.pos-payment-partials.modalPayment')
         @include('livewire.pos.pos-payment-partials.modalProductPos')
+        @include('livewire.pos.pos-payment-partials.modalSuccessPayment')
+
+        @include('livewire.pos.pos-settings-partials.modal-settings')
+        @include('livewire.pos.pos-settings-partials.modal-add-new-setting')
 
         {{-- <!-- Modal Pembayaran Berhasil -->
         <div id="paymentSuccessModalOverlay"
